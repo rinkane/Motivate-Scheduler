@@ -44,33 +44,74 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Center(
-            child: Container(
-              alignment: Alignment.centerRight,
-              width: 200,
-              height: 50,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.yellow, width: 4),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Text(
-                'Hello World',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 32,
-                  color: Colors.red,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Center(
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  width: 200,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.yellow, width: 4),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    'Hello World',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 32,
+                      color: Colors.red,
+                    ),
+                  ),
                 ),
               ),
-            ),
+              Text(
+                '$_counter',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+              TextButton(
+                  onPressed: () {},
+                  child: const Text("Text Button"),
+                  style: TextButton.styleFrom(primary: Colors.purple)),
+              OutlinedButton(
+                  onPressed: () {},
+                  child: const Text("OutlinedButton"),
+                  style: OutlinedButton.styleFrom(primary: Colors.purple)),
+              ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("ElevatedButton"),
+                  style: ElevatedButton.styleFrom(primary: Colors.purple)),
+              ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("ElevatedButton Shadow"),
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.purple, elevation: 8))
+            ],
           ),
-          Text(
-            '$_counter',
-            style: Theme.of(context).textTheme.headline4,
-          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              TextButton(
+                  onPressed: null,
+                  child: const Text("null TextButton"),
+                  style: TextButton.styleFrom(primary: Colors.purple)),
+              OutlinedButton(
+                  onPressed: null,
+                  child: const Text("null OutlinedButton"),
+                  style: OutlinedButton.styleFrom(primary: Colors.purple)),
+              ElevatedButton(
+                  onPressed: null,
+                  child: const Text("null ElevatedButton"),
+                  style: ElevatedButton.styleFrom(primary: Colors.purple))
+            ],
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
