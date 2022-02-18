@@ -47,18 +47,24 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            width: double.infinity,
-            color: Colors.grey,
-            child: const Text(
-              'Hello World',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontStyle: FontStyle.italic,
-                fontSize: 32,
-                color: Colors.red,
+          Center(
+            child: Container(
+              alignment: Alignment.centerRight,
+              width: 200,
+              height: 50,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.yellow, width: 4),
+                borderRadius: BorderRadius.circular(8),
               ),
-              textAlign: TextAlign.right,
+              child: const Text(
+                'Hello World',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                  fontSize: 32,
+                  color: Colors.red,
+                ),
+              ),
             ),
           ),
           Text(
