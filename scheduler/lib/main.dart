@@ -109,7 +109,37 @@ class _MyHomePageState extends State<MyHomePage> {
               ElevatedButton(
                   onPressed: null,
                   child: const Text("null ElevatedButton"),
+                  style: ElevatedButton.styleFrom(primary: Colors.purple)),
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.thumb_up),
+                  color: Colors.purple,
+                  iconSize: 64),
+              TextButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.abc),
+                  label: const Text("ABC"),
+                  style: TextButton.styleFrom(primary: Colors.purple)),
+              OutlinedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.favorite, color: Colors.pink),
+                  label: const Text("Like"),
+                  style: OutlinedButton.styleFrom(primary: Colors.purple)),
+              ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.flight),
+                  label: const Text("Flight"),
                   style: ElevatedButton.styleFrom(primary: Colors.purple))
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              FloatingActionButton(
+                  onPressed: () {},
+                  child: const Icon(Icons.gamepad),
+                  backgroundColor: Colors.purple)
             ],
           )
         ],
