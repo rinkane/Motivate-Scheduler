@@ -44,104 +44,26 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Center(
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  width: 200,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.yellow, width: 4),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Text(
-                    'Hello World',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 32,
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-              ),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headline4,
-              ),
-              TextButton(
-                  onPressed: () {},
-                  child: const Text("Text Button"),
-                  style: TextButton.styleFrom(primary: Colors.purple)),
-              OutlinedButton(
-                  onPressed: () {},
-                  child: const Text("OutlinedButton"),
-                  style: OutlinedButton.styleFrom(primary: Colors.purple)),
-              ElevatedButton(
-                  onPressed: () {},
-                  child: const Text("ElevatedButton"),
-                  style: ElevatedButton.styleFrom(primary: Colors.purple)),
-              ElevatedButton(
-                  onPressed: () {},
-                  child: const Text("ElevatedButton Shadow"),
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.purple, elevation: 8))
-            ],
+          ListTile(
+            title: Text("ListTile 1"),
+            subtitle: Text("SubTitle"),
+            trailing: Icon(Icons.more_vert),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              TextButton(
-                  onPressed: null,
-                  child: const Text("null TextButton"),
-                  style: TextButton.styleFrom(primary: Colors.purple)),
-              OutlinedButton(
-                  onPressed: null,
-                  child: const Text("null OutlinedButton"),
-                  style: OutlinedButton.styleFrom(primary: Colors.purple)),
-              ElevatedButton(
-                  onPressed: null,
-                  child: const Text("null ElevatedButton"),
-                  style: ElevatedButton.styleFrom(primary: Colors.purple)),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.thumb_up),
-                  color: Colors.purple,
-                  iconSize: 64),
-              TextButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.abc),
-                  label: const Text("ABC"),
-                  style: TextButton.styleFrom(primary: Colors.purple)),
-              OutlinedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.favorite, color: Colors.pink),
-                  label: const Text("Like"),
-                  style: OutlinedButton.styleFrom(primary: Colors.purple)),
-              ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.flight),
-                  label: const Text("Flight"),
-                  style: ElevatedButton.styleFrom(primary: Colors.purple))
-            ],
+          Card(
+            child: Container(
+                child: Text("card"),
+                height: 60,
+                width: double.infinity,
+                alignment: Alignment.center),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              FloatingActionButton(
-                  onPressed: () {},
-                  child: const Icon(Icons.gamepad),
-                  backgroundColor: Colors.purple)
-            ],
-          )
+          Card(
+            child: ListTile(
+              leading: Icon(Icons.beenhere),
+              title: Text("ListTile in Card"),
+              trailing: Icon(Icons.beenhere),
+            ),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
