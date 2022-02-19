@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const String appTitle = "Motivate Scheduler";
+
 void main() {
   runApp(const MyApp());
 }
@@ -10,11 +12,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: appTitle,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.purple,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: appTitle),
     );
   }
 }
@@ -29,14 +31,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
         slivers: <Widget>[
           SliverAppBar(
               floating: true,
-              title: Text("Scheduler"),
+              title: Text(appTitle),
               leading:
                   IconButton(icon: Icon(Icons.arrow_back), onPressed: () {}),
               actions: <Widget>[
@@ -52,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 IconButton(icon: Icon(Icons.more_vert), onPressed: () {})
               ]),
           SliverFixedExtentList(
-            itemExtent: 600,
+            itemExtent: 60,
             delegate: SliverChildListDelegate(
               [
                 ListTile(
@@ -81,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {},
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
