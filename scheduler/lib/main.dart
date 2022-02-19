@@ -40,28 +40,42 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Column(
-        children: <Widget>[
-          ListTile(
-            title: Text("ListTile 1"),
-            subtitle: Text("SubTitle"),
-            trailing: Icon(Icons.more_vert),
-          ),
-          Card(
-            child: Container(
-                child: Text("card"),
-                height: 60,
-                width: double.infinity,
-                alignment: Alignment.center),
-          ),
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.beenhere),
-              title: Text("ListTile in Card"),
-              trailing: Icon(Icons.beenhere),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+              floating: true,
+              title: Text("Scheduler"),
+              leading:
+                  IconButton(icon: Icon(Icons.arrow_back), onPressed: () {}),
+              actions: <Widget>[
+                IconButton(icon: Icon(Icons.favorite), onPressed: () {}),
+                IconButton(icon: Icon(Icons.more_vert), onPressed: () {})
+              ]),
+          SliverFixedExtentList(
+            itemExtent: 600,
+            delegate: SliverChildListDelegate(
+              [
+                ListTile(
+                  title: Text("ListTile 1"),
+                  subtitle: Text("SubTitle"),
+                  trailing: Icon(Icons.more_vert),
+                ),
+                Card(
+                  margin: EdgeInsets.fromLTRB(100, 0, 100, 0),
+                  child: Container(
+                      child: Text("card"),
+                      height: 60,
+                      width: double.infinity,
+                      alignment: Alignment.center),
+                ),
+                Card(
+                  child: ListTile(
+                    leading: Icon(Icons.beenhere),
+                    title: Text("ListTile in Card"),
+                    trailing: Icon(Icons.beenhere),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
