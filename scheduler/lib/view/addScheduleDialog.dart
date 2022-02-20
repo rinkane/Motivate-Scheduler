@@ -23,11 +23,11 @@ class AddScheduleDialogState extends State<AddScheduleDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        title: Text("スケジュールの追加"),
+        title: const Text("スケジュールの追加"),
         content: Column(
           children: <Widget>[
             TextField(
-              decoration: InputDecoration(hintText: "追加したい予定"),
+              decoration: const InputDecoration(hintText: "追加したい予定"),
               onChanged: (String s) {
                 changeTextField(s);
               },
@@ -44,11 +44,11 @@ class AddScheduleDialogState extends State<AddScheduleDialog> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 ElevatedButton(
-                  child: Text("日付選択"),
+                  child: const Text("日付選択"),
                   onPressed: () => selectDate(context, true),
                 ),
                 ElevatedButton(
-                  child: Text("時間選択"),
+                  child: const Text("時間選択"),
                   onPressed: () => selectTime(context, true),
                 ),
               ],
@@ -58,11 +58,11 @@ class AddScheduleDialogState extends State<AddScheduleDialog> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  child: Text("日付選択"),
+                  child: const Text("日付選択"),
                   onPressed: () => selectDate(context, false),
                 ),
                 ElevatedButton(
-                  child: Text("時間選択"),
+                  child: const Text("時間選択"),
                   onPressed: () => selectTime(context, false),
                 ),
               ],
@@ -71,13 +71,13 @@ class AddScheduleDialogState extends State<AddScheduleDialog> {
         ),
         actions: <Widget>[
           ElevatedButton(
-            child: Text("追加"),
+            child: const Text("追加"),
             onPressed: () {
               Navigator.pop(context, schedule);
             },
           ),
           ElevatedButton(
-            child: Text("キャンセル"),
+            child: const Text("キャンセル"),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -105,10 +105,11 @@ class AddScheduleDialogState extends State<AddScheduleDialog> {
     if (date != null) {
       final DateTime newDate = createDate(scheduleDate, date);
       setState(() {
-        if (isStart)
+        if (isStart) {
           schedule.startDateTime = newDate;
-        else
+        } else {
           schedule.endDateTime = newDate;
+        }
       });
     }
   }
@@ -132,10 +133,11 @@ class AddScheduleDialogState extends State<AddScheduleDialog> {
     if (time != null) {
       final DateTime newTime = createTime(scheduleTime, time);
       setState(() {
-        if (isStart)
+        if (isStart) {
           schedule.startDateTime = newTime;
-        else
+        } else {
           schedule.endDateTime = newTime;
+        }
       });
     }
   }

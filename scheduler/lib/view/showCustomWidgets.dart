@@ -10,7 +10,7 @@ class ShowCustomWidgets {
       initialDate: initialDate,
       firstDate: DateTime(2020),
       lastDate: DateTime.now().add(
-        Duration(days: 1000),
+        const Duration(days: 1000),
       ),
     );
   }

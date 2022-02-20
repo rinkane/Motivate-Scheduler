@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void showAddScheduleDialog() async {
     final schedule = await showDialog<Schedule>(
-        context: context, builder: (context) => AddScheduleDialog());
+        context: context, builder: (context) => const AddScheduleDialog());
     if (schedule != null) {
       setState(() {
         schedules.add(schedule);
@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       DateFormat("yyyy-MM-dd H:m")
                           .format(schedules[index].endDateTime)),
                   trailing: IconButton(
-                    icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.delete),
                     onPressed: () {
                       setState(() {
                         schedules.removeAt(index);
