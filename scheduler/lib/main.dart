@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'schedule.dart';
 
@@ -33,13 +34,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var schedules = <Schedule>[Schedule("test", 0.0), Schedule("test2", 10.0)];
+  var schedules = <Schedule>[];
 
   void showAddScheduleDialog() async {
     final schedule = await showDialog<Schedule>(
         context: context,
         builder: (context) =>
-            AddScheduleDialog(initialMotivation: 0.0, initialScheduleName: ""));
+            AddScheduleDialog(initialSchedule: Schedule("", 0.0)));
     if (schedule != null) {
       setState(() {
         schedules.add(schedule);
@@ -59,6 +60,11 @@ class _MyHomePageState extends State<MyHomePage> {
               child: ListTile(
                   leading: Text(schedules[index].motivation.toString()),
                   title: Text(schedules[index].name),
+                  subtitle: Text(DateFormat("yyyy-MM-dd H:m")
+                          .format(schedules[index].startDateTime) +
+                      " ~ " +
+                      DateFormat("yyyy-MM-dd H:m")
+                          .format(schedules[index].endDateTime)),
                   trailing: IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () {
@@ -78,13 +84,9 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class AddScheduleDialog extends StatefulWidget {
-  final String initialScheduleName;
-  final double initialMotivation;
+  final Schedule initialSchedule;
 
-  const AddScheduleDialog(
-      {Key? key,
-      required this.initialScheduleName,
-      required this.initialMotivation})
+  const AddScheduleDialog({Key? key, required this.initialSchedule})
       : super(key: key);
 
   @override
@@ -92,14 +94,12 @@ class AddScheduleDialog extends StatefulWidget {
 }
 
 class AddScheduleDialogState extends State<AddScheduleDialog> {
-  late String scheduleName;
-  late double motivation;
+  late Schedule schedule;
 
   @override
   void initState() {
     super.initState();
-    scheduleName = widget.initialScheduleName;
-    motivation = widget.initialMotivation;
+    schedule = widget.initialSchedule;
   }
 
   @override
@@ -110,19 +110,37 @@ class AddScheduleDialogState extends State<AddScheduleDialog> {
           TextField(
               decoration: InputDecoration(hintText: "追加したい予定"),
               onChanged: changeTextField),
-          Text(motivation.toString()),
+          Text(schedule.motivation.toString()),
           Slider(
-            value: motivation,
+            value: schedule.motivation,
             max: 100,
             min: -100,
             onChanged: changeSlider,
-          )
+          ),
+          Text(DateFormat("yyyy-MM-dd H:m").format(schedule.startDateTime)),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            ElevatedButton(
+                child: Text("日付選択"),
+                onPressed: () => selectDate(context, true)),
+            ElevatedButton(
+                child: Text("時間選択"),
+                onPressed: () => selectTime(context, true)),
+          ]),
+          Text(DateFormat("yyyy-MM-dd H:m").format(schedule.endDateTime)),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            ElevatedButton(
+                child: Text("日付選択"),
+                onPressed: () => selectDate(context, false)),
+            ElevatedButton(
+                child: Text("時間選択"),
+                onPressed: () => selectTime(context, false)),
+          ]),
         ]),
         actions: <Widget>[
           ElevatedButton(
               child: Text("追加"),
               onPressed: () {
-                Navigator.pop(context, Schedule(scheduleName, motivation));
+                Navigator.pop(context, schedule);
               }),
           ElevatedButton(
               child: Text("キャンセル"),
@@ -134,13 +152,76 @@ class AddScheduleDialogState extends State<AddScheduleDialog> {
 
   void changeSlider(double value) {
     setState(() {
-      motivation = value.roundToDouble();
+      schedule.motivation = value.roundToDouble();
     });
   }
 
   void changeTextField(String value) {
     setState(() {
-      scheduleName = value;
+      schedule.name = value;
     });
+  }
+
+  void selectDate(BuildContext context, bool isStart) async {
+    DateTime scheduleDate =
+        isStart ? schedule.startDateTime : schedule.endDateTime;
+    final DateTime? date = await showScheduleDatePicker(scheduleDate);
+    if (date != null) {
+      final DateTime newDate = createDate(scheduleDate, date);
+      setState(() {
+        if (isStart)
+          schedule.startDateTime = newDate;
+        else
+          schedule.endDateTime = newDate;
+      });
+    }
+  }
+
+  DateTime createDate(DateTime destination, DateTime source) {
+    DateTime dateTime = DateTime(
+      source.year,
+      source.month,
+      source.day,
+      destination.hour,
+      destination.minute,
+    );
+    return dateTime;
+  }
+
+  void selectTime(BuildContext context, bool isStart) async {
+    DateTime scheduleTime =
+        isStart ? schedule.startDateTime : schedule.endDateTime;
+    final TimeOfDay? time = await showScheduleTimePicker(scheduleTime);
+    if (time != null) {
+      final DateTime newTime = createTime(scheduleTime, time);
+      setState(() {
+        if (isStart)
+          schedule.startDateTime = newTime;
+        else
+          schedule.endDateTime = newTime;
+      });
+    }
+  }
+
+  DateTime createTime(DateTime destination, TimeOfDay source) {
+    DateTime dateTime = DateTime(destination.year, destination.month,
+        destination.day, source.hour, source.minute);
+    return dateTime;
+  }
+
+  Future<DateTime?> showScheduleDatePicker(DateTime initialDate) async {
+    return showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        firstDate: DateTime(2020),
+        lastDate: DateTime.now().add(Duration(days: 1000)));
+  }
+
+  Future<TimeOfDay?> showScheduleTimePicker(DateTime initialTime) async {
+    return showTimePicker(
+      context: context,
+      initialTime:
+          TimeOfDay(hour: initialTime.hour, minute: initialTime.minute),
+    );
   }
 }
