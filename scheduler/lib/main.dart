@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'schedule.dart';
+
+const String appName = "Motivate Scheduler";
+
 void main() {
   runApp(const MyApp());
 }
@@ -10,11 +14,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: appName,
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: appName),
     );
   }
 }
@@ -30,14 +34,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String testText = "test";
+  double testNum = 0.0;
+
   void showAddScheduleDialog() async {
-    final schedule = await showDialog<String>(
+    final schedule = await showDialog<Schedule>(
         context: context,
         builder: (context) =>
             AddScheduleDialog(initialMotivation: 0.0, initialScheduleName: ""));
     if (schedule != null) {
       setState(() {
-        testText = schedule;
+        testText = schedule.name;
+        testNum = schedule.motivation;
       });
     }
   }
@@ -46,8 +53,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(slivers: [
-        SliverAppBar(title: Text("Motivate-Scheduler")),
-        SliverList(delegate: SliverChildListDelegate([Text(testText)]))
+        SliverAppBar(title: Text(widget.title)),
+        SliverList(
+            delegate: SliverChildListDelegate(
+                [Text(testText), Text(testNum.toString())]))
       ]),
       floatingActionButton: FloatingActionButton(
         onPressed: showAddScheduleDialog,
@@ -91,6 +100,7 @@ class AddScheduleDialogState extends State<AddScheduleDialog> {
           TextField(
               decoration: InputDecoration(hintText: "追加したい予定"),
               onChanged: changeTextField),
+          Text(motivation.toString()),
           Slider(
             value: motivation,
             max: 100,
@@ -102,7 +112,7 @@ class AddScheduleDialogState extends State<AddScheduleDialog> {
           ElevatedButton(
               child: Text("追加"),
               onPressed: () {
-                Navigator.pop(context, scheduleName);
+                Navigator.pop(context, Schedule(scheduleName, motivation));
               }),
           ElevatedButton(
               child: Text("キャンセル"),
