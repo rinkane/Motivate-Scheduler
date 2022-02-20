@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'schedule.dart';
-import 'addScheduleDialog.dart';
+import 'model/schedule.dart';
+import 'view/addScheduleDialog.dart';
 
 const String appName = "Motivate Scheduler";
 

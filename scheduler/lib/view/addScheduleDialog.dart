@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'schedule.dart';
+import '../model/schedule.dart';
 import 'showCustomWidgets.dart';
 
 class AddScheduleDialog extends StatefulWidget {
