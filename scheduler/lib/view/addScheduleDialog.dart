@@ -24,47 +24,64 @@ class AddScheduleDialogState extends State<AddScheduleDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
         title: Text("スケジュールの追加"),
-        content: Column(children: <Widget>[
-          TextField(
+        content: Column(
+          children: <Widget>[
+            TextField(
               decoration: InputDecoration(hintText: "追加したい予定"),
-              onChanged: changeTextField),
-          Text(schedule.motivation.toString()),
-          Slider(
-            value: schedule.motivation,
-            max: 100,
-            min: -100,
-            onChanged: changeSlider,
-          ),
-          Text(DateFormat("yyyy-MM-dd H:m").format(schedule.startDateTime)),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            ElevatedButton(
-                child: Text("日付選択"),
-                onPressed: () => selectDate(context, true)),
-            ElevatedButton(
-                child: Text("時間選択"),
-                onPressed: () => selectTime(context, true)),
-          ]),
-          Text(DateFormat("yyyy-MM-dd H:m").format(schedule.endDateTime)),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            ElevatedButton(
-                child: Text("日付選択"),
-                onPressed: () => selectDate(context, false)),
-            ElevatedButton(
-                child: Text("時間選択"),
-                onPressed: () => selectTime(context, false)),
-          ]),
-        ]),
+              onChanged: (String s) {
+                changeTextField(s);
+              },
+            ),
+            Text(schedule.motivation.toString()),
+            Slider(
+              value: schedule.motivation,
+              max: 100,
+              min: -100,
+              onChanged: changeSlider,
+            ),
+            Text(DateFormat("yyyy-MM-dd H:m").format(schedule.startDateTime)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ElevatedButton(
+                  child: Text("日付選択"),
+                  onPressed: () => selectDate(context, true),
+                ),
+                ElevatedButton(
+                  child: Text("時間選択"),
+                  onPressed: () => selectTime(context, true),
+                ),
+              ],
+            ),
+            Text(DateFormat("yyyy-MM-dd H:m").format(schedule.endDateTime)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  child: Text("日付選択"),
+                  onPressed: () => selectDate(context, false),
+                ),
+                ElevatedButton(
+                  child: Text("時間選択"),
+                  onPressed: () => selectTime(context, false),
+                ),
+              ],
+            ),
+          ],
+        ),
         actions: <Widget>[
           ElevatedButton(
-              child: Text("追加"),
-              onPressed: () {
-                Navigator.pop(context, schedule);
-              }),
+            child: Text("追加"),
+            onPressed: () {
+              Navigator.pop(context, schedule);
+            },
+          ),
           ElevatedButton(
-              child: Text("キャンセル"),
-              onPressed: () {
-                Navigator.pop(context);
-              })
+            child: Text("キャンセル"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ]);
   }
 

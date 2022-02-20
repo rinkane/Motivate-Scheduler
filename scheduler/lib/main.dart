@@ -50,13 +50,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(slivers: [
-        SliverAppBar(title: Text(widget.title)),
-        SliverList(
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(title: Text(widget.title)),
+          SliverList(
             delegate:
                 SliverChildBuilderDelegate((BuildContext context, int index) {
-          return Card(
-              child: ListTile(
+              return Card(
+                child: ListTile(
                   leading: Text(schedules[index].motivation.toString()),
                   title: Text(schedules[index].name),
                   subtitle: Text(DateFormat("yyyy-MM-dd H:m")
@@ -65,14 +66,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       DateFormat("yyyy-MM-dd H:m")
                           .format(schedules[index].endDateTime)),
                   trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        setState(() {
-                          schedules.removeAt(index);
-                        });
-                      })));
-        }, childCount: schedules.length))
-      ]),
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      setState(() {
+                        schedules.removeAt(index);
+                      });
+                    },
+                  ),
+                ),
+              );
+            }, childCount: schedules.length),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: showAddScheduleDialog,
         tooltip: 'Increment',

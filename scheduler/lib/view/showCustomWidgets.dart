@@ -6,10 +6,13 @@ class ShowCustomWidgets {
 
   Future<DateTime?> scheduleDatePicker(DateTime initialDate) async {
     return showDatePicker(
-        context: context,
-        initialDate: initialDate,
-        firstDate: DateTime(2020),
-        lastDate: DateTime.now().add(Duration(days: 1000)));
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now().add(
+        Duration(days: 1000),
+      ),
+    );
   }
 
   Future<TimeOfDay?> scheduleTimePicker(DateTime initialTime) async {
