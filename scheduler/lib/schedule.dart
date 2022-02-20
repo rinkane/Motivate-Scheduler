@@ -1,8 +1,8 @@
 class Schedule {
-  String name;
-  double motivation;
+  String name = "";
+  double motivation = 0.0;
   DateTime startDateTime = DateTime.now();
   DateTime endDateTime = DateTime.now();
 
-  Schedule(this.name, this.motivation);
+  Schedule();
 }
