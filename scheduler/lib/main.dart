@@ -33,8 +33,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String testText = "test";
-  double testNum = 0.0;
+  var schedules = <Schedule>[Schedule("test", 0.0), Schedule("test2", 10.0)];
 
   void showAddScheduleDialog() async {
     final schedule = await showDialog<Schedule>(
@@ -43,8 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
             AddScheduleDialog(initialMotivation: 0.0, initialScheduleName: ""));
     if (schedule != null) {
       setState(() {
-        testText = schedule.name;
-        testNum = schedule.motivation;
+        schedules.add(schedule);
       });
     }
   }
@@ -55,8 +53,20 @@ class _MyHomePageState extends State<MyHomePage> {
       body: CustomScrollView(slivers: [
         SliverAppBar(title: Text(widget.title)),
         SliverList(
-            delegate: SliverChildListDelegate(
-                [Text(testText), Text(testNum.toString())]))
+            delegate:
+                SliverChildBuilderDelegate((BuildContext context, int index) {
+          return Card(
+              child: ListTile(
+                  leading: Text(schedules[index].motivation.toString()),
+                  title: Text(schedules[index].name),
+                  trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        setState(() {
+                          schedules.removeAt(index);
+                        });
+                      })));
+        }, childCount: schedules.length))
       ]),
       floatingActionButton: FloatingActionButton(
         onPressed: showAddScheduleDialog,
