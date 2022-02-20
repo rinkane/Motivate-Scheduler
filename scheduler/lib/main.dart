@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'schedule.dart';
+import 'showCustomWidgets.dart';
 
 const String appName = "Motivate Scheduler";
 
@@ -165,7 +166,8 @@ class AddScheduleDialogState extends State<AddScheduleDialog> {
   void selectDate(BuildContext context, bool isStart) async {
     DateTime scheduleDate =
         isStart ? schedule.startDateTime : schedule.endDateTime;
-    final DateTime? date = await showScheduleDatePicker(scheduleDate);
+    final DateTime? date =
+        await ShowCustomWidgets(context).scheduleDatePicker(scheduleDate);
     if (date != null) {
       final DateTime newDate = createDate(scheduleDate, date);
       setState(() {
@@ -191,7 +193,8 @@ class AddScheduleDialogState extends State<AddScheduleDialog> {
   void selectTime(BuildContext context, bool isStart) async {
     DateTime scheduleTime =
         isStart ? schedule.startDateTime : schedule.endDateTime;
-    final TimeOfDay? time = await showScheduleTimePicker(scheduleTime);
+    final TimeOfDay? time =
+        await ShowCustomWidgets(context).scheduleTimePicker(scheduleTime);
     if (time != null) {
       final DateTime newTime = createTime(scheduleTime, time);
       setState(() {
@@ -207,21 +210,5 @@ class AddScheduleDialogState extends State<AddScheduleDialog> {
     DateTime dateTime = DateTime(destination.year, destination.month,
         destination.day, source.hour, source.minute);
     return dateTime;
-  }
-
-  Future<DateTime?> showScheduleDatePicker(DateTime initialDate) async {
-    return showDatePicker(
-        context: context,
-        initialDate: initialDate,
-        firstDate: DateTime(2020),
-        lastDate: DateTime.now().add(Duration(days: 1000)));
-  }
-
-  Future<TimeOfDay?> showScheduleTimePicker(DateTime initialTime) async {
-    return showTimePicker(
-      context: context,
-      initialTime:
-          TimeOfDay(hour: initialTime.hour, minute: initialTime.minute),
-    );
   }
 }
