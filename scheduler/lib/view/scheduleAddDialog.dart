@@ -4,14 +4,14 @@ import 'package:intl/intl.dart';
 import '../model/schedule.dart';
 import 'showCustomWidgets.dart';
 
-class AddScheduleDialog extends StatefulWidget {
-  const AddScheduleDialog({Key? key}) : super(key: key);
+class ScheduleAddDialog extends StatefulWidget {
+  const ScheduleAddDialog({Key? key}) : super(key: key);
 
   @override
-  AddScheduleDialogState createState() => AddScheduleDialogState();
+  ScheduleAddDialogState createState() => ScheduleAddDialogState();
 }
 
-class AddScheduleDialogState extends State<AddScheduleDialog> {
+class ScheduleAddDialogState extends State<ScheduleAddDialog> {
   late Schedule schedule;
 
   @override
