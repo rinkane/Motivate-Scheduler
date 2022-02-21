@@ -4,20 +4,35 @@ import 'package:intl/intl.dart';
 import '../model/schedule.dart';
 import 'showCustomWidgets.dart';
 
-class ScheduleAddDialog extends StatefulWidget {
-  const ScheduleAddDialog({Key? key}) : super(key: key);
+class ScheduleSettingDialog extends StatefulWidget {
+  final ScheduleSettingMethod initialMethod;
+  final Schedule? initialSchedule;
+
+  const ScheduleSettingDialog({
+    Key? key,
+    required this.initialMethod,
+    this.initialSchedule,
+  }) : super(key: key);
 
   @override
-  ScheduleAddDialogState createState() => ScheduleAddDialogState();
+  ScheduleSettingDialogState createState() => ScheduleSettingDialogState();
 }
 
-class ScheduleAddDialogState extends State<ScheduleAddDialog> {
+enum ScheduleSettingMethod {
+  add,
+  fix,
+}
+
+class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
   late Schedule schedule;
+  late ScheduleSettingMethod method;
 
   @override
   void initState() {
     super.initState();
-    schedule = Schedule();
+    schedule =
+        widget.initialSchedule != null ? widget.initialSchedule! : Schedule();
+    method = widget.initialMethod;
   }
 
   @override
@@ -32,7 +47,8 @@ class ScheduleAddDialogState extends State<ScheduleAddDialog> {
               children: <Widget>[
                 SizedBox(
                   width: 400,
-                  child: TextField(
+                  child: TextFormField(
+                    initialValue: schedule.name,
                     decoration: const InputDecoration(hintText: "何をする予定ですか？"),
                     onChanged: (String s) {
                       changeTextField(s);
@@ -145,7 +161,9 @@ class ScheduleAddDialogState extends State<ScheduleAddDialog> {
             width: 100,
             height: 60,
             child: TextButton(
-              child: const Text("追加"),
+              child: method == ScheduleSettingMethod.add
+                  ? const Text("追加")
+                  : const Text("修正"),
               onPressed: () {
                 Navigator.pop(context, schedule);
               },

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../model/schedule.dart';
-import 'scheduleAddDialog.dart';
+import 'scheduleSettingDialog.dart';
 
 class ScheduleListView extends StatefulWidget {
   const ScheduleListView({Key? key, required this.title}) : super(key: key);
@@ -18,10 +18,26 @@ class _ScheduleListViewState extends State<ScheduleListView> {
 
   void showAddScheduleDialog() async {
     final schedule = await showDialog<Schedule>(
-        context: context, builder: (context) => const ScheduleAddDialog());
+        context: context,
+        builder: (context) => const ScheduleSettingDialog(
+            initialMethod: ScheduleSettingMethod.add));
     if (schedule != null) {
       setState(() {
         schedules.add(schedule);
+      });
+    }
+  }
+
+  void showFixScheduleDialog(int scheduleIndex) async {
+    final schedule = await showDialog<Schedule>(
+      context: context,
+      builder: (context) => ScheduleSettingDialog(
+          initialMethod: ScheduleSettingMethod.fix,
+          initialSchedule: schedules[scheduleIndex]),
+    );
+    if (schedule != null) {
+      setState(() {
+        schedules[scheduleIndex] = schedule;
       });
     }
   }
@@ -49,13 +65,24 @@ class _ScheduleListViewState extends State<ScheduleListView> {
                       " ~ " +
                       DateFormat("yyyy-MM-dd HH:mm")
                           .format(schedules[index].endDateTime)),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      setState(() {
-                        schedules.removeAt(index);
-                      });
-                    },
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.change_circle),
+                        onPressed: () {
+                          showFixScheduleDialog(index);
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          setState(() {
+                            schedules.removeAt(index);
+                          });
+                        },
+                      ),
+                    ],
                   ),
                 ),
               );
@@ -65,7 +92,7 @@ class _ScheduleListViewState extends State<ScheduleListView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: showAddScheduleDialog,
-        tooltip: 'Increment',
+        tooltip: 'Add Schedule',
         child: const Icon(Icons.add),
       ),
     );
