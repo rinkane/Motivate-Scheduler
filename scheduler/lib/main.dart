@@ -35,7 +35,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var schedules = <Schedule>[];
+  var schedules = <Schedule>[Schedule()];
 
   void showAddScheduleDialog() async {
     final schedule = await showDialog<Schedule>(
@@ -58,12 +58,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 SliverChildBuilderDelegate((BuildContext context, int index) {
               return Card(
                 child: ListTile(
-                  leading: Text(schedules[index].motivation.toString()),
+                  leading: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(schedules[index].motivation.toString())
+                    ],
+                  ),
                   title: Text(schedules[index].name),
-                  subtitle: Text(DateFormat("yyyy-MM-dd H:m")
+                  subtitle: Text(DateFormat("yyyy-MM-dd HH:mm")
                           .format(schedules[index].startDateTime) +
                       " ~ " +
-                      DateFormat("yyyy-MM-dd H:m")
+                      DateFormat("yyyy-MM-dd HH:mm")
                           .format(schedules[index].endDateTime)),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
