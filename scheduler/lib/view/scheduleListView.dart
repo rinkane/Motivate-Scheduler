@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import '../model/schedule.dart';
 import 'scheduleSettingDialog.dart';
 
+const String dateTimeFormat = "yyyy-MM-dd HH:mm";
+
 class ScheduleListView extends StatefulWidget {
   const ScheduleListView({Key? key, required this.title}) : super(key: key);
 
@@ -60,10 +62,10 @@ class _ScheduleListViewState extends State<ScheduleListView> {
                     ],
                   ),
                   title: Text(schedules[index].name),
-                  subtitle: Text(DateFormat("yyyy-MM-dd HH:mm")
+                  subtitle: Text(DateFormat(dateTimeFormat)
                           .format(schedules[index].startDateTime) +
                       " ~ " +
-                      DateFormat("yyyy-MM-dd HH:mm")
+                      DateFormat(dateTimeFormat)
                           .format(schedules[index].endDateTime)),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,

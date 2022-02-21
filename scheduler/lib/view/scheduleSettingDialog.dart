@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 import '../model/schedule.dart';
 import 'showCustomWidgets.dart';
 
+const String dateFormat = "yyyy-MM-dd";
+const String timeFormat = "HH:mm";
+
 class ScheduleSettingDialog extends StatefulWidget {
   final ScheduleSettingMethod initialMethod;
   final Schedule? initialSchedule;
@@ -74,7 +77,7 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
                       children: <Widget>[
                         TextButton(
                           onPressed: () => selectDate(context, true),
-                          child: Text(DateFormat("yyyy-MM-dd")
+                          child: Text(DateFormat(dateFormat)
                               .format(schedule.startDateTime)),
                           style: TextButton.styleFrom(
                             padding: const EdgeInsets.fromLTRB(6, 0, 3, 0),
@@ -84,7 +87,7 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
                           width: 44,
                           child: TextButton(
                             onPressed: () => selectTime(context, true),
-                            child: Text(DateFormat("HH:mm")
+                            child: Text(DateFormat(timeFormat)
                                 .format(schedule.startDateTime)),
                             style: TextButton.styleFrom(
                               padding: const EdgeInsets.fromLTRB(3, 0, 6, 0),
@@ -111,7 +114,7 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
                       children: <Widget>[
                         TextButton(
                           onPressed: () => selectDate(context, false),
-                          child: Text(DateFormat("yyyy-MM-dd")
+                          child: Text(DateFormat(dateFormat)
                               .format(schedule.endDateTime)),
                           style: TextButton.styleFrom(
                             padding: const EdgeInsets.fromLTRB(6, 0, 3, 0),
@@ -121,7 +124,7 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
                           width: 44,
                           child: TextButton(
                             onPressed: () => selectTime(context, false),
-                            child: Text(DateFormat("HH:mm")
+                            child: Text(DateFormat(timeFormat)
                                 .format(schedule.endDateTime)),
                             style: TextButton.styleFrom(
                               padding: const EdgeInsets.fromLTRB(3, 0, 6, 0),
