@@ -4,13 +4,25 @@ class ShowCustomWidgets {
   BuildContext context;
   ShowCustomWidgets(this.context);
 
-  Future<DateTime?> scheduleDatePicker(DateTime initialDate) async {
+  Future<DateTime?> scheduleStartDatePicker(DateTime initialDate) async {
     return showDatePicker(
       context: context,
       initialDate: initialDate,
       firstDate: DateTime(2020),
       lastDate: DateTime.now().add(
         const Duration(days: 1000),
+      ),
+    );
+  }
+
+  Future<DateTime?> scheduleEndDatePicker(
+      DateTime initialDate, DateTime startDate) async {
+    return showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: startDate,
+      lastDate: startDate.add(
+        const Duration(days: 366),
       ),
     );
   }

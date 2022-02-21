@@ -197,21 +197,69 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
   void selectDate(BuildContext context, bool isStart) async {
     DateTime scheduleDate =
         isStart ? schedule.startDateTime : schedule.endDateTime;
-    final DateTime? date =
-        await ShowCustomWidgets(context).scheduleDatePicker(scheduleDate);
+    final DateTime? date = isStart
+        ? await ShowCustomWidgets(context).scheduleStartDatePicker(scheduleDate)
+        : await ShowCustomWidgets(context)
+            .scheduleEndDatePicker(scheduleDate, schedule.startDateTime);
     if (date != null) {
-      final DateTime newDate = createDate(scheduleDate, date);
+      final DateTime newDate = createUpdatedDate(scheduleDate, date);
       setState(() {
         if (isStart) {
           schedule.startDateTime = newDate;
+          validateScheduleEndDateTime();
         } else {
           schedule.endDateTime = newDate;
+          validateScheduleStartDateTime();
         }
       });
     }
   }
 
-  DateTime createDate(DateTime destination, DateTime source) {
+  void selectTime(BuildContext context, bool isStart) async {
+    DateTime scheduleTime =
+        isStart ? schedule.startDateTime : schedule.endDateTime;
+    final TimeOfDay? time =
+        await ShowCustomWidgets(context).scheduleTimePicker(scheduleTime);
+    if (time != null) {
+      final DateTime newTime = createUpdatedTime(scheduleTime, time);
+      setState(() {
+        if (isStart) {
+          schedule.startDateTime = newTime;
+          validateScheduleEndDateTime();
+        } else {
+          schedule.endDateTime = newTime;
+          validateScheduleStartDateTime();
+        }
+      });
+    }
+  }
+
+  void validateScheduleStartDateTime() {
+    if (schedule.endDateTime.isBefore(schedule.startDateTime)) {
+      setState(() {
+        schedule.startDateTime =
+            schedule.startDateTime.add(const Duration(days: -1));
+      });
+    }
+  }
+
+  void validateScheduleEndDateTime() {
+    if (schedule.endDateTime.isBefore(schedule.startDateTime)) {
+      setState(() {
+        schedule.endDateTime =
+            createUpdatedDate(schedule.endDateTime, schedule.startDateTime);
+      });
+    }
+
+    if (schedule.endDateTime.isBefore(schedule.startDateTime)) {
+      setState(() {
+        schedule.endDateTime =
+            schedule.endDateTime.add(const Duration(days: 1));
+      });
+    }
+  }
+
+  DateTime createUpdatedDate(DateTime destination, DateTime source) {
     DateTime dateTime = DateTime(
       source.year,
       source.month,
@@ -222,24 +270,7 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
     return dateTime;
   }
 
-  void selectTime(BuildContext context, bool isStart) async {
-    DateTime scheduleTime =
-        isStart ? schedule.startDateTime : schedule.endDateTime;
-    final TimeOfDay? time =
-        await ShowCustomWidgets(context).scheduleTimePicker(scheduleTime);
-    if (time != null) {
-      final DateTime newTime = createTime(scheduleTime, time);
-      setState(() {
-        if (isStart) {
-          schedule.startDateTime = newTime;
-        } else {
-          schedule.endDateTime = newTime;
-        }
-      });
-    }
-  }
-
-  DateTime createTime(DateTime destination, TimeOfDay source) {
+  DateTime createUpdatedTime(DateTime destination, TimeOfDay source) {
     DateTime dateTime = DateTime(destination.year, destination.month,
         destination.day, source.hour, source.minute);
     return dateTime;
