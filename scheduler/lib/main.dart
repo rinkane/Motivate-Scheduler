@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'view/scheduleListView.dart';
+import 'model/schedule.dart';
 
 const String appName = "Motivate Scheduler";
 
@@ -18,7 +19,61 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: const ScheduleListView(title: appName),
+      home: ScheduleListView(
+        title: appName,
+        schedules: <Schedule>[
+          Schedule.of(
+              "予定1",
+              10,
+              DateTime(
+                  DateTime.now().year,
+                  DateTime.now().month,
+                  DateTime.now().day,
+                  DateTime.now().hour,
+                  DateTime.now().minute),
+              DateTime(
+                      DateTime.now().year,
+                      DateTime.now().month,
+                      DateTime.now().day,
+                      DateTime.now().hour,
+                      DateTime.now().minute)
+                  .add(const Duration(days: 1))),
+          Schedule.of(
+              "予定2",
+              -30,
+              DateTime(
+                      DateTime.now().year,
+                      DateTime.now().month,
+                      DateTime.now().day,
+                      DateTime.now().hour,
+                      DateTime.now().minute)
+                  .add(const Duration(days: -1)),
+              DateTime(
+                      DateTime.now().year,
+                      DateTime.now().month,
+                      DateTime.now().day,
+                      DateTime.now().hour,
+                      DateTime.now().minute)
+                  .add(const Duration(days: 2))),
+          Schedule.of(
+              "予定3",
+              40,
+              DateTime(
+                      DateTime.now().year,
+                      DateTime.now().month,
+                      DateTime.now().day,
+                      DateTime.now().hour,
+                      DateTime.now().minute)
+                  .add(const Duration(days: -2)),
+              DateTime(
+                      DateTime.now().year,
+                      DateTime.now().month,
+                      DateTime.now().day,
+                      DateTime.now().hour,
+                      DateTime.now().minute)
+                  .add(const Duration(days: 0))),
+        ],
+      ),
     );
   }
 }

@@ -7,16 +7,29 @@ import 'scheduleSettingDialog.dart';
 const String dateTimeFormat = "yyyy-MM-dd HH:mm";
 
 class ScheduleListView extends StatefulWidget {
-  const ScheduleListView({Key? key, required this.title}) : super(key: key);
+  const ScheduleListView(
+      {Key? key, required this.title, required this.schedules})
+      : super(key: key);
 
   final String title;
+  final List<Schedule> schedules;
 
   @override
   State<ScheduleListView> createState() => _ScheduleListViewState();
 }
 
 class _ScheduleListViewState extends State<ScheduleListView> {
-  var schedules = <Schedule>[Schedule()];
+  late List<Schedule> schedules = <Schedule>[];
+
+  @override
+  void initState() {
+    super.initState();
+
+    for (var _schedule in widget.schedules) {
+      insertSchedule(_schedule);
+      checkDoubleBooking(_schedule);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,23 +42,33 @@ class _ScheduleListViewState extends State<ScheduleListView> {
                 SliverChildBuilderDelegate((BuildContext context, int index) {
               return Card(
                 child: ListTile(
-                  leading: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  leading: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text(schedules[index].motivation.toString())
+                      Container(
+                        alignment: Alignment.center,
+                        width: 30,
+                        child: Text(schedules[index].motivation.toString()),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: schedules[index].doubleBookingSchedule.isNotEmpty
+                            ? Icon(
+                                Icons.warning,
+                                color: Colors.yellow.shade600,
+                              )
+                            : Container(),
+                      ),
                     ],
                   ),
                   title: Text(schedules[index].name),
-                  subtitle: Text(DateFormat(dateTimeFormat)
-                          .format(schedules[index].startDateTime) +
-                      " ~ " +
-                      DateFormat(dateTimeFormat)
-                          .format(schedules[index].endDateTime)),
+                  subtitle: getSubTitle(index),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       IconButton(
-                        icon: const Icon(Icons.change_circle),
+                        icon: const Icon(Icons.mode_edit),
                         onPressed: () {
                           showFixScheduleDialog(index);
                         },
@@ -81,6 +104,7 @@ class _ScheduleListViewState extends State<ScheduleListView> {
             initialMethod: ScheduleSettingMethod.add));
     if (schedule != null) {
       insertSchedule(schedule);
+      checkDoubleBooking(schedule);
     }
   }
 
@@ -96,6 +120,7 @@ class _ScheduleListViewState extends State<ScheduleListView> {
         schedules.removeAt(scheduleIndex);
       });
       insertSchedule(schedule);
+      checkDoubleBooking(schedule);
     }
   }
 
@@ -111,5 +136,52 @@ class _ScheduleListViewState extends State<ScheduleListView> {
     setState(() {
       schedules.add(schedule);
     });
+  }
+
+  void checkDoubleBooking(Schedule schedule) {
+    for (int i = 0; i < schedules.length; i++) {
+      if (schedules[i].isDuring(schedule) || schedule.isDuring(schedules[i])) {
+        setState(() {
+          schedule.addDoubleBookingSchedule(schedules[i]);
+          schedules[i].addDoubleBookingSchedule(schedule);
+        });
+      } else {
+        setState(() {
+          schedule.doubleBookingSchedule.remove(schedules[i]);
+          schedules[i].doubleBookingSchedule.remove(schedule);
+        });
+      }
+    }
+  }
+
+  Widget getSubTitle(int scheduleIndex) {
+    if (schedules[scheduleIndex].doubleBookingSchedule.isEmpty) {
+      return Text(DateFormat(dateTimeFormat)
+              .format(schedules[scheduleIndex].startDateTime) +
+          " ~ " +
+          DateFormat(dateTimeFormat)
+              .format(schedules[scheduleIndex].endDateTime));
+    } else {
+      String warning = "It's double-booked with ";
+      for (var doubleBooked in schedules[scheduleIndex].doubleBookingSchedule) {
+        warning += '"' + doubleBooked.name + '"';
+        warning += " , ";
+      }
+      warning = warning.replaceRange(warning.length - 3, null, '.');
+      return Row(
+        children: <Widget>[
+          Text(DateFormat(dateTimeFormat)
+                  .format(schedules[scheduleIndex].startDateTime) +
+              " ~ " +
+              DateFormat(dateTimeFormat)
+                  .format(schedules[scheduleIndex].endDateTime)),
+          Container(
+            margin: const EdgeInsets.fromLTRB(10, 0, 0, 2),
+            child:
+                Text(warning, style: TextStyle(color: Colors.yellow.shade600)),
+          ),
+        ],
+      );
+    }
   }
 }
