@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import '../model/schedule.dart';
 import 'scheduleSettingDialog.dart';
 
+const String dateTimeFormat = "yyyy-MM-dd HH:mm";
+
 class ScheduleListView extends StatefulWidget {
   const ScheduleListView({Key? key, required this.title}) : super(key: key);
 
@@ -15,32 +17,6 @@ class ScheduleListView extends StatefulWidget {
 
 class _ScheduleListViewState extends State<ScheduleListView> {
   var schedules = <Schedule>[Schedule()];
-
-  void showAddScheduleDialog() async {
-    final schedule = await showDialog<Schedule>(
-        context: context,
-        builder: (context) => const ScheduleSettingDialog(
-            initialMethod: ScheduleSettingMethod.add));
-    if (schedule != null) {
-      setState(() {
-        schedules.add(schedule);
-      });
-    }
-  }
-
-  void showFixScheduleDialog(int scheduleIndex) async {
-    final schedule = await showDialog<Schedule>(
-      context: context,
-      builder: (context) => ScheduleSettingDialog(
-          initialMethod: ScheduleSettingMethod.fix,
-          initialSchedule: schedules[scheduleIndex]),
-    );
-    if (schedule != null) {
-      setState(() {
-        schedules[scheduleIndex] = schedule;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,10 +36,10 @@ class _ScheduleListViewState extends State<ScheduleListView> {
                     ],
                   ),
                   title: Text(schedules[index].name),
-                  subtitle: Text(DateFormat("yyyy-MM-dd HH:mm")
+                  subtitle: Text(DateFormat(dateTimeFormat)
                           .format(schedules[index].startDateTime) +
                       " ~ " +
-                      DateFormat("yyyy-MM-dd HH:mm")
+                      DateFormat(dateTimeFormat)
                           .format(schedules[index].endDateTime)),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -96,5 +72,44 @@ class _ScheduleListViewState extends State<ScheduleListView> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  void showAddScheduleDialog() async {
+    final schedule = await showDialog<Schedule>(
+        context: context,
+        builder: (context) => const ScheduleSettingDialog(
+            initialMethod: ScheduleSettingMethod.add));
+    if (schedule != null) {
+      insertSchedule(schedule);
+    }
+  }
+
+  void showFixScheduleDialog(int scheduleIndex) async {
+    final schedule = await showDialog<Schedule>(
+      context: context,
+      builder: (context) => ScheduleSettingDialog(
+          initialMethod: ScheduleSettingMethod.fix,
+          initialSchedule: schedules[scheduleIndex]),
+    );
+    if (schedule != null) {
+      setState(() {
+        schedules.removeAt(scheduleIndex);
+      });
+      insertSchedule(schedule);
+    }
+  }
+
+  void insertSchedule(Schedule schedule) {
+    for (int i = 0; i < schedules.length; i++) {
+      if (schedules[i].startDateTime.isAfter(schedule.startDateTime)) {
+        setState(() {
+          schedules.insert(i, schedule);
+        });
+        return;
+      }
+    }
+    setState(() {
+      schedules.add(schedule);
+    });
   }
 }
