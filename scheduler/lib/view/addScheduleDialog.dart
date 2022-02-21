@@ -25,62 +25,141 @@ class AddScheduleDialogState extends State<AddScheduleDialog> {
     return AlertDialog(
         title: const Text("スケジュールの追加"),
         content: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            TextField(
-              decoration: const InputDecoration(hintText: "追加したい予定"),
-              onChanged: (String s) {
-                changeTextField(s);
-              },
-            ),
-            Text(schedule.motivation.toString()),
-            Slider(
-              value: schedule.motivation,
-              max: 100,
-              min: -100,
-              onChanged: changeSlider,
-            ),
-            Text(DateFormat("yyyy-MM-dd H:m").format(schedule.startDateTime)),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                ElevatedButton(
-                  child: const Text("日付選択"),
-                  onPressed: () => selectDate(context, true),
+                SizedBox(
+                  width: 400,
+                  child: TextField(
+                    decoration: const InputDecoration(hintText: "何をする予定ですか？"),
+                    onChanged: (String s) {
+                      changeTextField(s);
+                    },
+                  ),
                 ),
-                ElevatedButton(
-                  child: const Text("時間選択"),
-                  onPressed: () => selectTime(context, true),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black26),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          TextButton(
+                            onPressed: () => selectDate(context, true),
+                            child: Text(DateFormat("yyyy-MM-dd")
+                                .format(schedule.startDateTime)),
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.fromLTRB(6, 0, 3, 0),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 44,
+                            child: TextButton(
+                              onPressed: () => selectTime(context, true),
+                              child: Text(DateFormat("HH:mm")
+                                  .format(schedule.startDateTime)),
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.fromLTRB(3, 0, 6, 0),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                      child: Icon(
+                        Icons.arrow_forward,
+                        color: Colors.black45,
+                        size: 16,
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black26),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          TextButton(
+                            onPressed: () => selectDate(context, false),
+                            child: Text(DateFormat("yyyy-MM-dd")
+                                .format(schedule.endDateTime)),
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.fromLTRB(6, 0, 3, 0),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 44,
+                            child: TextButton(
+                              onPressed: () => selectTime(context, false),
+                              child: Text(DateFormat("HH:mm")
+                                  .format(schedule.endDateTime)),
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.fromLTRB(3, 0, 6, 0),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            Text(DateFormat("yyyy-MM-dd H:m").format(schedule.endDateTime)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  child: const Text("日付選択"),
-                  onPressed: () => selectDate(context, false),
+            Stack(
+              children: <Widget>[
+                Container(
+                  height: 60,
+                  margin: const EdgeInsets.fromLTRB(0, 28, 0, 0),
+                  alignment: Alignment.centerLeft,
+                  child: const Text("モチベーション"),
                 ),
-                ElevatedButton(
-                  child: const Text("時間選択"),
-                  onPressed: () => selectTime(context, false),
+                Container(
+                  height: 60,
+                  margin: const EdgeInsets.fromLTRB(120, 30, 50, 0),
+                  alignment: Alignment.center,
+                  child: Slider(
+                    value: schedule.motivation,
+                    max: 100,
+                    min: -100,
+                    onChanged: changeSlider,
+                  ),
+                ),
+                Container(
+                  height: 60,
+                  margin: const EdgeInsets.fromLTRB(0, 30, 20, 0),
+                  alignment: Alignment.centerRight,
+                  child: Text(schedule.motivation.toString()),
                 ),
               ],
             ),
           ],
         ),
         actions: <Widget>[
-          ElevatedButton(
-            child: const Text("追加"),
-            onPressed: () {
-              Navigator.pop(context, schedule);
-            },
+          SizedBox(
+            width: 100,
+            height: 60,
+            child: TextButton(
+              child: const Text("追加"),
+              onPressed: () {
+                Navigator.pop(context, schedule);
+              },
+            ),
           ),
-          ElevatedButton(
-            child: const Text("キャンセル"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+          SizedBox(
+            width: 100,
+            height: 60,
+            child: TextButton(
+              child: const Text("キャンセル"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
         ]);
   }
