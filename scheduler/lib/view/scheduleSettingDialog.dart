@@ -27,6 +27,9 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
   late Schedule schedule;
   late ScheduleSettingMethod method;
 
+  bool get isCorrectSchedulePeriod =>
+      !schedule.endDateTime.isBefore(schedule.startDateTime);
+
   @override
   void initState() {
     super.initState();
@@ -164,9 +167,11 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
               child: method == ScheduleSettingMethod.add
                   ? const Text("追加")
                   : const Text("修正"),
-              onPressed: () {
-                Navigator.pop(context, schedule);
-              },
+              onPressed: isCorrectSchedulePeriod
+                  ? () {
+                      Navigator.pop(context, schedule);
+                    }
+                  : null,
             ),
           ),
           SizedBox(
@@ -235,7 +240,7 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
   }
 
   void validateScheduleStartDateTime() {
-    if (schedule.endDateTime.isBefore(schedule.startDateTime)) {
+    if (!isCorrectSchedulePeriod) {
       setState(() {
         schedule.startDateTime =
             schedule.startDateTime.add(const Duration(days: -1));
@@ -244,14 +249,14 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
   }
 
   void validateScheduleEndDateTime() {
-    if (schedule.endDateTime.isBefore(schedule.startDateTime)) {
+    if (!isCorrectSchedulePeriod) {
       setState(() {
         schedule.endDateTime =
             createUpdatedDate(schedule.endDateTime, schedule.startDateTime);
       });
     }
 
-    if (schedule.endDateTime.isBefore(schedule.startDateTime)) {
+    if (!isCorrectSchedulePeriod) {
       setState(() {
         schedule.endDateTime =
             schedule.endDateTime.add(const Duration(days: 1));
