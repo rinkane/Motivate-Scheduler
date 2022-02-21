@@ -197,8 +197,10 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
   void selectDate(BuildContext context, bool isStart) async {
     DateTime scheduleDate =
         isStart ? schedule.startDateTime : schedule.endDateTime;
-    final DateTime? date =
-        await ShowCustomWidgets(context).scheduleDatePicker(scheduleDate);
+    final DateTime? date = isStart
+        ? await ShowCustomWidgets(context).scheduleStartDatePicker(scheduleDate)
+        : await ShowCustomWidgets(context)
+            .scheduleEndDatePicker(scheduleDate, schedule.startDateTime);
     if (date != null) {
       final DateTime newDate = createDate(scheduleDate, date);
       setState(() {
@@ -234,6 +236,10 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
           schedule.startDateTime = newTime;
         } else {
           schedule.endDateTime = newTime;
+          if (schedule.endDateTime.isBefore(schedule.startDateTime)) {
+            schedule.endDateTime =
+                schedule.endDateTime.add(const Duration(days: 1));
+          }
         }
       });
     }
