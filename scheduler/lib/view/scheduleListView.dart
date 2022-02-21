@@ -18,32 +18,6 @@ class ScheduleListView extends StatefulWidget {
 class _ScheduleListViewState extends State<ScheduleListView> {
   var schedules = <Schedule>[Schedule()];
 
-  void showAddScheduleDialog() async {
-    final schedule = await showDialog<Schedule>(
-        context: context,
-        builder: (context) => const ScheduleSettingDialog(
-            initialMethod: ScheduleSettingMethod.add));
-    if (schedule != null) {
-      setState(() {
-        schedules.add(schedule);
-      });
-    }
-  }
-
-  void showFixScheduleDialog(int scheduleIndex) async {
-    final schedule = await showDialog<Schedule>(
-      context: context,
-      builder: (context) => ScheduleSettingDialog(
-          initialMethod: ScheduleSettingMethod.fix,
-          initialSchedule: schedules[scheduleIndex]),
-    );
-    if (schedule != null) {
-      setState(() {
-        schedules[scheduleIndex] = schedule;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,5 +72,43 @@ class _ScheduleListViewState extends State<ScheduleListView> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  void showAddScheduleDialog() async {
+    final schedule = await showDialog<Schedule>(
+        context: context,
+        builder: (context) => const ScheduleSettingDialog(
+            initialMethod: ScheduleSettingMethod.add));
+    if (schedule != null) {
+      setState(() {
+        insertSchedule(schedule);
+      });
+    }
+  }
+
+  void showFixScheduleDialog(int scheduleIndex) async {
+    final schedule = await showDialog<Schedule>(
+      context: context,
+      builder: (context) => ScheduleSettingDialog(
+          initialMethod: ScheduleSettingMethod.fix,
+          initialSchedule: schedules[scheduleIndex]),
+    );
+    if (schedule != null) {
+      setState(() {
+        schedules[scheduleIndex] = schedule;
+      });
+    }
+  }
+
+  void insertSchedule(Schedule schedule) {
+    for (int i = 0; i < schedules.length; i++) {
+      if (schedules[i].startDateTime.isAfter(schedule.startDateTime)) {
+        setState(() {
+          schedules.insert(i, schedule);
+        });
+        return;
+      }
+    }
+    schedules.add(schedule);
   }
 }
