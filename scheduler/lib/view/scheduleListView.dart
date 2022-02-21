@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 
 import '../model/schedule.dart';
 import 'scheduleSettingDialog.dart';
-import 'showCustomWidgets.dart';
 
 const String dateTimeFormat = "yyyy-MM-dd HH:mm";
 
@@ -166,8 +165,9 @@ class _ScheduleListViewState extends State<ScheduleListView> {
       String warning = "It's double-booked with ";
       for (var doubleBooked in schedules[scheduleIndex].doubleBookingSchedule) {
         warning += '"' + doubleBooked.name + '"';
-        warning += ",";
+        warning += " , ";
       }
+      warning = warning.replaceRange(warning.length - 3, null, '.');
       return Row(
         children: <Widget>[
           Text(DateFormat(dateTimeFormat)
