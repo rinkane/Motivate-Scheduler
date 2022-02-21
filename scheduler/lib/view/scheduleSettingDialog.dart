@@ -30,6 +30,11 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
   bool get isCorrectSchedulePeriod =>
       !schedule.endDateTime.isBefore(schedule.startDateTime);
 
+  bool get isEmptyScheduleName => schedule.name == "";
+
+  bool get canCompleteSettingSchedule =>
+      isCorrectSchedulePeriod && !isEmptyScheduleName;
+
   @override
   void initState() {
     super.initState();
@@ -167,7 +172,7 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
               child: method == ScheduleSettingMethod.add
                   ? const Text("追加")
                   : const Text("修正"),
-              onPressed: isCorrectSchedulePeriod
+              onPressed: canCompleteSettingSchedule
                   ? () {
                       Navigator.pop(context, schedule);
                     }
