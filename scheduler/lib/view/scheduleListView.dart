@@ -80,9 +80,7 @@ class _ScheduleListViewState extends State<ScheduleListView> {
         builder: (context) => const ScheduleSettingDialog(
             initialMethod: ScheduleSettingMethod.add));
     if (schedule != null) {
-      setState(() {
-        insertSchedule(schedule);
-      });
+      insertSchedule(schedule);
     }
   }
 
@@ -95,8 +93,9 @@ class _ScheduleListViewState extends State<ScheduleListView> {
     );
     if (schedule != null) {
       setState(() {
-        schedules[scheduleIndex] = schedule;
+        schedules.removeAt(scheduleIndex);
       });
+      insertSchedule(schedule);
     }
   }
 
@@ -109,6 +108,8 @@ class _ScheduleListViewState extends State<ScheduleListView> {
         return;
       }
     }
-    schedules.add(schedule);
+    setState(() {
+      schedules.add(schedule);
+    });
   }
 }
