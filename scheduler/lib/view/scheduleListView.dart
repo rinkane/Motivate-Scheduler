@@ -36,7 +36,29 @@ class _ScheduleListViewState extends State<ScheduleListView> {
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
-          SliverAppBar(title: Text(widget.title)),
+          SliverAppBar(
+            title: Text(widget.title),
+          ),
+          SliverList(
+            delegate:
+                SliverChildBuilderDelegate((BuildContext context, int index) {
+              return Container(
+                height: 60,
+                margin: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.black12,
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: TextButton(
+                  child: const Icon(Icons.add),
+                  onPressed: showAddScheduleDialog,
+                ),
+              );
+            }, childCount: 1),
+          ),
           SliverList(
             delegate:
                 SliverChildBuilderDelegate((BuildContext context, int index) {
@@ -86,13 +108,8 @@ class _ScheduleListViewState extends State<ScheduleListView> {
                 ),
               );
             }, childCount: schedules.length),
-          ),
+          )
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: showAddScheduleDialog,
-        tooltip: 'Add Schedule',
-        child: const Icon(Icons.add),
       ),
     );
   }
