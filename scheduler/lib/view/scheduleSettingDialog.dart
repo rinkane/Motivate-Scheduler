@@ -151,7 +151,7 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
                 margin: const EdgeInsets.fromLTRB(120, 30, 50, 0),
                 alignment: Alignment.center,
                 child: Slider(
-                  value: schedule.motivation,
+                  value: schedule.motivation.toDouble(),
                   max: 100,
                   min: -100,
                   onChanged: changeSlider,
@@ -198,7 +198,7 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
 
   void changeSlider(double value) {
     setState(() {
-      schedule.motivation = value.roundToDouble();
+      schedule.motivation = value.toInt();
     });
   }
 
