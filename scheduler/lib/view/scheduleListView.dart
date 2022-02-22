@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:dotted_border/dotted_border.dart';
 
 import '../model/schedule.dart';
 import 'scheduleSettingDialog.dart';
@@ -36,63 +37,86 @@ class _ScheduleListViewState extends State<ScheduleListView> {
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
-          SliverAppBar(title: Text(widget.title)),
+          SliverAppBar(
+            title: Text(widget.title),
+          ),
           SliverList(
             delegate:
                 SliverChildBuilderDelegate((BuildContext context, int index) {
-              return Card(
-                child: ListTile(
-                  leading: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.center,
-                        width: 30,
-                        child: Text(schedules[index].motivation.toString()),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child: schedules[index].doubleBookingSchedule.isNotEmpty
-                            ? Icon(
-                                Icons.warning,
-                                color: Colors.yellow.shade600,
-                              )
-                            : Container(),
-                      ),
-                    ],
+              return Container(
+                height: 60,
+                margin: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+                child: DottedBorder(
+                  color: Colors.black26,
+                  strokeWidth: 1,
+                  dashPattern: const [10, 10],
+                  radius: const Radius.circular(4),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints.expand(),
+                    child: TextButton(
+                      child: const Icon(Icons.add),
+                      onPressed: showAddScheduleDialog,
+                    ),
                   ),
-                  title: Text(schedules[index].name),
-                  subtitle: getSubTitle(index),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(
-                        icon: const Icon(Icons.mode_edit),
-                        onPressed: () {
-                          showFixScheduleDialog(index);
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          setState(() {
-                            schedules.removeAt(index);
-                          });
-                        },
-                      ),
-                    ],
+                ),
+              );
+            }, childCount: 1),
+          ),
+          SliverList(
+            delegate:
+                SliverChildBuilderDelegate((BuildContext context, int index) {
+              return Container(
+                margin: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                child: Card(
+                  child: ListTile(
+                    leading: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          alignment: Alignment.center,
+                          width: 30,
+                          child: Text(schedules[index].motivation.toString()),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child:
+                              schedules[index].doubleBookingSchedule.isNotEmpty
+                                  ? Icon(
+                                      Icons.warning,
+                                      color: Colors.yellow.shade600,
+                                    )
+                                  : Container(),
+                        ),
+                      ],
+                    ),
+                    title: Text(schedules[index].name),
+                    subtitle: getSubTitle(index),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          icon: const Icon(Icons.mode_edit),
+                          onPressed: () {
+                            showFixScheduleDialog(index);
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            setState(() {
+                              schedules.removeAt(index);
+                            });
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
             }, childCount: schedules.length),
-          ),
+          )
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: showAddScheduleDialog,
-        tooltip: 'Add Schedule',
-        child: const Icon(Icons.add),
       ),
     );
   }
