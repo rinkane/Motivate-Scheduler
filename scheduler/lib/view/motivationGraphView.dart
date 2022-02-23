@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:charts_flutter/flutter.dart';
 
 import '../model/schedule.dart';
@@ -44,28 +45,45 @@ class _MotivationGraphViewState extends State<MotivationGraphView> {
           Container(
             margin: const EdgeInsets.all(30),
             height: 500,
-            child: TimeSeriesChart(createMotivationData()),
+            child: createChart(),
           ),
         ],
       ),
     );
   }
 
-  List<Series<MotivationData, DateTime>> createMotivationData() {
+  TimeSeriesChart createChart() {
     List<Schedule> _schedules = createSchedulesCopy(schedules);
     _schedules.sort((a, b) => a.endDateTime.compareTo(b.endDateTime));
 
     List<MotivationData> motivations = createMotivationDatas(_schedules);
 
-    return [
-      Series<MotivationData, DateTime>(
-        id: "Motivations",
-        data: motivations,
-        colorFn: (_, __) => MaterialPalette.purple.shadeDefault,
-        domainFn: (motivation, _) => motivation.dateTime,
-        measureFn: (motivation, _) => motivation.motivation,
-      )
-    ];
+    return TimeSeriesChart(
+      [
+        Series<MotivationData, DateTime>(
+          id: "Motivations",
+          data: motivations,
+          colorFn: (_, __) => MaterialPalette.purple.shadeDefault,
+          domainFn: (motivation, _) => motivation.dateTime,
+          measureFn: (motivation, _) => motivation.motivation,
+        )
+      ],
+      animate: false,
+      behaviors: [
+        RangeAnnotation(
+          [
+            for (int i = 0; i < motivations.length; i++)
+              LineAnnotationSegment(
+                motivations[i].dateTime,
+                RangeAnnotationAxisType.domain,
+                startLabel: DateFormat("yyyy-MM-dd HH:mm")
+                    .format(motivations[i].dateTime),
+                labelPosition: AnnotationLabelPosition.inside,
+              ),
+          ],
+        ),
+      ],
+    );
   }
 
   List<Schedule> createSchedulesCopy(List<Schedule> schedules) {
