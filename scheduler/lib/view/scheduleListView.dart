@@ -4,6 +4,7 @@ import 'package:dotted_border/dotted_border.dart';
 
 import '../model/schedule.dart';
 import 'scheduleSettingDialog.dart';
+import 'viewSelectDrawer.dart';
 
 const String dateTimeFormat = "yyyy-MM-dd HH:mm";
 
@@ -35,41 +36,7 @@ class _ScheduleListViewState extends State<ScheduleListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            const SizedBox(
-              height: 100,
-              child: DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.purple,
-                ),
-                child: Text(
-                  "Menu",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-            ),
-            TextButton(
-              child: const ListTile(
-                leading: Icon(Icons.schedule),
-                title: Text("Schedules"),
-              ),
-              onPressed: () {},
-            ),
-            TextButton(
-              child: const ListTile(
-                leading: Icon(Icons.auto_graph),
-                title: Text("Motivation"),
-              ),
-              onPressed: () {},
-            ),
-          ],
-        ),
-      ),
+      drawer: const ViewSelectDrawer(),
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
