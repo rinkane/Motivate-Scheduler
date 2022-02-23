@@ -3,7 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:dotted_border/dotted_border.dart';
 
 import '../model/schedule.dart';
+import '../model/schedulesArguments.dart';
 import 'scheduleSettingDialog.dart';
+import 'viewSelectDrawer.dart';
 
 const String dateTimeFormat = "yyyy-MM-dd HH:mm";
 
@@ -34,7 +36,13 @@ class _ScheduleListViewState extends State<ScheduleListView> {
 
   @override
   Widget build(BuildContext context) {
+    var args = ModalRoute.of(context)?.settings.arguments;
+    if (args is SchedulesArguments) {
+      schedules = args.schedules;
+    }
+
     return Scaffold(
+      drawer: ViewSelectDrawer(schedules: schedules),
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
