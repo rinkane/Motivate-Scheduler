@@ -75,49 +75,52 @@ class _ScheduleListViewState extends State<ScheduleListView> {
                 SliverChildBuilderDelegate((BuildContext context, int index) {
               return Container(
                 margin: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                child: Card(
-                  child: ListTile(
-                    leading: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          alignment: Alignment.center,
-                          width: 30,
-                          child: Text(schedules[index].motivation.toString()),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child:
-                              schedules[index].doubleBookingSchedule.isNotEmpty
-                                  ? Icon(
-                                      Icons.warning,
-                                      color: Colors.yellow.shade600,
-                                    )
-                                  : Container(),
-                        ),
-                      ],
-                    ),
-                    title: Text(schedules[index].name),
-                    subtitle: getSubTitle(index),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        IconButton(
-                          icon: const Icon(Icons.mode_edit),
-                          onPressed: () {
-                            showFixScheduleDialog(index);
-                          },
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            setState(() {
-                              schedules.removeAt(index);
-                            });
-                          },
-                        ),
-                      ],
+                child: Flexible(
+                  child: Card(
+                    child: ListTile(
+                      leading: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            alignment: Alignment.center,
+                            width: 30,
+                            child: Text(schedules[index].motivation.toString()),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: schedules[index]
+                                    .doubleBookingSchedule
+                                    .isNotEmpty
+                                ? Icon(
+                                    Icons.warning,
+                                    color: Colors.yellow.shade600,
+                                  )
+                                : Container(),
+                          ),
+                        ],
+                      ),
+                      title: Text(schedules[index].name),
+                      subtitle: getSubTitle(index),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          IconButton(
+                            icon: const Icon(Icons.mode_edit),
+                            onPressed: () {
+                              showFixScheduleDialog(index);
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              setState(() {
+                                schedules.removeAt(index);
+                              });
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -200,17 +203,25 @@ class _ScheduleListViewState extends State<ScheduleListView> {
         warning += " , ";
       }
       warning = warning.replaceRange(warning.length - 3, null, '.');
-      return Row(
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(DateFormat(dateTimeFormat)
-                  .format(schedules[scheduleIndex].startDateTime) +
-              " ~ " +
-              DateFormat(dateTimeFormat)
-                  .format(schedules[scheduleIndex].endDateTime)),
           Container(
-            margin: const EdgeInsets.fromLTRB(10, 0, 0, 2),
-            child:
-                Text(warning, style: TextStyle(color: Colors.yellow.shade600)),
+            margin: const EdgeInsets.fromLTRB(0, 4, 0, 0),
+            child: Text(DateFormat(dateTimeFormat)
+                    .format(schedules[scheduleIndex].startDateTime) +
+                " ~ " +
+                DateFormat(dateTimeFormat)
+                    .format(schedules[scheduleIndex].endDateTime)),
+          ),
+          Container(
+            margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: DefaultTextStyle(
+              style: TextStyle(color: Colors.yellow.shade600),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              child: Text(warning),
+            ),
           ),
         ],
       );
