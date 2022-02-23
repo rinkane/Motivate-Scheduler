@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../model/schedule.dart';
+import '../model/schedulesArguments.dart';
 import 'viewSelectDrawer.dart';
 
 class MotivationGraphView extends StatefulWidget {
@@ -27,8 +28,13 @@ class _MotivationGraphViewState extends State<MotivationGraphView> {
 
   @override
   Widget build(BuildContext context) {
+    var args = ModalRoute.of(context)?.settings.arguments;
+    if (args is SchedulesArguments) {
+      schedules = args.schedules;
+    }
+
     return Scaffold(
-      drawer: const ViewSelectDrawer(),
+      drawer: ViewSelectDrawer(schedules: schedules),
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(title: Text(widget.title)),
