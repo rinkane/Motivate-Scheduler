@@ -38,7 +38,11 @@ class _ScheduleListViewState extends State<ScheduleListView> {
   Widget build(BuildContext context) {
     var args = ModalRoute.of(context)?.settings.arguments;
     if (args is SchedulesArguments) {
-      schedules = args.schedules;
+      schedules = <Schedule>[];
+      for (var _schedule in args.schedules) {
+        insertSchedule(_schedule);
+        checkDoubleBooking(_schedule);
+      }
     }
 
     return Scaffold(
