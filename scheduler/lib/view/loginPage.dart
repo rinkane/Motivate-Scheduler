@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                   });
                 },
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 24),
               ElevatedButton(
                 child: const Text("ログイン"),
                 onPressed: () async {
@@ -75,9 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
               ),
-              const SizedBox(height: 8),
-              Text(infoText),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               ElevatedButton(
                 child: const Text("ユーザ登録"),
                 onPressed: () async {
@@ -88,6 +86,8 @@ class _LoginPageState extends State<LoginPage> {
                       ));
                 },
               ),
+              const SizedBox(height: 16),
+              Text(infoText),
             ],
           ),
         ),
