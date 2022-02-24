@@ -6,6 +6,7 @@ import '../model/schedule.dart';
 import '../model/schedulesArguments.dart';
 import 'scheduleSettingDialog.dart';
 import 'viewSelectDrawer.dart';
+import 'confirmDeleteScheduleDialog.dart';
 
 const String dateTimeFormat = "yyyy-MM-dd HH:mm";
 
@@ -117,11 +118,7 @@ class _ScheduleListViewState extends State<ScheduleListView> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete),
-                            onPressed: () {
-                              setState(() {
-                                schedules.removeAt(index);
-                              });
-                            },
+                            onPressed: () => deleteSchedule(index),
                           ),
                         ],
                       ),
@@ -160,6 +157,20 @@ class _ScheduleListViewState extends State<ScheduleListView> {
       });
       insertSchedule(schedule);
       checkDoubleBooking(schedule);
+    }
+  }
+
+  void deleteSchedule(int scheduleIndex) async {
+    final isDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => ConfirmDeleteScheduleDialog(
+          title: schedules[scheduleIndex].name + "を削除しますか?"),
+    );
+
+    if (isDelete == true) {
+      setState(() {
+        schedules.removeAt(scheduleIndex);
+      });
     }
   }
 
