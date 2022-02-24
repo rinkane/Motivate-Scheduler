@@ -80,48 +80,45 @@ class _ScheduleListViewState extends State<ScheduleListView> {
                 SliverChildBuilderDelegate((BuildContext context, int index) {
               return Container(
                 margin: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                child: Flexible(
-                  child: Card(
-                    child: ListTile(
-                      leading: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            alignment: Alignment.center,
-                            width: 30,
-                            child: Text(schedules[index].motivation.toString()),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: schedules[index]
-                                    .doubleBookingSchedule
-                                    .isNotEmpty
-                                ? Icon(
-                                    Icons.warning,
-                                    color: Colors.yellow.shade600,
-                                  )
-                                : Container(),
-                          ),
-                        ],
-                      ),
-                      title: Text(schedules[index].name),
-                      subtitle: getSubTitle(index),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          IconButton(
-                            icon: const Icon(Icons.mode_edit),
-                            onPressed: () {
-                              showFixScheduleDialog(index);
-                            },
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () => deleteSchedule(index),
-                          ),
-                        ],
-                      ),
+                child: Card(
+                  child: ListTile(
+                    leading: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          alignment: Alignment.center,
+                          width: 30,
+                          child: Text(schedules[index].motivation.toString()),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child:
+                              schedules[index].doubleBookingSchedule.isNotEmpty
+                                  ? Icon(
+                                      Icons.warning,
+                                      color: Colors.yellow.shade600,
+                                    )
+                                  : Container(),
+                        ),
+                      ],
+                    ),
+                    title: Text(schedules[index].name),
+                    subtitle: getSubTitle(index),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          icon: const Icon(Icons.mode_edit),
+                          onPressed: () {
+                            showFixScheduleDialog(index);
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () => deleteSchedule(index),
+                        ),
+                      ],
                     ),
                   ),
                 ),

@@ -58,6 +58,7 @@ class _RegistUserPageState extends State<RegistUserPage> {
                     setState(() {
                       infoText = "登録成功:${user.email}";
                     });
+                    Navigator.pop(context);
                   } catch (e) {
                     setState(() {
                       infoText = "登録失敗:${e.toString()}";
