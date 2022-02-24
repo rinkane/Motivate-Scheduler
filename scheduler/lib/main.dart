@@ -5,6 +5,7 @@ import 'firebase_options.dart';
 import 'view/scheduleListView.dart';
 import 'view/motivationGraphView.dart';
 import 'view/registUserPage.dart';
+import 'view/loginPage.dart';
 import 'model/schedule.dart';
 
 const String appName = "Motivate Scheduler";
@@ -62,7 +63,7 @@ class MyApp extends StatelessWidget {
               schedules: schedules,
             ),
       },
-      home: const RegistUserPage(),
+      home: const LoginPage(),
     );
   }
 }
