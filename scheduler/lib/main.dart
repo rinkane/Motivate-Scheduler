@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
+import 'firebase_options.dart';
 import 'view/scheduleListView.dart';
 import 'view/motivationGraphView.dart';
+import 'view/registUserPage.dart';
 import 'model/schedule.dart';
 
 const String appName = "Motivate Scheduler";
@@ -34,7 +37,8 @@ List<Schedule> schedules = [
               DateTime.now().hour, DateTime.now().minute)
           .add(const Duration(days: 0)))
 ];
-void main() {
+void main() async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.web);
   runApp(const MyApp());
 }
 
@@ -58,10 +62,7 @@ class MyApp extends StatelessWidget {
               schedules: schedules,
             ),
       },
-      home: ScheduleListView(
-        title: appName,
-        schedules: schedules,
-      ),
+      home: const RegistUserPage(),
     );
   }
 }
