@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import '../model/schedule.dart';
 import '../model/schedulesArguments.dart';
 
+import 'motivationGraphView.dart';
+import 'scheduleListView.dart';
+
+const String appName = "Motivate Scheduler";
+
 class ViewSelectDrawer extends StatefulWidget {
   const ViewSelectDrawer({Key? key, required this.schedules}) : super(key: key);
 
@@ -46,9 +51,12 @@ class _ViewSelectDrawerState extends State<ViewSelectDrawer> {
               leading: Icon(Icons.schedule),
               title: Text("Schedules"),
             ),
-            onPressed: () => Navigator.of(context).pushNamed(
-              "/home",
-              arguments: SchedulesArguments(schedules),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    ScheduleListView(title: appName, schedules: schedules),
+              ),
             ),
           ),
           TextButton(
@@ -56,9 +64,12 @@ class _ViewSelectDrawerState extends State<ViewSelectDrawer> {
               leading: Icon(Icons.auto_graph),
               title: Text("Motivation"),
             ),
-            onPressed: () => Navigator.of(context).pushNamed(
-              "/motivation",
-              arguments: SchedulesArguments(schedules),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    MotivationGraphView(title: appName, schedules: schedules),
+              ),
             ),
           ),
         ],

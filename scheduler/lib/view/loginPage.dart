@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'registUserPage.dart';
+import 'scheduleListView.dart';
+
+const String appName = "Motivate Scheduler";
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -56,6 +61,13 @@ class _LoginPageState extends State<LoginPage> {
                     setState(() {
                       infoText = "ログイン成功:${user.email}";
                     });
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ScheduleListView(
+                            title: appName, schedules: []),
+                      ),
+                    );
                   } catch (e) {
                     setState(() {
                       infoText = "ログイン失敗:${e.toString()}";
@@ -65,6 +77,17 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 8),
               Text(infoText),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                child: const Text("ユーザ登録"),
+                onPressed: () async {
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RegistUserPage(),
+                      ));
+                },
+              ),
             ],
           ),
         ),
