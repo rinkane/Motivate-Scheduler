@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class RegistUserPage extends StatefulWidget {
@@ -58,6 +59,10 @@ class _RegistUserPageState extends State<RegistUserPage> {
                     setState(() {
                       infoText = "登録成功:${user.email}";
                     });
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc()
+                        .set({'mail': mailAddress, 'password': password});
                     Navigator.pop(context);
                   } catch (e) {
                     setState(() {
