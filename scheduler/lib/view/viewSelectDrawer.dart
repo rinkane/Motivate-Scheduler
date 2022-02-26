@@ -54,8 +54,7 @@ class _ViewSelectDrawerState extends State<ViewSelectDrawer> {
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    ScheduleListView(title: appName, schedules: schedules),
+                builder: (context) => ScheduleListView(title: appName),
               ),
             ),
           ),
