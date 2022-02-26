@@ -32,40 +32,42 @@ class _ScheduleListViewState extends State<ScheduleListView> {
   void initState() {
     super.initState();
     user = widget.user;
-    QuerySnapshot<Map<String, dynamic>> snapshot;
-
-    Future(() async {
-      snapshot = await FirebaseFirestore.instance.collection("users").get();
-      setState(() {
-        documents = snapshot.docs;
-      });
-
-      final userDoc = documents.firstWhere((doc) => doc["mail"] == user?.email);
-      final newSchedule =
-          Schedule.of(userDoc["mail"], 0, DateTime.now(), DateTime.now());
-      insertSchedule(newSchedule);
-      checkDoubleBooking(newSchedule);
-      /*
-      final userSnapshot =
-          await userDoc.reference.collection("schedules").get();
-      for (var userSchedule in userSnapshot.docs) {
-        final newSchedule = Schedule.of(
-            userSchedule["mail"], 0, DateTime.now(), DateTime.now());
-        insertSchedule(newSchedule);
-        checkDoubleBooking(newSchedule);
-      }
-      */
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    var args = ModalRoute.of(context)?.settings.arguments;
-    if (args is SchedulesArguments) {
-      schedules = <Schedule>[];
-      for (var _schedule in args.schedules) {
-        insertSchedule(_schedule);
-        checkDoubleBooking(_schedule);
+    if (schedules.isEmpty) {
+      var args = ModalRoute.of(context)?.settings.arguments;
+      if (args is SchedulesArguments) {
+        schedules = <Schedule>[];
+        for (var _schedule in args.schedules) {
+          insertSchedule(_schedule);
+          checkDoubleBooking(_schedule);
+        }
+      } else {
+        QuerySnapshot<Map<String, dynamic>> snapshot;
+
+        Future(() async {
+          snapshot = await FirebaseFirestore.instance.collection("users").get();
+          setState(() {
+            documents = snapshot.docs;
+          });
+
+          final userDoc =
+              documents.firstWhere((doc) => doc["mail"] == user?.email);
+          final userSnapshot =
+              await userDoc.reference.collection("schedules").get();
+
+          for (var userSchedule in userSnapshot.docs) {
+            final newSchedule = Schedule.of(
+                userSchedule["name"],
+                userSchedule["motivate"],
+                userSchedule["startTime"].toDate(),
+                userSchedule["endTime"].toDate());
+            insertSchedule(newSchedule);
+            checkDoubleBooking(newSchedule);
+          }
+        });
       }
     }
 
