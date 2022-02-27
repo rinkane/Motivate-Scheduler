@@ -98,9 +98,29 @@ class ScheduleCard extends StatelessWidget {
             ),
           ],
         ),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete),
-          onPressed: () => scheduleListViewModel.deleteScheduleDelegate(index),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.mode_edit),
+              onPressed: () async {
+                final _schedule = await showDialog<Schedule>(
+                  context: context,
+                  builder: (context) => ScheduleSettingDialog(
+                      initialMethod: ScheduleSettingMethod.fix,
+                      initialSchedule: schedule),
+                );
+                if (_schedule != null) {
+                  scheduleListViewModel.fixSchedule(_schedule, index);
+                }
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () =>
+                  scheduleListViewModel.deleteScheduleDelegate(index),
+            ),
+          ],
         ),
       ),
     );

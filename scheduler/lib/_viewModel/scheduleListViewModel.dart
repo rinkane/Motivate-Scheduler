@@ -15,8 +15,16 @@ class ScheduleListViewModel with ChangeNotifier {
       }
     }
     schedules.add(schedule);
-    checkDoubleBooking(schedule);
     notifyListeners();
+
+    checkDoubleBooking(schedule);
+  }
+
+  void fixSchedule(Schedule schedule, int index) {
+    schedules[index] = schedule;
+    notifyListeners();
+
+    checkDoubleBooking(schedule);
   }
 
   void checkDoubleBooking(Schedule schedule) {
