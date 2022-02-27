@@ -1,14 +1,12 @@
 import 'package:flutter/foundation.dart';
 
+import '../_model/schedule.dart';
+
 class ScheduleListViewModel with ChangeNotifier {
-  int count = 0;
+  List<Schedule> schedules = [];
 
-  ScheduleListViewModel() {
-    count = 0;
-  }
-
-  void incrementCount() {
-    count++;
+  void addSchedule(Schedule schedule) {
+    schedules.add(schedule);
     notifyListeners();
   }
 }

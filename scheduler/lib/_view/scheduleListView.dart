@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../_model/schedule.dart';
 import '../_viewModel/scheduleListViewModel.dart';
 
 const String dateTimeformat = "yyyy-MM-dd HH:mm";
@@ -16,13 +17,14 @@ class ScheduleListView extends StatelessWidget {
       ),
       body: Center(
         child: Text(
-          scheduleListViewModel.count.toString(),
+          scheduleListViewModel.schedules.toString(),
           style: TextStyle(fontSize: 100),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          scheduleListViewModel.incrementCount();
+          scheduleListViewModel.addSchedule(
+              Schedule.of("testSch", 0, DateTime.now(), DateTime.now()));
         },
         child: Icon(Icons.add),
       ),
