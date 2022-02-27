@@ -4,7 +4,8 @@ import 'package:dotted_border/dotted_border.dart';
 
 import '../_model/schedule.dart';
 import '../_viewModel/scheduleListViewModel.dart';
-import '../_view/scheduleSettingDialog.dart';
+import 'scheduleSettingDialog.dart';
+import 'viewSelectDrawer.dart';
 
 const String dateTimeformat = "yyyy-MM-dd HH:mm";
 
@@ -14,6 +15,7 @@ class ScheduleListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
     return Scaffold(
+      drawer: const ViewSelectDrawer(),
       body: CustomScrollView(
         slivers: <Widget>[
           const SliverAppBar(
