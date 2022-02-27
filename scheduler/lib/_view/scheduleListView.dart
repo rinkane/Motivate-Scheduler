@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:dotted_border/dotted_border.dart';
 
 import '../_model/schedule.dart';
 import '../_viewModel/scheduleListViewModel.dart';
@@ -13,25 +14,45 @@ class ScheduleListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("motivate-scheduler"),
-      ),
-      body: const Center(
-        child: ScheduleList(),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final schedule = await showDialog<Schedule>(
-            context: context,
-            builder: (context) => const ScheduleSettingDialog(
-              initialMethod: ScheduleSettingMethod.add,
-            ),
-          );
-          if (schedule != null) {
-            scheduleListViewModel.addSchedule(schedule);
-          }
-        },
-        child: const Icon(Icons.add),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          const SliverAppBar(
+            title: Text("motivate scheduler"),
+          ),
+          SliverList(
+            delegate:
+                SliverChildBuilderDelegate((BuildContext context, int index) {
+              return Container(
+                height: 60,
+                margin: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+                child: DottedBorder(
+                  color: Colors.black26,
+                  strokeWidth: 1,
+                  dashPattern: const [10, 10],
+                  radius: const Radius.circular(4),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints.expand(),
+                    child: TextButton(
+                      child: const Icon(Icons.add),
+                      onPressed: () async {
+                        final schedule = await showDialog<Schedule>(
+                          context: context,
+                          builder: (context) => const ScheduleSettingDialog(
+                            initialMethod: ScheduleSettingMethod.add,
+                          ),
+                        );
+                        if (schedule != null) {
+                          scheduleListViewModel.addSchedule(schedule);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              );
+            }, childCount: 1),
+          ),
+          const ScheduleList(),
+        ],
       ),
     );
   }
@@ -43,9 +64,13 @@ class ScheduleList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
-    return ListView.builder(
-      itemCount: scheduleListViewModel.schedules.length,
-      itemBuilder: (context, index) => ScheduleCard(index: index),
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          return ScheduleCard(index: index);
+        },
+        childCount: scheduleListViewModel.schedules.length,
+      ),
     );
   }
 }
