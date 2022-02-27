@@ -61,16 +61,19 @@ class _LoginPageState extends State<LoginPage> {
                         await auth.signInWithEmailAndPassword(
                             email: mailAddress, password: password);
                     final User user = result.user!;
-                    scheduleListViewModel.fetchSchedule(user.email);
-                    setState(() {
-                      infoText = "ログイン成功:${user.email}";
-                    });
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ScheduleListView(),
-                      ),
-                    );
+                    if (scheduleListViewModel.fetchSchedule(user.email)) {
+                      setState(() {
+                        infoText = "ログイン成功:${user.email}";
+                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ScheduleListView(),
+                        ),
+                      );
+                    } else {
+                      throw Exception("スケジュールデータを取得できませんでした。");
+                    }
                   } catch (e) {
                     setState(() {
                       infoText = "ログイン失敗:${e.toString()}";

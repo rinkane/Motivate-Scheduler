@@ -7,9 +7,9 @@ class ScheduleListViewModel with ChangeNotifier {
   List<Schedule> schedules = [];
   QueryDocumentSnapshot<Map<String, dynamic>>? userDoc;
 
-  void fetchSchedule(String? userEmail) {
+  bool fetchSchedule(String? userEmail) {
     if (userEmail == null) {
-      return;
+      return false;
     }
 
     Future(() async {
@@ -18,7 +18,7 @@ class ScheduleListViewModel with ChangeNotifier {
           initSchedule(userEmail);
         } catch (e) {
           userDoc = null;
-          return;
+          return false;
         }
       }
 
@@ -34,6 +34,8 @@ class ScheduleListViewModel with ChangeNotifier {
         addSchedule(newSchedule);
       }
     });
+
+    return true;
   }
 
   void addSchedule(Schedule schedule) {
