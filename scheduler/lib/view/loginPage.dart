@@ -64,8 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            ScheduleListView(title: appName, user: user),
+                        builder: (context) => const ScheduleListView(),
                       ),
                     );
                   } catch (e) {

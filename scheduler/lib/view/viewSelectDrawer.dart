@@ -1,30 +1,10 @@
 import 'package:flutter/material.dart';
-import '../model/schedule.dart';
-import '../model/schedulesArguments.dart';
 
-import 'motivationGraphView.dart';
 import 'scheduleListView.dart';
+import 'motivationGraphView.dart';
 
-const String appName = "Motivate Scheduler";
-
-class ViewSelectDrawer extends StatefulWidget {
-  const ViewSelectDrawer({Key? key, required this.schedules}) : super(key: key);
-
-  final List<Schedule> schedules;
-
-  @override
-  State<ViewSelectDrawer> createState() => _ViewSelectDrawerState();
-}
-
-class _ViewSelectDrawerState extends State<ViewSelectDrawer> {
-  late List<Schedule> schedules = <Schedule>[];
-
-  @override
-  void initState() {
-    super.initState();
-
-    schedules = widget.schedules;
-  }
+class ViewSelectDrawer extends StatelessWidget {
+  const ViewSelectDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,28 +27,30 @@ class _ViewSelectDrawerState extends State<ViewSelectDrawer> {
             ),
           ),
           TextButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ScheduleListView(),
+                  ));
+            },
             child: const ListTile(
               leading: Icon(Icons.schedule),
               title: Text("Schedules"),
             ),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ScheduleListView(title: appName),
-              ),
-            ),
           ),
           TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MotivationGraphView(),
+                ),
+              );
+            },
             child: const ListTile(
               leading: Icon(Icons.auto_graph),
               title: Text("Motivation"),
-            ),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    MotivationGraphView(title: appName, schedules: schedules),
-              ),
             ),
           ),
         ],
