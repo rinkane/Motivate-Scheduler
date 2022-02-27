@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'scheduleListView.dart';
+import 'motivationGraphView.dart';
 
 class ViewSelectDrawer extends StatelessWidget {
   const ViewSelectDrawer({Key? key}) : super(key: key);
@@ -36,6 +37,20 @@ class ViewSelectDrawer extends StatelessWidget {
             child: const ListTile(
               leading: Icon(Icons.schedule),
               title: Text("Schedules"),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MotivationGraphView(),
+                ),
+              );
+            },
+            child: const ListTile(
+              leading: Icon(Icons.auto_graph),
+              title: Text("Motivation"),
             ),
           ),
         ],
