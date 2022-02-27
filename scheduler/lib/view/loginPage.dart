@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'registUserPage.dart';
 import 'scheduleListView.dart';
+import '../viewModel/scheduleListViewModel.dart';
 
 const String appName = "Motivate Scheduler";
 
@@ -20,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
     return Scaffold(
       body: Center(
         child: Container(
@@ -58,15 +61,21 @@ class _LoginPageState extends State<LoginPage> {
                         await auth.signInWithEmailAndPassword(
                             email: mailAddress, password: password);
                     final User user = result.user!;
-                    setState(() {
-                      infoText = "ログイン成功:${user.email}";
-                    });
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ScheduleListView(),
-                      ),
-                    );
+                    final isFetch = await scheduleListViewModel
+                        .fetchScheduleFromFirestore(user.email);
+                    if (isFetch) {
+                      setState(() {
+                        infoText = "ログイン成功:${user.email}";
+                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ScheduleListView(),
+                        ),
+                      );
+                    } else {
+                      throw Exception("スケジュールデータを取得できませんでした。");
+                    }
                   } catch (e) {
                     setState(() {
                       infoText = "ログイン失敗:${e.toString()}";
