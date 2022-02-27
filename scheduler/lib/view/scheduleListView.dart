@@ -139,7 +139,7 @@ class ScheduleCard extends StatelessWidget {
                       initialSchedule: schedule),
                 );
                 if (_schedule != null) {
-                  scheduleListViewModel.fixSchedule(_schedule, index);
+                  scheduleListViewModel.updateSchedule(_schedule, index);
                 }
               },
             ),

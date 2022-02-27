@@ -5,7 +5,7 @@ import '../model/schedule.dart';
 
 class ScheduleListViewModel with ChangeNotifier {
   List<Schedule> schedules = [];
-  QueryDocumentSnapshot<Map<String, dynamic>>? userDoc;
+  QueryDocumentSnapshot<Map<String, dynamic>>? userDocument;
 
   Future<bool> fetchScheduleFromFirestore(String? userEmail) async {
     schedules = [];
@@ -15,15 +15,15 @@ class ScheduleListViewModel with ChangeNotifier {
     }
 
     try {
-      await initSchedule(userEmail);
+      await initFirestoreDocument(userEmail);
     } catch (e) {
-      userDoc = null;
+      userDocument = null;
       return false;
     }
 
     try {
       final userSnapshot =
-          await userDoc!.reference.collection("schedules").get();
+          await userDocument!.reference.collection("schedules").get();
 
       for (var userSchedule in userSnapshot.docs) {
         final newSchedule = Schedule.of(
@@ -41,6 +41,17 @@ class ScheduleListViewModel with ChangeNotifier {
     return true;
   }
 
+  Future<void> initFirestoreDocument(String userEmail) async {
+    try {
+      final snapshot =
+          await FirebaseFirestore.instance.collection("users").get();
+      userDocument =
+          snapshot.docs.firstWhere((doc) => doc["mail"] == userEmail);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   bool addSchedule(Schedule schedule) {
     if (!insertScheduleToFirestore(schedule)) {
       return false;
@@ -51,13 +62,13 @@ class ScheduleListViewModel with ChangeNotifier {
   }
 
   bool insertScheduleToFirestore(Schedule schedule) {
-    if (userDoc == null) {
+    if (userDocument == null) {
       return false;
     }
 
     try {
-      final newDocId = userDoc!.reference.collection("schedules").doc().id;
-      userDoc!.reference.collection("schedules").doc(newDocId).set({
+      final newDocId = userDocument!.reference.collection("schedules").doc().id;
+      userDocument!.reference.collection("schedules").doc(newDocId).set({
         "id": newDocId,
         "name": schedule.name,
         "motivate": schedule.motivation,
@@ -86,21 +97,39 @@ class ScheduleListViewModel with ChangeNotifier {
     checkDoubleBooking(schedule);
   }
 
-  void fixSchedule(Schedule schedule, int index) {
+  bool updateSchedule(Schedule schedule, int index) {
+    if (!updateScheduleToFirestore(schedule)) {
+      return false;
+    }
+
+    updateScheduleToSchedules(schedule, index);
+    return true;
+  }
+
+  bool updateScheduleToFirestore(Schedule schedule) {
+    if (userDocument == null) {
+      return false;
+    }
+
+    try {
+      userDocument!.reference.collection("schedules").doc(schedule.id).set({
+        "name": schedule.name,
+        "motivate": schedule.motivation,
+        "startTime": schedule.startDateTime,
+        "endTime": schedule.endDateTime,
+      }, SetOptions(merge: true));
+    } catch (e) {
+      return false;
+    }
+
+    return true;
+  }
+
+  void updateScheduleToSchedules(Schedule schedule, int index) {
     schedules[index] = schedule;
     notifyListeners();
 
     checkDoubleBooking(schedule);
-  }
-
-  Future<void> initSchedule(String userEmail) async {
-    try {
-      final snapshot =
-          await FirebaseFirestore.instance.collection("users").get();
-      userDoc = snapshot.docs.firstWhere((doc) => doc["mail"] == userEmail);
-    } catch (e) {
-      rethrow;
-    }
   }
 
   void checkDoubleBooking(Schedule schedule) {
