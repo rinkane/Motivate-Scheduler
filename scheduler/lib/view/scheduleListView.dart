@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dotted_border/dotted_border.dart';
 
+import '../model/completeSchedule.dart';
 import '../model/schedule.dart';
+import '../viewModel/completeScheduleListViewModel.dart';
 import '../viewModel/scheduleListViewModel.dart';
 import 'scheduleSettingDialog.dart';
 import 'viewSelectDrawer.dart';
@@ -86,6 +88,8 @@ class ScheduleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
+    final completeScheduleListViewModel =
+        Provider.of<CompleteScheduleListViewModel>(context);
     final schedule = scheduleListViewModel.schedules[index];
     return Card(
       child: ListTile(
@@ -129,6 +133,41 @@ class ScheduleCard extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+              child: schedule.isDone()
+                  ? ElevatedButton(
+                      child: const Text("complete"),
+                      onPressed: () {
+                        completeScheduleListViewModel.addCompleteSchedule(
+                            CompleteSchedule.of(
+                                schedule.id,
+                                schedule.name,
+                                schedule.motivation,
+                                schedule.startDateTime,
+                                schedule.endDateTime,
+                                ""));
+                        scheduleListViewModel.deleteSchedule(index);
+                      },
+                    )
+                  : OutlinedButton(
+                      child: const Text("complete",
+                          style: TextStyle(
+                            color: Colors.black87,
+                          )),
+                      onPressed: () {
+                        completeScheduleListViewModel.addCompleteSchedule(
+                            CompleteSchedule.of(
+                                schedule.id,
+                                schedule.name,
+                                schedule.motivation,
+                                schedule.startDateTime,
+                                schedule.endDateTime,
+                                ""));
+                        scheduleListViewModel.deleteSchedule(index);
+                      },
+                    ),
+            ),
             IconButton(
               icon: const Icon(Icons.mode_edit),
               onPressed: () async {

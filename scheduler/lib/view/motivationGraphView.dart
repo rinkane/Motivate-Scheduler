@@ -3,7 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:charts_flutter/flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../model/completeSchedule.dart';
 import '../model/schedule.dart';
+import '../viewModel/completeScheduleListViewModel.dart';
 import '../viewModel/scheduleListViewModel.dart';
 import 'viewSelectDrawer.dart';
 
@@ -12,6 +14,10 @@ class MotivationGraphView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final schedules = Provider.of<ScheduleListViewModel>(context).schedules;
+    final completeSchedules =
+        Provider.of<CompleteScheduleListViewModel>(context).completeSchedules;
+    final allSchedules = createSchedulesCopy(schedules, completeSchedules);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Motivation Scheduler"),
@@ -21,17 +27,15 @@ class MotivationGraphView extends StatelessWidget {
         child: Container(
             margin: const EdgeInsets.all(30),
             height: 500,
-            child: createChart(
-                Provider.of<ScheduleListViewModel>(context).schedules)),
+            child: createChart(allSchedules)),
       ),
     );
   }
 
   TimeSeriesChart createChart(List<Schedule> schedules) {
-    List<Schedule> _schedules = createSchedulesCopy(schedules);
-    _schedules.sort((a, b) => a.endDateTime.compareTo(b.endDateTime));
+    schedules.sort((a, b) => a.endDateTime.compareTo(b.endDateTime));
 
-    List<MotivationData> motivations = createMotivationDatas(_schedules);
+    List<MotivationData> motivations = createMotivationDatas(schedules);
 
     return TimeSeriesChart(
       [
@@ -61,7 +65,8 @@ class MotivationGraphView extends StatelessWidget {
     );
   }
 
-  List<Schedule> createSchedulesCopy(List<Schedule> schedules) {
+  List<Schedule> createSchedulesCopy(
+      List<Schedule> schedules, List<CompleteSchedule> completeSchedules) {
     List<Schedule> _schedules = <Schedule>[];
     for (int i = 0; i < schedules.length; i++) {
       _schedules.add(Schedule.of(
@@ -70,6 +75,14 @@ class MotivationGraphView extends StatelessWidget {
           schedules[i].motivation,
           schedules[i].startDateTime,
           schedules[i].endDateTime));
+    }
+    for (int i = 0; i < completeSchedules.length; i++) {
+      _schedules.add(Schedule.of(
+          completeSchedules[i].id,
+          completeSchedules[i].name,
+          completeSchedules[i].motivation,
+          completeSchedules[i].startDateTime,
+          completeSchedules[i].endDateTime));
     }
 
     return _schedules;

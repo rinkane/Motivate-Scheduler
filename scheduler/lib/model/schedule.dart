@@ -46,4 +46,8 @@ class Schedule {
     warning = warning.replaceRange(warning.length - 3, null, '.');
     return warning;
   }
+
+  bool isDone() {
+    return DateTime.now().isAfter(endDateTime);
+  }
 }
