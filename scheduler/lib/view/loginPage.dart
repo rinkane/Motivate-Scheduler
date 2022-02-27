@@ -61,7 +61,9 @@ class _LoginPageState extends State<LoginPage> {
                         await auth.signInWithEmailAndPassword(
                             email: mailAddress, password: password);
                     final User user = result.user!;
-                    if (scheduleListViewModel.fetchSchedule(user.email)) {
+                    final isFetch = await scheduleListViewModel
+                        .fetchScheduleFromFirestore(user.email);
+                    if (isFetch) {
                       setState(() {
                         infoText = "ログイン成功:${user.email}";
                       });

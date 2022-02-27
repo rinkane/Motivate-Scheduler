@@ -7,21 +7,21 @@ class ScheduleListViewModel with ChangeNotifier {
   List<Schedule> schedules = [];
   QueryDocumentSnapshot<Map<String, dynamic>>? userDoc;
 
-  bool fetchSchedule(String? userEmail) {
+  Future<bool> fetchScheduleFromFirestore(String? userEmail) async {
+    schedules = [];
+
     if (userEmail == null) {
       return false;
     }
 
-    Future(() async {
-      if (userDoc == null) {
-        try {
-          initSchedule(userEmail);
-        } catch (e) {
-          userDoc = null;
-          return false;
-        }
-      }
+    try {
+      await initSchedule(userEmail);
+    } catch (e) {
+      userDoc = null;
+      return false;
+    }
 
+    try {
       final userSnapshot =
           await userDoc!.reference.collection("schedules").get();
 
@@ -31,14 +31,44 @@ class ScheduleListViewModel with ChangeNotifier {
             userSchedule["motivate"],
             userSchedule["startTime"].toDate(),
             userSchedule["endTime"].toDate());
-        addSchedule(newSchedule);
+        insertScheduleToSchedules(newSchedule);
       }
-    });
+    } catch (e) {
+      return false;
+    }
 
     return true;
   }
 
-  void addSchedule(Schedule schedule) {
+  bool addSchedule(Schedule schedule) {
+    if (!insertScheduleToFirestore(schedule)) {
+      return false;
+    }
+
+    insertScheduleToSchedules(schedule);
+    return true;
+  }
+
+  bool insertScheduleToFirestore(Schedule schedule) {
+    if (userDoc == null) {
+      return false;
+    }
+
+    try {
+      userDoc!.reference.collection("schedules").doc().set({
+        "name": schedule.name,
+        "motivate": schedule.motivation,
+        "startTime": schedule.startDateTime,
+        "endTime": schedule.endDateTime,
+      });
+    } catch (e) {
+      return false;
+    }
+
+    return true;
+  }
+
+  void insertScheduleToSchedules(Schedule schedule) {
     for (int i = 0; i < schedules.length; i++) {
       if (schedules[i].startDateTime.isAfter(schedule.startDateTime)) {
         schedules.insert(i, schedule);
@@ -60,7 +90,7 @@ class ScheduleListViewModel with ChangeNotifier {
     checkDoubleBooking(schedule);
   }
 
-  void initSchedule(String userEmail) async {
+  Future<void> initSchedule(String userEmail) async {
     try {
       final snapshot =
           await FirebaseFirestore.instance.collection("users").get();
