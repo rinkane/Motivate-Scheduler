@@ -6,6 +6,7 @@ import '../_model/schedule.dart';
 import '../_viewModel/scheduleListViewModel.dart';
 import 'scheduleSettingDialog.dart';
 import 'viewSelectDrawer.dart';
+import 'confirmDeleteScheduleDialog.dart';
 
 const String dateTimeformat = "yyyy-MM-dd HH:mm";
 
@@ -144,8 +145,16 @@ class ScheduleCard extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.delete),
-              onPressed: () =>
-                  scheduleListViewModel.deleteScheduleDelegate(index),
+              onPressed: () async {
+                final isDelete = await showDialog<bool>(
+                  context: context,
+                  builder: (context) =>
+                      ConfirmDeleteScheduleDialog(title: schedule.name),
+                );
+                if (isDelete == true) {
+                  scheduleListViewModel.deleteScheduleDelegate(index);
+                }
+              },
             ),
           ],
         ),
