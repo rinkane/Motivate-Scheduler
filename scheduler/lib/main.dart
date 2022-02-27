@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
 
 import 'firebase_options.dart';
-import 'view/loginPage.dart';
+import '_view/scheduleListView.dart';
+import '_viewModel/scheduleListViewModel.dart';
 
 const String appName = "Motivate Scheduler";
 
@@ -16,12 +19,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: appName,
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
+    return ChangeNotifierProvider(
+      create: (context) => ScheduleListViewModel(),
+      child: MaterialApp(
+        title: appName,
+        theme: ThemeData(
+          primarySwatch: Colors.purple,
+        ),
+        home: const ScheduleListView(),
       ),
-      home: const LoginPage(),
     );
   }
 }
