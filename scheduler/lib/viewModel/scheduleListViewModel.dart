@@ -27,6 +27,7 @@ class ScheduleListViewModel with ChangeNotifier {
 
       for (var userSchedule in userSnapshot.docs) {
         final newSchedule = Schedule.of(
+            userSchedule["id"],
             userSchedule["name"],
             userSchedule["motivate"],
             userSchedule["startTime"].toDate(),
@@ -55,7 +56,9 @@ class ScheduleListViewModel with ChangeNotifier {
     }
 
     try {
-      userDoc!.reference.collection("schedules").doc().set({
+      final newDocId = userDoc!.reference.collection("schedules").doc().id;
+      userDoc!.reference.collection("schedules").doc(newDocId).set({
+        "id": newDocId,
         "name": schedule.name,
         "motivate": schedule.motivation,
         "startTime": schedule.startDateTime,

@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 
 class Schedule {
+  String id = "";
   String name = "";
   int motivation = 0;
 
@@ -12,7 +13,8 @@ class Schedule {
   var doubleBookingSchedules = <Schedule>[];
 
   Schedule();
-  Schedule.of(this.name, this.motivation, this.startDateTime, this.endDateTime);
+  Schedule.of(this.id, this.name, this.motivation, this.startDateTime,
+      this.endDateTime);
 
   void addDoubleBookingSchedule(Schedule schedule) {
     if (!doubleBookingSchedules.contains(schedule)) {

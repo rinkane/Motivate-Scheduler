@@ -64,8 +64,12 @@ class MotivationGraphView extends StatelessWidget {
   List<Schedule> createSchedulesCopy(List<Schedule> schedules) {
     List<Schedule> _schedules = <Schedule>[];
     for (int i = 0; i < schedules.length; i++) {
-      _schedules.add(Schedule.of(schedules[i].name, schedules[i].motivation,
-          schedules[i].startDateTime, schedules[i].endDateTime));
+      _schedules.add(Schedule.of(
+          schedules[i].id,
+          schedules[i].name,
+          schedules[i].motivation,
+          schedules[i].startDateTime,
+          schedules[i].endDateTime));
     }
 
     return _schedules;
