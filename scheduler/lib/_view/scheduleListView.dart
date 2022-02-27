@@ -38,8 +38,22 @@ class ScheduleList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: schedules.length,
-      itemBuilder: (context, index) => ListTile(
-        title: Text(schedules[index].name),
+      itemBuilder: (context, index) => ScheduleCard(schedule: schedules[index]),
+    );
+  }
+}
+
+class ScheduleCard extends StatelessWidget {
+  final Schedule schedule;
+
+  const ScheduleCard({Key? key, required this.schedule}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        title: Text(schedule.name),
+        leading: Text(schedule.motivation.toString()),
       ),
     );
   }
