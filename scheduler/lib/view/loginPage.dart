@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'registUserPage.dart';
 import 'scheduleListView.dart';
+import '../viewModel/scheduleListViewModel.dart';
 
 const String appName = "Motivate Scheduler";
 
@@ -20,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
     return Scaffold(
       body: Center(
         child: Container(
@@ -58,6 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                         await auth.signInWithEmailAndPassword(
                             email: mailAddress, password: password);
                     final User user = result.user!;
+                    scheduleListViewModel.fetchSchedule(user.email);
                     setState(() {
                       infoText = "ログイン成功:${user.email}";
                     });

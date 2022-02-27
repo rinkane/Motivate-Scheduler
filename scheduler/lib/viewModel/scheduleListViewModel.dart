@@ -1,9 +1,40 @@
 import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../model/schedule.dart';
 
 class ScheduleListViewModel with ChangeNotifier {
   List<Schedule> schedules = [];
+  QueryDocumentSnapshot<Map<String, dynamic>>? userDoc;
+
+  void fetchSchedule(String? userEmail) {
+    if (userEmail == null) {
+      return;
+    }
+
+    Future(() async {
+      if (userDoc == null) {
+        try {
+          initSchedule(userEmail);
+        } catch (e) {
+          userDoc = null;
+          return;
+        }
+      }
+
+      final userSnapshot =
+          await userDoc!.reference.collection("schedules").get();
+
+      for (var userSchedule in userSnapshot.docs) {
+        final newSchedule = Schedule.of(
+            userSchedule["name"],
+            userSchedule["motivate"],
+            userSchedule["startTime"].toDate(),
+            userSchedule["endTime"].toDate());
+        addSchedule(newSchedule);
+      }
+    });
+  }
 
   void addSchedule(Schedule schedule) {
     for (int i = 0; i < schedules.length; i++) {
@@ -25,6 +56,16 @@ class ScheduleListViewModel with ChangeNotifier {
     notifyListeners();
 
     checkDoubleBooking(schedule);
+  }
+
+  void initSchedule(String userEmail) async {
+    try {
+      final snapshot =
+          await FirebaseFirestore.instance.collection("users").get();
+      userDoc = snapshot.docs.firstWhere((doc) => doc["mail"] == userEmail);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   void checkDoubleBooking(Schedule schedule) {
