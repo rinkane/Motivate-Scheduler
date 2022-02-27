@@ -15,8 +15,8 @@ class ScheduleListView extends StatelessWidget {
       appBar: AppBar(
         title: const Text("motivate-scheduler"),
       ),
-      body: Center(
-        child: ScheduleList(schedules: scheduleListViewModel.schedules),
+      body: const Center(
+        child: ScheduleList(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -30,30 +30,35 @@ class ScheduleListView extends StatelessWidget {
 }
 
 class ScheduleList extends StatelessWidget {
-  final List<Schedule> schedules;
-
-  const ScheduleList({Key? key, required this.schedules}) : super(key: key);
+  const ScheduleList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
     return ListView.builder(
-      itemCount: schedules.length,
-      itemBuilder: (context, index) => ScheduleCard(schedule: schedules[index]),
+      itemCount: scheduleListViewModel.schedules.length,
+      itemBuilder: (context, index) => ScheduleCard(index: index),
     );
   }
 }
 
 class ScheduleCard extends StatelessWidget {
-  final Schedule schedule;
+  final int index;
 
-  const ScheduleCard({Key? key, required this.schedule}) : super(key: key);
+  const ScheduleCard({Key? key, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
     return Card(
       child: ListTile(
-        title: Text(schedule.name),
-        leading: Text(schedule.motivation.toString()),
+        title: Text(scheduleListViewModel.schedules[index].name),
+        leading:
+            Text(scheduleListViewModel.schedules[index].motivation.toString()),
+        trailing: IconButton(
+          icon: const Icon(Icons.delete),
+          onPressed: () => scheduleListViewModel.deleteScheduleDelegate(index),
+        ),
       ),
     );
   }

@@ -9,4 +9,9 @@ class ScheduleListViewModel with ChangeNotifier {
     schedules.add(schedule);
     notifyListeners();
   }
+
+  void deleteScheduleDelegate(int index) {
+    schedules.removeAt(index);
+    notifyListeners();
+  }
 }
