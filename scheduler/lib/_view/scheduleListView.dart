@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../_model/schedule.dart';
 import '../_viewModel/scheduleListViewModel.dart';
+import '../_view/scheduleSettingDialog.dart';
 
 const String dateTimeformat = "yyyy-MM-dd HH:mm";
 
@@ -19,9 +20,16 @@ class ScheduleListView extends StatelessWidget {
         child: ScheduleList(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          scheduleListViewModel.addSchedule(
-              Schedule.of("testSch", 0, DateTime.now(), DateTime.now()));
+        onPressed: () async {
+          final schedule = await showDialog<Schedule>(
+            context: context,
+            builder: (context) => const ScheduleSettingDialog(
+              initialMethod: ScheduleSettingMethod.add,
+            ),
+          );
+          if (schedule != null) {
+            scheduleListViewModel.addSchedule(schedule);
+          }
         },
         child: const Icon(Icons.add),
       ),
