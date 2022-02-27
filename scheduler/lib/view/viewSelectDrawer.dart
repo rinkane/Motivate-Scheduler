@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'completeScheduleListView.dart';
 import 'scheduleListView.dart';
 import 'motivationGraphView.dart';
 
@@ -51,6 +52,22 @@ class ViewSelectDrawer extends StatelessWidget {
             child: const ListTile(
               leading: Icon(Icons.auto_graph),
               title: Text("Motivation"),
+            ),
+          ),
+          const Divider(
+              thickness: 1, indent: 10, endIndent: 10, color: Colors.black38),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CompleteScheduleListView(),
+                ),
+              );
+            },
+            child: const ListTile(
+              leading: Icon(Icons.check_circle_outline),
+              title: Text("Complete Schedules"),
             ),
           ),
         ],

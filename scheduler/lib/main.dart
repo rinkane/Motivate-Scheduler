@@ -3,7 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
+import 'view/completeScheduleListView.dart';
+import 'view/scheduleListView.dart';
 import 'viewModel/scheduleListViewModel.dart';
+import 'viewModel/completeScheduleListViewModel.dart';
 import 'view/loginPage.dart';
 
 const String appName = "Motivate Scheduler";
@@ -18,8 +21,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ScheduleListViewModel(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ScheduleListViewModel()),
+        ChangeNotifierProvider(
+            create: (context) => CompleteScheduleListViewModel()),
+      ],
       child: MaterialApp(
         title: appName,
         theme: ThemeData(
