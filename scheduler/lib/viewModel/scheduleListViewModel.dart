@@ -1,48 +1,30 @@
-import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 import '../model/schedule.dart';
 
 class ScheduleListViewModel with ChangeNotifier {
-  List<Schedule> schedules = <Schedule>[];
-  List<DocumentSnapshot> documents = [];
+  List<Schedule> schedules = [];
 
-  void fetchSchedules(User user) {
-    schedules = [];
-    QuerySnapshot<Map<String, dynamic>> snapshot;
-
-    Future(() async {
-      snapshot = await FirebaseFirestore.instance.collection("users").get();
-      documents = snapshot.docs;
-
-      final userDoc = documents.firstWhere((doc) => doc["mail"] == user?.email);
-      final userSnapshot =
-          await userDoc.reference.collection("schedules").get();
-
-      for (var userSchedule in userSnapshot.docs) {
-        final newSchedule = Schedule.of(
-            userSchedule["name"],
-            userSchedule["motivate"],
-            userSchedule["startTime"].toDate(),
-            userSchedule["endTime"].toDate());
-        insertSchedule(newSchedule);
-        checkDoubleBooking(newSchedule);
-      }
-    });
-  }
-
-  void insertSchedule(Schedule schedule) {
+  void addSchedule(Schedule schedule) {
     for (int i = 0; i < schedules.length; i++) {
       if (schedules[i].startDateTime.isAfter(schedule.startDateTime)) {
         schedules.insert(i, schedule);
         notifyListeners();
+        checkDoubleBooking(schedule);
         return;
       }
     }
     schedules.add(schedule);
     notifyListeners();
+
+    checkDoubleBooking(schedule);
+  }
+
+  void fixSchedule(Schedule schedule, int index) {
+    schedules[index] = schedule;
+    notifyListeners();
+
+    checkDoubleBooking(schedule);
   }
 
   void checkDoubleBooking(Schedule schedule) {
@@ -52,10 +34,15 @@ class ScheduleListViewModel with ChangeNotifier {
         schedules[i].addDoubleBookingSchedule(schedule);
         notifyListeners();
       } else {
-        schedule.doubleBookingSchedule.remove(schedules[i]);
-        schedules[i].doubleBookingSchedule.remove(schedule);
+        schedule.doubleBookingSchedules.remove(schedules[i]);
+        schedules[i].doubleBookingSchedules.remove(schedule);
         notifyListeners();
       }
     }
+  }
+
+  void deleteScheduleDelegate(int index) {
+    schedules.removeAt(index);
+    notifyListeners();
   }
 }

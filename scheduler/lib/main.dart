@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/foundation.dart';
 
 import 'firebase_options.dart';
-import '_view/scheduleListView.dart';
-import '_viewModel/scheduleListViewModel.dart';
-import '_view/loginPage.dart';
+import 'viewModel/scheduleListViewModel.dart';
+import 'view/loginPage.dart';
 
 const String appName = "Motivate Scheduler";
 
