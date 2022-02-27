@@ -16,17 +16,30 @@ class ScheduleListView extends StatelessWidget {
         title: const Text("motivate-scheduler"),
       ),
       body: Center(
-        child: Text(
-          scheduleListViewModel.schedules.toString(),
-          style: TextStyle(fontSize: 100),
-        ),
+        child: ScheduleList(schedules: scheduleListViewModel.schedules),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           scheduleListViewModel.addSchedule(
               Schedule.of("testSch", 0, DateTime.now(), DateTime.now()));
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class ScheduleList extends StatelessWidget {
+  final List<Schedule> schedules;
+
+  const ScheduleList({Key? key, required this.schedules}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: schedules.length,
+      itemBuilder: (context, index) => ListTile(
+        title: Text(schedules[index].name),
       ),
     );
   }
