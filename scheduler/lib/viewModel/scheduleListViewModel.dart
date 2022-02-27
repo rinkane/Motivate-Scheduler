@@ -146,7 +146,29 @@ class ScheduleListViewModel with ChangeNotifier {
     }
   }
 
-  void deleteScheduleDelegate(int index) {
+  bool deleteSchedule(int index) {
+    if (!deleteScheduleFromFirestore(schedules[index])) {
+      return false;
+    }
+
+    deleteScheduleFromSchedules(index);
+    return true;
+  }
+
+  bool deleteScheduleFromFirestore(Schedule schedule) {
+    if (userDocument == null) {
+      return false;
+    }
+
+    try {
+      userDocument!.reference.collection("schedules").doc(schedule.id).delete();
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
+  void deleteScheduleFromSchedules(int index) {
     schedules.removeAt(index);
     notifyListeners();
   }

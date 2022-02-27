@@ -152,7 +152,7 @@ class ScheduleCard extends StatelessWidget {
                       ConfirmDeleteScheduleDialog(title: schedule.name),
                 );
                 if (isDelete == true) {
-                  scheduleListViewModel.deleteScheduleDelegate(index);
+                  scheduleListViewModel.deleteSchedule(index);
                 }
               },
             ),
