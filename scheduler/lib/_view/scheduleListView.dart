@@ -50,11 +50,46 @@ class ScheduleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
+    final schedule = scheduleListViewModel.schedules[index];
     return Card(
       child: ListTile(
-        title: Text(scheduleListViewModel.schedules[index].name),
-        leading:
-            Text(scheduleListViewModel.schedules[index].motivation.toString()),
+        title: Text(schedule.name),
+        leading: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              alignment: Alignment.center,
+              width: 30,
+              child: Text(schedule.motivation.toString()),
+            ),
+          ],
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: Text(
+                schedule.getDurationText(),
+              ),
+            ),
+            Visibility(
+              visible: schedule.doubleBookingSchedules.isNotEmpty,
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child: DefaultTextStyle(
+                  child: Text(schedule.getDoubleBookingWarning()),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Colors.yellow.shade600,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
         trailing: IconButton(
           icon: const Icon(Icons.delete),
           onPressed: () => scheduleListViewModel.deleteScheduleDelegate(index),
