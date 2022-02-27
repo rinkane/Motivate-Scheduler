@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'firebase_options.dart';
 import '_view/scheduleListView.dart';
 import '_viewModel/scheduleListViewModel.dart';
+import '_view/loginPage.dart';
 
 const String appName = "Motivate Scheduler";
 
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.purple,
         ),
-        home: const ScheduleListView(),
+        home: const LoginPage(),
       ),
     );
   }

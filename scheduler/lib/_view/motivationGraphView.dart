@@ -73,6 +73,9 @@ class MotivationGraphView extends StatelessWidget {
 
   List<MotivationData> createMotivationDatas(List<Schedule> schedules) {
     List<MotivationData> motivations = <MotivationData>[];
+    if (schedules.isEmpty) {
+      return [];
+    }
     motivations.add(MotivationData(schedules[0].startDateTime, 0));
     for (int i = 0; i < schedules.length; i++) {
       if (i == 0) {
