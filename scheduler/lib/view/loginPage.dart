@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../viewModel/completeScheduleListViewModel.dart';
 import 'registUserPage.dart';
 import 'scheduleListView.dart';
 import '../viewModel/scheduleListViewModel.dart';
@@ -23,6 +24,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
+    final completeScheduleListViewModel =
+        Provider.of<CompleteScheduleListViewModel>(context);
     return Scaffold(
       body: Center(
         child: Container(
@@ -62,7 +65,9 @@ class _LoginPageState extends State<LoginPage> {
                             email: mailAddress, password: password);
                     final User user = result.user!;
                     final isFetch = await scheduleListViewModel
-                        .fetchScheduleFromFirestore(user.email);
+                            .fetchScheduleFromFirestore(user.email) &&
+                        await completeScheduleListViewModel
+                            .fetchScheduleFromFirestore(user.email);
                     if (isFetch) {
                       setState(() {
                         infoText = "ログイン成功:${user.email}";
