@@ -68,6 +68,7 @@ class ScheduleListViewModel with ChangeNotifier {
 
     try {
       final newDocId = userDocument!.reference.collection("schedules").doc().id;
+      schedule.id = newDocId;
       userDocument!.reference.collection("schedules").doc(newDocId).set({
         "id": newDocId,
         "name": schedule.name,
@@ -87,14 +88,14 @@ class ScheduleListViewModel with ChangeNotifier {
       if (schedules[i].startDateTime.isAfter(schedule.startDateTime)) {
         schedules.insert(i, schedule);
         notifyListeners();
-        checkDoubleBooking(schedule);
+        updateDoubleBooking(schedule);
         return;
       }
     }
     schedules.add(schedule);
     notifyListeners();
 
-    checkDoubleBooking(schedule);
+    updateDoubleBooking(schedule);
   }
 
   bool updateSchedule(Schedule schedule, int index) {
@@ -129,16 +130,29 @@ class ScheduleListViewModel with ChangeNotifier {
     schedules[index] = schedule;
     notifyListeners();
 
-    checkDoubleBooking(schedule);
+    updateDoubleBooking(schedule);
   }
 
-  void checkDoubleBooking(Schedule schedule) {
+  void updateDoubleBooking(Schedule schedule) {
+    addDoubleBooking(schedule);
+    removeDoubleBooking(schedule);
+  }
+
+  void addDoubleBooking(Schedule schedule) {
     for (int i = 0; i < schedules.length; i++) {
       if (schedules[i].isDuring(schedule) || schedule.isDuring(schedules[i])) {
         schedule.addDoubleBookingSchedule(schedules[i]);
         schedules[i].addDoubleBookingSchedule(schedule);
         notifyListeners();
-      } else {
+      }
+    }
+  }
+
+  void removeDoubleBooking(Schedule schedule, {bool isForce = false}) {
+    for (int i = 0; i < schedules.length; i++) {
+      if (!(schedules[i].isDuring(schedule) ||
+              schedule.isDuring(schedules[i])) ||
+          isForce) {
         schedule.doubleBookingSchedules.remove(schedules[i]);
         schedules[i].doubleBookingSchedules.remove(schedule);
         notifyListeners();
@@ -169,6 +183,7 @@ class ScheduleListViewModel with ChangeNotifier {
   }
 
   void deleteScheduleFromSchedules(int index) {
+    removeDoubleBooking(schedules[index], isForce: true);
     schedules.removeAt(index);
     notifyListeners();
   }
