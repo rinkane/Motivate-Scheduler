@@ -1,35 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../model/schedule.dart';
 import 'showCustomWidgets.dart';
 
 const String dateFormat = "yyyy-MM-dd";
 const String timeFormat = "HH:mm";
 
 class DateTimePicker extends StatefulWidget {
-  final DateTime startDateTime;
-  final DateTime endDateTime;
+  final Schedule schedule;
 
-  const DateTimePicker(
-      {Key? key, required this.startDateTime, required this.endDateTime})
-      : super(key: key);
+  const DateTimePicker({Key? key, required this.schedule}) : super(key: key);
 
   @override
   DateTimePickerState createState() => DateTimePickerState();
 }
 
 class DateTimePickerState extends State<DateTimePicker> {
-  late DateTime startDateTime;
-  late DateTime endDateTime;
-
-  bool get isCorrectSchedulePeriod => !endDateTime.isBefore(startDateTime);
-
+  late Schedule schedule;
   @override
   void initState() {
     super.initState();
 
-    startDateTime = widget.startDateTime;
-    endDateTime = widget.endDateTime;
+    schedule = widget.schedule;
   }
 
   @override
@@ -45,7 +38,8 @@ class DateTimePickerState extends State<DateTimePicker> {
             children: <Widget>[
               TextButton(
                 onPressed: () => selectDate(context, true),
-                child: Text(DateFormat(dateFormat).format(startDateTime)),
+                child:
+                    Text(DateFormat(dateFormat).format(schedule.startDateTime)),
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(6, 0, 3, 0),
                 ),
@@ -54,7 +48,8 @@ class DateTimePickerState extends State<DateTimePicker> {
                 width: 44,
                 child: TextButton(
                   onPressed: () => selectTime(context, true),
-                  child: Text(DateFormat(timeFormat).format(startDateTime)),
+                  child: Text(
+                      DateFormat(timeFormat).format(schedule.startDateTime)),
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.fromLTRB(3, 0, 6, 0),
                   ),
@@ -80,7 +75,8 @@ class DateTimePickerState extends State<DateTimePicker> {
             children: <Widget>[
               TextButton(
                 onPressed: () => selectDate(context, false),
-                child: Text(DateFormat(dateFormat).format(endDateTime)),
+                child:
+                    Text(DateFormat(dateFormat).format(schedule.endDateTime)),
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(6, 0, 3, 0),
                 ),
@@ -89,7 +85,8 @@ class DateTimePickerState extends State<DateTimePicker> {
                 width: 44,
                 child: TextButton(
                   onPressed: () => selectTime(context, false),
-                  child: Text(DateFormat(timeFormat).format(endDateTime)),
+                  child:
+                      Text(DateFormat(timeFormat).format(schedule.endDateTime)),
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.fromLTRB(3, 0, 6, 0),
                   ),
@@ -103,19 +100,20 @@ class DateTimePickerState extends State<DateTimePicker> {
   }
 
   void selectDate(BuildContext context, bool isStart) async {
-    DateTime scheduleDate = isStart ? startDateTime : endDateTime;
+    DateTime scheduleDate =
+        isStart ? schedule.startDateTime : schedule.endDateTime;
     final DateTime? date = isStart
         ? await ShowCustomWidgets(context).scheduleStartDatePicker(scheduleDate)
         : await ShowCustomWidgets(context)
-            .scheduleEndDatePicker(scheduleDate, startDateTime);
+            .scheduleEndDatePicker(scheduleDate, schedule.startDateTime);
     if (date != null) {
       final DateTime newDate = createUpdatedDate(scheduleDate, date);
       setState(() {
         if (isStart) {
-          startDateTime = newDate;
+          schedule.startDateTime = newDate;
           validateScheduleEndDateTime();
         } else {
-          endDateTime = newDate;
+          schedule.endDateTime = newDate;
           validateScheduleStartDateTime();
         }
       });
@@ -123,17 +121,18 @@ class DateTimePickerState extends State<DateTimePicker> {
   }
 
   void selectTime(BuildContext context, bool isStart) async {
-    DateTime scheduleTime = isStart ? startDateTime : endDateTime;
+    DateTime scheduleTime =
+        isStart ? schedule.startDateTime : schedule.endDateTime;
     final TimeOfDay? time =
         await ShowCustomWidgets(context).scheduleTimePicker(scheduleTime);
     if (time != null) {
       final DateTime newTime = createUpdatedTime(scheduleTime, time);
       setState(() {
         if (isStart) {
-          startDateTime = newTime;
+          schedule.startDateTime = newTime;
           validateScheduleEndDateTime();
         } else {
-          endDateTime = newTime;
+          schedule.endDateTime = newTime;
           validateScheduleStartDateTime();
         }
       });
@@ -141,23 +140,26 @@ class DateTimePickerState extends State<DateTimePicker> {
   }
 
   void validateScheduleStartDateTime() {
-    if (!isCorrectSchedulePeriod) {
+    if (!schedule.isCorrectSchedulePeriod) {
       setState(() {
-        startDateTime = startDateTime.add(const Duration(days: -1));
+        schedule.startDateTime =
+            schedule.startDateTime.add(const Duration(days: -1));
       });
     }
   }
 
   void validateScheduleEndDateTime() {
-    if (!isCorrectSchedulePeriod) {
+    if (!schedule.isCorrectSchedulePeriod) {
       setState(() {
-        endDateTime = createUpdatedDate(endDateTime, startDateTime);
+        schedule.endDateTime =
+            createUpdatedDate(schedule.endDateTime, schedule.startDateTime);
       });
     }
 
-    if (!isCorrectSchedulePeriod) {
+    if (!schedule.isCorrectSchedulePeriod) {
       setState(() {
-        endDateTime = endDateTime.add(const Duration(days: 1));
+        schedule.endDateTime =
+            schedule.endDateTime.add(const Duration(days: 1));
       });
     }
   }

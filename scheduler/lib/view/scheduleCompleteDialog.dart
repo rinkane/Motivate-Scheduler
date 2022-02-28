@@ -23,9 +23,6 @@ class ScheduleCompleteDialog extends StatefulWidget {
 class ScheduleCompleteDialogState extends State<ScheduleCompleteDialog> {
   late CompleteSchedule completeSchedule;
 
-  bool get isCorrectSchedulePeriod =>
-      !completeSchedule.endDateTime.isBefore(completeSchedule.startDateTime);
-
   @override
   void initState() {
     super.initState();
@@ -49,9 +46,7 @@ class ScheduleCompleteDialogState extends State<ScheduleCompleteDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              DateTimePicker(
-                  startDateTime: completeSchedule.startDateTime,
-                  endDateTime: completeSchedule.endDateTime),
+              DateTimePicker(schedule: completeSchedule),
             ],
           ),
         ],
@@ -62,7 +57,7 @@ class ScheduleCompleteDialogState extends State<ScheduleCompleteDialog> {
           height: 60,
           child: TextButton(
               child: const Text("完了"),
-              onPressed: isCorrectSchedulePeriod
+              onPressed: completeSchedule.isCorrectSchedulePeriod
                   ? () {
                       Navigator.pop(context, completeSchedule);
                     }

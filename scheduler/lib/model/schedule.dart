@@ -10,6 +10,8 @@ class Schedule {
   DateTime endDateTime = DateTime(DateTime.now().year, DateTime.now().month,
       DateTime.now().day, DateTime.now().hour, DateTime.now().minute);
 
+  bool get isCorrectSchedulePeriod => !endDateTime.isBefore(startDateTime);
+
   var doubleBookingSchedules = <Schedule>[];
   Schedule();
   Schedule.of(this.id, this.name, this.motivation, this.startDateTime,
