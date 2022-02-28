@@ -93,7 +93,12 @@ class ScheduleCard extends StatelessWidget {
     final schedule = scheduleListViewModel.schedules[index];
     return Card(
       child: ListTile(
-        title: Text(schedule.name),
+        title: DefaultTextStyle(
+          child: Text(schedule.name),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style: const TextStyle(),
+        ),
         leading: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,7 +106,23 @@ class ScheduleCard extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               width: 30,
-              child: Text(schedule.motivation.toString()),
+              child: Text(
+                schedule.motivation.toString(),
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            Visibility(
+              visible: schedule.doubleBookingSchedules.isNotEmpty,
+              child: Container(
+                alignment: Alignment.center,
+                width: 50,
+                child: Icon(
+                  Icons.warning,
+                  color: Colors.yellow.shade600,
+                ),
+              ),
             ),
           ],
         ),
