@@ -11,7 +11,6 @@ class Schedule {
       DateTime.now().day, DateTime.now().hour, DateTime.now().minute);
 
   var doubleBookingSchedules = <Schedule>[];
-
   Schedule();
   Schedule.of(this.id, this.name, this.motivation, this.startDateTime,
       this.endDateTime);

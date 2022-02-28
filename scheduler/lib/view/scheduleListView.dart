@@ -6,6 +6,7 @@ import '../model/completeSchedule.dart';
 import '../model/schedule.dart';
 import '../viewModel/completeScheduleListViewModel.dart';
 import '../viewModel/scheduleListViewModel.dart';
+import 'scheduleCompleteDialog.dart';
 import 'scheduleSettingDialog.dart';
 import 'viewSelectDrawer.dart';
 import 'confirmDeleteScheduleDialog.dart';
@@ -159,15 +160,18 @@ class ScheduleCard extends StatelessWidget {
               child: schedule.isDone()
                   ? ElevatedButton(
                       child: const Text("complete"),
-                      onPressed: () {
-                        completeScheduleListViewModel.addCompleteSchedule(
-                            CompleteSchedule.of(
-                                schedule.id,
-                                schedule.name,
-                                schedule.motivation,
-                                schedule.startDateTime,
-                                schedule.endDateTime,
-                                ""));
+                      onPressed: () async {
+                        final completeSchedule =
+                            await showDialog<CompleteSchedule>(
+                          context: context,
+                          builder: (context) =>
+                              ScheduleCompleteDialog(initialSchedule: schedule),
+                        );
+                        if (completeSchedule == null) {
+                          return;
+                        }
+                        completeScheduleListViewModel
+                            .addCompleteSchedule(completeSchedule);
                         scheduleListViewModel.deleteSchedule(index);
                       },
                     )
@@ -176,15 +180,18 @@ class ScheduleCard extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.black87,
                           )),
-                      onPressed: () {
-                        completeScheduleListViewModel.addCompleteSchedule(
-                            CompleteSchedule.of(
-                                schedule.id,
-                                schedule.name,
-                                schedule.motivation,
-                                schedule.startDateTime,
-                                schedule.endDateTime,
-                                ""));
+                      onPressed: () async {
+                        final completeSchedule =
+                            await showDialog<CompleteSchedule>(
+                          context: context,
+                          builder: (context) =>
+                              ScheduleCompleteDialog(initialSchedule: schedule),
+                        );
+                        if (completeSchedule == null) {
+                          return;
+                        }
+                        completeScheduleListViewModel
+                            .addCompleteSchedule(completeSchedule);
                         scheduleListViewModel.deleteSchedule(index);
                       },
                     ),
@@ -221,4 +228,6 @@ class ScheduleCard extends StatelessWidget {
       ),
     );
   }
+
+  void completeSchedule(BuildContext context, Schedule schedule) async {}
 }
