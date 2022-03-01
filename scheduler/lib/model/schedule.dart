@@ -71,7 +71,7 @@ class Schedule {
     return warning;
   }
 
-  bool isDone() {
-    return DateTime.now().isAfter(endDateTime);
+  bool isCompleteAt(DateTime now) {
+    return now.isAfter(endDateTime) || now.isAtSameMomentAs(endDateTime);
   }
 }

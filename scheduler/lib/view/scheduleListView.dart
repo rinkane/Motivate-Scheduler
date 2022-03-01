@@ -157,7 +157,7 @@ class ScheduleCard extends StatelessWidget {
           children: <Widget>[
             Container(
               margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-              child: schedule.isDone()
+              child: schedule.isCompleteAt(DateTime.now())
                   ? ElevatedButton(
                       child: const Text("complete"),
                       onPressed: () async {
