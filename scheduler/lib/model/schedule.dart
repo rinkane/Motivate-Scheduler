@@ -18,16 +18,34 @@ class Schedule {
       this.endDateTime);
 
   void addDoubleBookingSchedule(Schedule schedule) {
-    if (!doubleBookingSchedules.contains(schedule)) {
-      doubleBookingSchedules.add(schedule);
+    if (doubleBookingSchedules.contains(schedule)) {
+      return;
     }
+
+    if (!isDuring(schedule)) {
+      return;
+    }
+
+    doubleBookingSchedules.add(schedule);
   }
 
   bool isDuring(Schedule schedule) {
-    return (startDateTime.isAfter(schedule.startDateTime) &&
-            startDateTime.isBefore(schedule.endDateTime)) ||
-        (endDateTime.isAfter(schedule.startDateTime) &&
-            endDateTime.isBefore(schedule.endDateTime));
+    if (startDateTime.isAfter(schedule.startDateTime) &&
+        startDateTime.isBefore(schedule.endDateTime)) {
+      return true;
+    }
+
+    if (endDateTime.isAfter(schedule.startDateTime) &&
+        endDateTime.isBefore(schedule.endDateTime)) {
+      return true;
+    }
+
+    if (startDateTime.isAtSameMomentAs(schedule.startDateTime) &&
+        endDateTime.isAtSameMomentAs(schedule.endDateTime)) {
+      return true;
+    }
+
+    return false;
   }
 
   String getDurationText() {
