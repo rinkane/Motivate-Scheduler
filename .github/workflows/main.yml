@@ -9,15 +9,13 @@ jobs:
   widget-test:
     name: flutter widget test
     runs-on: ubuntu-latest
-    container:
-      image: google/dart:latest
     steps:
       - name: set up repository
         uses: actions/checkout@v2
       - name: set up flutter-action
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '2.5.3'
+          flutter-version: '2.10.2'
       - run: flutter pub get
         working-directory: ./scheduler
       - name: flutter widget test
