@@ -17,5 +17,6 @@ jobs:
         with:
           flutter-version: '2.5.3'
       - run: flutter pub get
+        working-directory: ./scheduler
       - name: flutter widget test
         run: flutter test test/widget_test.dart
