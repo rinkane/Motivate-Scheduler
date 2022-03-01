@@ -38,5 +38,16 @@ void main() {
 
       expect(isDuring, true);
     });
+
+    test("When schedule finishes, other schedule starts.", () {
+      schedule = Schedule.of(
+          "ID1", "schedule1", 0, DateTime(2022, 1, 1), DateTime(2022, 1, 2));
+      anotherSchedule = Schedule.of(
+          "ID1", "schedule1", 0, DateTime(2022, 1, 2), DateTime(2022, 1, 3));
+
+      bool isDuring = schedule.isDuring(anotherSchedule);
+
+      expect(isDuring, false);
+    });
   });
 }
