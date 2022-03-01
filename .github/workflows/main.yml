@@ -1,4 +1,4 @@
-name: widget-test
+name: flutter-test
 on:
   pull_request:
     types: [opened, synchronize]
@@ -7,7 +7,7 @@ on:
       - master
 jobs:
   widget-test:
-    name: flutter widget test
+    name: flutter test
     runs-on: ubuntu-latest
     steps:
       - name: set up repository
@@ -18,6 +18,11 @@ jobs:
           flutter-version: '2.10.2'
       - run: flutter pub get
         working-directory: ./scheduler
-      - name: flutter widget test
-        run: flutter test test/widget_test.dart
+      - name: flutter test
+        run: flutter test --coverage
         working-directory: ./scheduler
+      - name: Report code coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          
