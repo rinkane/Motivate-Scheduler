@@ -20,3 +20,4 @@ jobs:
         working-directory: ./scheduler
       - name: flutter widget test
         run: flutter test test/widget_test.dart
+        working-directory: ./scheduler
