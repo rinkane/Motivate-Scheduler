@@ -72,6 +72,12 @@ class Schedule {
   }
 
   bool isCompleteAt(DateTime now) {
-    return now.isAfter(endDateTime) || now.isAtSameMomentAs(endDateTime);
+    if (now.isAfter(endDateTime)) {
+      return true;
+    }
+    if (now.isAtSameMomentAs(endDateTime)) {
+      return true;
+    }
+    return false;
   }
 }
