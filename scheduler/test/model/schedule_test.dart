@@ -33,9 +33,8 @@ void main() {
   });
 
   group("IsDuring Test", () {
-    test("Same DateTime", () {
+    test("Same schedule", () {
       bool isDuring = schedule.isDuring(anotherSchedule);
-
       expect(isDuring, true);
     });
 
@@ -46,7 +45,30 @@ void main() {
           "ID1", "schedule1", 0, DateTime(2022, 1, 2), DateTime(2022, 1, 3));
 
       bool isDuring = schedule.isDuring(anotherSchedule);
+      expect(isDuring, false);
+      isDuring = anotherSchedule.isDuring(schedule);
+      expect(isDuring, false);
+    });
 
+    test("Same schedule and schedule is a moment.", () {
+      schedule = Schedule.of(
+          "ID1", "schedule1", 0, DateTime(2022, 1, 1), DateTime(2022, 1, 1));
+      anotherSchedule = Schedule.of(
+          "ID1", "schedule1", 0, DateTime(2022, 1, 1), DateTime(2022, 1, 1));
+
+      bool isDuring = schedule.isDuring(anotherSchedule);
+      expect(isDuring, false);
+      isDuring = anotherSchedule.isDuring(schedule);
+      expect(isDuring, false);
+    });
+
+    test("Schedule isn't between other schedule.", () {
+      schedule = Schedule.of(
+          "ID1", "schedule1", 0, DateTime(2022, 1, 1), DateTime(2022, 1, 2));
+      anotherSchedule = Schedule.of(
+          "ID1", "schedule1", 0, DateTime(2022, 1, 3), DateTime(2022, 1, 4));
+
+      bool isDuring = schedule.isDuring(anotherSchedule);
       expect(isDuring, false);
     });
   });

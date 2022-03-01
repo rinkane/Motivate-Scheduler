@@ -30,6 +30,11 @@ class Schedule {
   }
 
   bool isDuring(Schedule schedule) {
+    if (startDateTime.isAtSameMomentAs(endDateTime) ||
+        schedule.startDateTime.isAtSameMomentAs(schedule.endDateTime)) {
+      return false;
+    }
+
     if (startDateTime.isAfter(schedule.startDateTime) &&
         startDateTime.isBefore(schedule.endDateTime)) {
       return true;
