@@ -1,7 +1,21 @@
-name: hello-world-actions
-on: [push]
+name: widget-test
+on:
+  pull_request:
+    types: [opened, synchronize]
+  push:
+    branches:
+      - master
 jobs:
-  check-bats-version:
+  widget-test:
+    name: flutter widget test
     runs-on: ubuntu-latest
     steps:
-      - run: echo "hello world"
+      - name: set up repository
+        uses: actions/checkout@v2
+      - name: set up flutter-action
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.5.3'
+      - run: flutter pub get
+      - name: flutter widget test
+        run: flutter test test/widget_test.dart
