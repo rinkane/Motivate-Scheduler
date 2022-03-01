@@ -9,14 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
-import 'package:scheduler/main.dart';
 import 'package:scheduler/view/scheduleListView.dart';
 import 'package:scheduler/viewModel/scheduleListViewModel.dart';
 
 Widget createScheduleListView() =>
     ChangeNotifierProvider<ScheduleListViewModel>(
         create: (context) => ScheduleListViewModel(),
-        child: MaterialApp(
+        child: const MaterialApp(
           home: ScheduleListView(),
         ));
 
