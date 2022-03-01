@@ -9,6 +9,8 @@ jobs:
   widget-test:
     name: flutter widget test
     runs-on: ubuntu-latest
+    container:
+      image: google/dart:latest
     steps:
       - name: set up repository
         uses: actions/checkout@v2
