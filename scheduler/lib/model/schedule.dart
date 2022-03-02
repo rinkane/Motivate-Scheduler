@@ -29,6 +29,10 @@ class Schedule {
   }
 
   void addDoubleBookedSchedule(Schedule schedule) {
+    if (this == schedule) {
+      return;
+    }
+
     if (_doubleBookedSchedules.contains(schedule)) {
       return;
     }
