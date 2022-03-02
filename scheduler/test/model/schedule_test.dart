@@ -39,6 +39,29 @@ void main() {
     });
   });
 
+  group("isCorrectSchedulePeriod Test", () {
+    test("startTime is before endTime", () {
+      schedule = Schedule.of(
+          "ID1", "schedule1", 0, DateTime(2022, 1, 1), DateTime(2022, 1, 2));
+      bool isCorrect = schedule.isCorrectSchedulePeriod;
+      expect(isCorrect, true);
+    });
+
+    test("startTime is at same moment as endTime.", () {
+      schedule = Schedule.of(
+          "ID1", "schedule1", 0, DateTime(2022, 1, 1), DateTime(2022, 1, 1));
+      bool isCorrect = schedule.isCorrectSchedulePeriod;
+      expect(isCorrect, true);
+    });
+
+    test("startTime is after endTime.", () {
+      schedule = Schedule.of(
+          "ID1", "schedule1", 0, DateTime(2022, 1, 2), DateTime(2022, 1, 1));
+      bool isCorrect = schedule.isCorrectSchedulePeriod;
+      expect(isCorrect, false);
+    });
+  });
+
   group("AddDoubleBookingSchedule Test", () {
     test("add one schedule that double-booking schedule.", () {
       schedule.addDoubleBookedSchedule(anotherSchedule);
