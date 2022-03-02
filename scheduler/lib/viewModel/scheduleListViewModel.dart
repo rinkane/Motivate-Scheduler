@@ -140,9 +140,10 @@ class ScheduleListViewModel with ChangeNotifier {
 
   void addDoubleBooking(Schedule schedule) {
     for (int i = 0; i < schedules.length; i++) {
-      if (schedules[i].isDuring(schedule) || schedule.isDuring(schedules[i])) {
-        schedule.addDoubleBookingSchedule(schedules[i]);
-        schedules[i].addDoubleBookingSchedule(schedule);
+      if (schedules[i].isDoubleBooked(schedule) ||
+          schedule.isDoubleBooked(schedules[i])) {
+        schedule.addDoubleBookedSchedule(schedules[i]);
+        schedules[i].addDoubleBookedSchedule(schedule);
         notifyListeners();
       }
     }
@@ -150,11 +151,11 @@ class ScheduleListViewModel with ChangeNotifier {
 
   void removeDoubleBooking(Schedule schedule, {bool isForce = false}) {
     for (int i = 0; i < schedules.length; i++) {
-      if (!(schedules[i].isDuring(schedule) ||
-              schedule.isDuring(schedules[i])) ||
+      if (!(schedules[i].isDoubleBooked(schedule) ||
+              schedule.isDoubleBooked(schedules[i])) ||
           isForce) {
-        schedule.doubleBookingSchedules.remove(schedules[i]);
-        schedules[i].doubleBookingSchedules.remove(schedule);
+        schedule.removeDoubleBookedSchedule(schedules[i]);
+        schedules[i].removeDoubleBookedSchedule(schedule);
         notifyListeners();
       }
     }

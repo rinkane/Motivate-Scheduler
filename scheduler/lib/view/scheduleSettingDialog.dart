@@ -41,8 +41,9 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
   @override
   void initState() {
     super.initState();
-    schedule =
-        widget.initialSchedule != null ? widget.initialSchedule! : Schedule();
+    schedule = widget.initialSchedule != null
+        ? widget.initialSchedule!
+        : Schedule(DateTime.now());
     method = widget.initialMethod;
   }
 
