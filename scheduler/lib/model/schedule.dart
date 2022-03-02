@@ -29,6 +29,10 @@ class Schedule {
   }
 
   void addDoubleBookedSchedule(Schedule schedule) {
+    if (this == schedule) {
+      return;
+    }
+
     if (_doubleBookedSchedules.contains(schedule)) {
       return;
     }
@@ -87,13 +91,19 @@ class Schedule {
   String getDoubleBookedWarningText() {
     if (_doubleBookedSchedules.isEmpty) return "";
 
-    String warning = "It's double-booked with ";
+    String warning =
+        "It's double-booked with " + _getDoubleBookedSchedulesText();
+
+    return warning;
+  }
+
+  String _getDoubleBookedSchedulesText() {
+    String warning = "";
     for (var doubleBookingSchedule in _doubleBookedSchedules) {
       warning += '"' + doubleBookingSchedule.name + '"';
       warning += " , ";
     }
-    warning = warning.replaceRange(warning.length - 3, null, '.');
-    return warning;
+    return warning.replaceRange(warning.length - 3, null, '.');
   }
 
   bool isCompleteAt(DateTime now) {

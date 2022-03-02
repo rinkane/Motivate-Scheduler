@@ -63,6 +63,11 @@ void main() {
   });
 
   group("AddDoubleBookingSchedule Test", () {
+    test("add myself", () {
+      schedule.addDoubleBookedSchedule(schedule);
+
+      expect(schedule.doubleBookedCount, 0);
+    });
     test("add one schedule that double-booking schedule.", () {
       schedule.addDoubleBookedSchedule(anotherSchedule);
 
