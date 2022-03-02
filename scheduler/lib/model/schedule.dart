@@ -5,32 +5,47 @@ class Schedule {
   String name = "";
   int motivation = 0;
 
-  DateTime startDateTime = DateTime(DateTime.now().year, DateTime.now().month,
-      DateTime.now().day, DateTime.now().hour, DateTime.now().minute);
-  DateTime endDateTime = DateTime(DateTime.now().year, DateTime.now().month,
-      DateTime.now().day, DateTime.now().hour, DateTime.now().minute);
+  late DateTime startDateTime;
+  late DateTime endDateTime;
 
   bool get isCorrectSchedulePeriod => !endDateTime.isBefore(startDateTime);
 
-  var doubleBookingSchedules = <Schedule>[];
-  Schedule();
-  Schedule.of(this.id, this.name, this.motivation, this.startDateTime,
-      this.endDateTime);
+  final _doubleBookedSchedules = <Schedule>[];
 
-  void addDoubleBookingSchedule(Schedule schedule) {
-    if (doubleBookingSchedules.contains(schedule)) {
-      return;
-    }
+  int get doubleBookedCount => _doubleBookedSchedules.length;
 
-    if (!isDuring(schedule)) {
-      return;
-    }
-
-    doubleBookingSchedules.add(schedule);
+  Schedule(DateTime now) {
+    startDateTime =
+        DateTime(now.year, now.month, now.day, now.hour, now.minute);
+    endDateTime = DateTime(now.year, now.month, now.day, now.hour, now.minute);
   }
 
-  bool isDuring(Schedule schedule) {
-    if (startDateTime.isAtSameMomentAs(endDateTime) ||
+  Schedule.of(this.id, this.name, this.motivation, DateTime _startDateTime,
+      DateTime _endDateTime) {
+    startDateTime = DateTime(_startDateTime.year, _startDateTime.month,
+        _startDateTime.day, _startDateTime.hour, _startDateTime.minute);
+    endDateTime = DateTime(_endDateTime.year, _endDateTime.month,
+        _endDateTime.day, _endDateTime.hour, _endDateTime.minute);
+  }
+
+  void addDoubleBookedSchedule(Schedule schedule) {
+    if (_doubleBookedSchedules.contains(schedule)) {
+      return;
+    }
+
+    if (!isDoubleBooked(schedule)) {
+      return;
+    }
+
+    _doubleBookedSchedules.add(schedule);
+  }
+
+  void removeDoubleBookedSchedule(Schedule schedule) {
+    _doubleBookedSchedules.remove(schedule);
+  }
+
+  bool isDoubleBooked(Schedule schedule) {
+    if (startDateTime.isAtSameMomentAs(endDateTime) &&
         schedule.startDateTime.isAtSameMomentAs(schedule.endDateTime)) {
       return false;
     }
@@ -40,8 +55,18 @@ class Schedule {
       return true;
     }
 
+    if (schedule.startDateTime.isAfter(startDateTime) &&
+        schedule.startDateTime.isBefore(endDateTime)) {
+      return true;
+    }
+
     if (endDateTime.isAfter(schedule.startDateTime) &&
         endDateTime.isBefore(schedule.endDateTime)) {
+      return true;
+    }
+
+    if (schedule.endDateTime.isAfter(startDateTime) &&
+        schedule.endDateTime.isBefore(endDateTime)) {
       return true;
     }
 
@@ -59,11 +84,11 @@ class Schedule {
         DateFormat("yyyy-MM-dd HH:mm").format(endDateTime);
   }
 
-  String getDoubleBookingWarning() {
-    if (doubleBookingSchedules.isEmpty) return "";
+  String getDoubleBookedWarningText() {
+    if (_doubleBookedSchedules.isEmpty) return "";
 
     String warning = "It's double-booked with ";
-    for (var doubleBookingSchedule in doubleBookingSchedules) {
+    for (var doubleBookingSchedule in _doubleBookedSchedules) {
       warning += '"' + doubleBookingSchedule.name + '"';
       warning += " , ";
     }
@@ -72,6 +97,12 @@ class Schedule {
   }
 
   bool isCompleteAt(DateTime now) {
-    return now.isAfter(endDateTime) || now.isAtSameMomentAs(endDateTime);
+    if (now.isAfter(endDateTime)) {
+      return true;
+    }
+    if (now.isAtSameMomentAs(endDateTime)) {
+      return true;
+    }
+    return false;
   }
 }

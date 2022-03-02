@@ -115,7 +115,7 @@ class ScheduleCard extends StatelessWidget {
               ),
             ),
             Visibility(
-              visible: schedule.doubleBookingSchedules.isNotEmpty,
+              visible: schedule.doubleBookedCount != 0,
               child: Container(
                 alignment: Alignment.center,
                 width: 50,
@@ -137,11 +137,11 @@ class ScheduleCard extends StatelessWidget {
               ),
             ),
             Visibility(
-              visible: schedule.doubleBookingSchedules.isNotEmpty,
+              visible: schedule.doubleBookedCount != 0,
               child: Container(
                 margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: DefaultTextStyle(
-                  child: Text(schedule.getDoubleBookingWarning()),
+                  child: Text(schedule.getDoubleBookedWarningText()),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: TextStyle(
