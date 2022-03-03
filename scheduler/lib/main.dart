@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'firebase_options.dart';
-import 'view/completeScheduleListView.dart';
-import 'view/scheduleListView.dart';
-import 'viewModel/scheduleListViewModel.dart';
-import 'viewModel/completeScheduleListViewModel.dart';
-import 'view/loginPage.dart';
+import 'view/login_page.dart';
 
 const String appName = "Motivate Scheduler";
 
 void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.web);
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -21,19 +21,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => ScheduleListViewModel()),
-        ChangeNotifierProvider(
-            create: (context) => CompleteScheduleListViewModel()),
-      ],
-      child: MaterialApp(
-        title: appName,
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-        ),
-        home: const LoginPage(),
+    return MaterialApp(
+      title: appName,
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
       ),
+      home: const LoginPage(),
     );
   }
 }

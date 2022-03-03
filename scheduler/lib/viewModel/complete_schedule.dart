@@ -1,7 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../model/completeSchedule.dart';
+import '../model/complete_schedule.dart';
+
+final completeScheduleListProvider =
+    ChangeNotifierProvider((_) => CompleteScheduleListViewModel());
 
 class CompleteScheduleListViewModel with ChangeNotifier {
   List<CompleteSchedule> completeSchedules = [];

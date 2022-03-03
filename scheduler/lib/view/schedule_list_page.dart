@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dotted_border/dotted_border.dart';
 
-import '../model/completeSchedule.dart';
+import '../model/complete_schedule.dart';
 import '../model/schedule.dart';
-import '../viewModel/completeScheduleListViewModel.dart';
-import '../viewModel/scheduleListViewModel.dart';
-import 'scheduleCompleteDialog.dart';
-import 'scheduleSettingDialog.dart';
-import 'viewSelectDrawer.dart';
-import 'confirmDeleteScheduleDialog.dart';
+import '../viewModel/complete_schedule.dart';
+import '../viewModel/schedule_list.dart';
+import 'schedule_complete_dialog.dart';
+import 'schedule_setting_dialog.dart';
+import 'view_select_drawer.dart';
+import 'confirm_delete_schedule_dialog.dart';
 
 const String dateTimeformat = "yyyy-MM-dd HH:mm";
 
-class ScheduleListView extends StatelessWidget {
+class ScheduleListView extends HookConsumerWidget {
   const ScheduleListView({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final scheduleListViewModel = ref.watch(scheduleListProvider);
     return Scaffold(
       drawer: const ViewSelectDrawer(),
       body: CustomScrollView(
@@ -64,12 +64,12 @@ class ScheduleListView extends StatelessWidget {
   }
 }
 
-class ScheduleList extends StatelessWidget {
+class ScheduleList extends HookConsumerWidget {
   const ScheduleList({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final scheduleListViewModel = ref.watch(scheduleListProvider);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -81,16 +81,16 @@ class ScheduleList extends StatelessWidget {
   }
 }
 
-class ScheduleCard extends StatelessWidget {
+class ScheduleCard extends HookConsumerWidget {
   final int index;
 
   const ScheduleCard({Key? key, required this.index}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final scheduleListViewModel = ref.watch(scheduleListProvider);
     final completeScheduleListViewModel =
-        Provider.of<CompleteScheduleListViewModel>(context);
+        ref.watch(completeScheduleListProvider);
     final schedule = scheduleListViewModel.schedules[index];
     return Card(
       child: ListTile(

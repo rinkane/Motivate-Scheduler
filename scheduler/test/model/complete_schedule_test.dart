@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-
-import '../../lib/model/completeSchedule.dart';
+import 'package:scheduler/model/complete_schedule.dart';
 
 void main() {
   group("constructor", () {

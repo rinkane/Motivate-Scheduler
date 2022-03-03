@@ -1,7 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../model/schedule.dart';
+
+final scheduleListProvider =
+    ChangeNotifierProvider((_) => ScheduleListViewModel());
 
 class ScheduleListViewModel with ChangeNotifier {
   List<Schedule> schedules = [];

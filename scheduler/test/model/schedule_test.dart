@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-
-import '../../lib/model/schedule.dart';
+import 'package:scheduler/model/schedule.dart';
 
 void main() {
   late Schedule schedule;
