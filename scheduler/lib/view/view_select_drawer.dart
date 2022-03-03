@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'completeScheduleListView.dart';
-import 'scheduleListView.dart';
-import 'motivationGraphView.dart';
+import 'complete_schedule_page.dart';
+import 'schedule_list_page.dart';
+import 'motivation_graph.dart';
 
 class ViewSelectDrawer extends StatelessWidget {
   const ViewSelectDrawer({Key? key}) : super(key: key);
@@ -61,7 +61,7 @@ class ViewSelectDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const CompleteScheduleListView(),
+                  builder: (context) => const CompleteScheduleView(),
                 ),
               );
             },

@@ -3,11 +3,11 @@ import 'package:intl/intl.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:charts_flutter/flutter.dart';
 
-import '../model/completeSchedule.dart';
+import '../model/complete_schedule.dart';
 import '../model/schedule.dart';
-import '../viewModel/completeScheduleListViewModel.dart';
-import '../viewModel/scheduleListViewModel.dart';
-import 'viewSelectDrawer.dart';
+import '../viewModel/complete_schedule.dart';
+import '../viewModel/schedule_list.dart';
+import 'view_select_drawer.dart';
 
 class MotivationGraphView extends HookConsumerWidget {
   const MotivationGraphView({Key? key}) : super(key: key);

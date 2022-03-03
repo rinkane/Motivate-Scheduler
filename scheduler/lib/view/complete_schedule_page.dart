@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../viewModel/completeScheduleListViewModel.dart';
-import 'viewSelectDrawer.dart';
+import '../viewModel/complete_schedule.dart';
+import 'view_select_drawer.dart';
 
-class CompleteScheduleListView extends StatelessWidget {
-  const CompleteScheduleListView({Key? key}) : super(key: key);
+class CompleteScheduleView extends StatelessWidget {
+  const CompleteScheduleView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return const Scaffold(

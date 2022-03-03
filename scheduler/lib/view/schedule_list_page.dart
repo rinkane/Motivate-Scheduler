@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dotted_border/dotted_border.dart';
 
-import '../model/completeSchedule.dart';
+import '../model/complete_schedule.dart';
 import '../model/schedule.dart';
-import '../viewModel/completeScheduleListViewModel.dart';
-import '../viewModel/scheduleListViewModel.dart';
-import 'scheduleCompleteDialog.dart';
-import 'scheduleSettingDialog.dart';
-import 'viewSelectDrawer.dart';
-import 'confirmDeleteScheduleDialog.dart';
+import '../viewModel/complete_schedule.dart';
+import '../viewModel/schedule_list.dart';
+import 'schedule_complete_dialog.dart';
+import 'schedule_setting_dialog.dart';
+import 'view_select_drawer.dart';
+import 'confirm_delete_schedule_dialog.dart';
 
 const String dateTimeformat = "yyyy-MM-dd HH:mm";
 

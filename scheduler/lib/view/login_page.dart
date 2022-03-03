@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:scheduler/viewModel/loginPageViewModel.dart';
+import 'package:scheduler/viewModel/login.dart';
 
-import '../viewModel/completeScheduleListViewModel.dart';
-import 'registUserPage.dart';
-import 'scheduleListView.dart';
-import '../viewModel/scheduleListViewModel.dart';
+import '../viewModel/complete_schedule.dart';
+import 'regist_user_page.dart';
+import 'schedule_list_page.dart';
+import '../viewModel/schedule_list.dart';
 
 const String appName = "Motivate Scheduler";
 

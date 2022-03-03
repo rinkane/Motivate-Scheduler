@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:scheduler/view/scheduleListView.dart';
+import 'package:scheduler/view/schedule_list_page.dart';
 
 void main() {
   group("Schedule List View Tests", () {
