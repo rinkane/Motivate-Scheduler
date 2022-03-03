@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../viewModel/completeScheduleListViewModel.dart';
 import 'viewSelectDrawer.dart';
@@ -22,13 +22,12 @@ class CompleteScheduleListView extends StatelessWidget {
   }
 }
 
-class CompleteScheduleList extends StatelessWidget {
+class CompleteScheduleList extends HookConsumerWidget {
   const CompleteScheduleList({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final scheduleListViewModel =
-        Provider.of<CompleteScheduleListViewModel>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final scheduleListViewModel = ref.watch(completeScheduleListProvider);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -40,15 +39,14 @@ class CompleteScheduleList extends StatelessWidget {
   }
 }
 
-class CompleteScheduleCard extends StatelessWidget {
+class CompleteScheduleCard extends HookConsumerWidget {
   final int index;
 
   const CompleteScheduleCard({Key? key, required this.index}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final scheduleListViewModel =
-        Provider.of<CompleteScheduleListViewModel>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final scheduleListViewModel = ref.watch(completeScheduleListProvider);
     final schedule = scheduleListViewModel.completeSchedules[index];
     return Card(
       child: ListTile(
@@ -67,10 +65,8 @@ class CompleteScheduleCard extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              child: Text(
-                schedule.getDurationText(),
-              ),
+            Text(
+              schedule.getDurationText(),
             ),
           ],
         ),

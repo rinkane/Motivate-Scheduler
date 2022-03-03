@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:charts_flutter/flutter.dart';
-import 'package:provider/provider.dart';
 
 import '../model/completeSchedule.dart';
 import '../model/schedule.dart';
@@ -9,14 +9,14 @@ import '../viewModel/completeScheduleListViewModel.dart';
 import '../viewModel/scheduleListViewModel.dart';
 import 'viewSelectDrawer.dart';
 
-class MotivationGraphView extends StatelessWidget {
+class MotivationGraphView extends HookConsumerWidget {
   const MotivationGraphView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final schedules = Provider.of<ScheduleListViewModel>(context).schedules;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final schedules = ref.watch(scheduleListProvider).schedules;
     final completeSchedules =
-        Provider.of<CompleteScheduleListViewModel>(context).completeSchedules;
+        ref.watch(completeScheduleListProvider).completeSchedules;
     final allSchedules = createSchedulesCopy(schedules, completeSchedules);
     return Scaffold(
       appBar: AppBar(

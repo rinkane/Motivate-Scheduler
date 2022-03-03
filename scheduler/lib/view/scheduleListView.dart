@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dotted_border/dotted_border.dart';
 
 import '../model/completeSchedule.dart';
@@ -13,11 +13,11 @@ import 'confirmDeleteScheduleDialog.dart';
 
 const String dateTimeformat = "yyyy-MM-dd HH:mm";
 
-class ScheduleListView extends StatelessWidget {
+class ScheduleListView extends HookConsumerWidget {
   const ScheduleListView({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final scheduleListViewModel = ref.watch(scheduleListProvider);
     return Scaffold(
       drawer: const ViewSelectDrawer(),
       body: CustomScrollView(
@@ -64,12 +64,12 @@ class ScheduleListView extends StatelessWidget {
   }
 }
 
-class ScheduleList extends StatelessWidget {
+class ScheduleList extends HookConsumerWidget {
   const ScheduleList({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final scheduleListViewModel = ref.watch(scheduleListProvider);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -81,16 +81,16 @@ class ScheduleList extends StatelessWidget {
   }
 }
 
-class ScheduleCard extends StatelessWidget {
+class ScheduleCard extends HookConsumerWidget {
   final int index;
 
   const ScheduleCard({Key? key, required this.index}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final scheduleListViewModel = ref.watch(scheduleListProvider);
     final completeScheduleListViewModel =
-        Provider.of<CompleteScheduleListViewModel>(context);
+        ref.watch(completeScheduleListProvider);
     final schedule = scheduleListViewModel.schedules[index];
     return Card(
       child: ListTile(

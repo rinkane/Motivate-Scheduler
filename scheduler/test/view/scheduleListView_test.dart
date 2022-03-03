@@ -7,22 +7,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:scheduler/view/scheduleListView.dart';
-import 'package:scheduler/viewModel/scheduleListViewModel.dart';
-
-Widget createScheduleListView() =>
-    ChangeNotifierProvider<ScheduleListViewModel>(
-        create: (context) => ScheduleListViewModel(),
-        child: const MaterialApp(
-          home: ScheduleListView(),
-        ));
 
 void main() {
   group("Schedule List View Tests", () {
     testWidgets('Testing if SliverList shows up', (WidgetTester tester) async {
-      await tester.pumpWidget(createScheduleListView());
+      await tester.pumpWidget(
+          const ProviderScope(child: MaterialApp(home: ScheduleListView())));
       expect(find.byType(SliverList), findsOneWidget);
     });
   });

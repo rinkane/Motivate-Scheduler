@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:scheduler/viewModel/loginPageViewModel.dart';
 
 import '../viewModel/completeScheduleListViewModel.dart';
 import 'registUserPage.dart';
@@ -9,23 +10,15 @@ import '../viewModel/scheduleListViewModel.dart';
 
 const String appName = "Motivate Scheduler";
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends HookConsumerWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  String mailAddress = "";
-  String password = "";
-  String infoText = "";
-
-  @override
-  Widget build(BuildContext context) {
-    final scheduleListViewModel = Provider.of<ScheduleListViewModel>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final scheduleListViewModel = ref.watch(scheduleListProvider);
     final completeScheduleListViewModel =
-        Provider.of<CompleteScheduleListViewModel>(context);
+        ref.watch(completeScheduleListProvider);
+    final loginPageViewModel = ref.watch(loginPageProvider);
     return Scaffold(
       body: Center(
         child: Container(
@@ -37,9 +30,7 @@ class _LoginPageState extends State<LoginPage> {
                   labelText: "MailAddress",
                 ),
                 onChanged: (String input) {
-                  setState(() {
-                    mailAddress = input;
-                  });
+                  loginPageViewModel.setEmail(input);
                 },
               ),
               const SizedBox(height: 8),
@@ -49,9 +40,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 obscureText: true,
                 onChanged: (String input) {
-                  setState(() {
-                    password = input;
-                  });
+                  loginPageViewModel.setPassword(input);
                 },
               ),
               const SizedBox(height: 24),
@@ -62,16 +51,15 @@ class _LoginPageState extends State<LoginPage> {
                     final FirebaseAuth auth = FirebaseAuth.instance;
                     final UserCredential result =
                         await auth.signInWithEmailAndPassword(
-                            email: mailAddress, password: password);
+                            email: loginPageViewModel.email,
+                            password: loginPageViewModel.password);
                     final User user = result.user!;
                     final isFetch = await scheduleListViewModel
                             .fetchScheduleFromFirestore(user.email) &&
                         await completeScheduleListViewModel
                             .fetchScheduleFromFirestore(user.email);
                     if (isFetch) {
-                      setState(() {
-                        infoText = "ログイン成功:${user.email}";
-                      });
+                      loginPageViewModel.infoText = "ログイン成功:${user.email}";
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -82,9 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                       throw Exception("スケジュールデータを取得できませんでした。");
                     }
                   } catch (e) {
-                    setState(() {
-                      infoText = "ログイン失敗:${e.toString()}";
-                    });
+                    loginPageViewModel.infoText = "ログイン失敗:${e.toString()}";
                   }
                 },
               ),
@@ -100,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
               const SizedBox(height: 16),
-              Text(infoText),
+              Text(loginPageViewModel.infoText),
             ],
           ),
         ),
