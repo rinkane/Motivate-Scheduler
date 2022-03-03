@@ -4,7 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../model/schedule.dart';
 
-final scheduleListProvider = Provider((_) => ScheduleListViewModel());
+final scheduleListProvider =
+    ChangeNotifierProvider((_) => ScheduleListViewModel());
 
 class ScheduleListViewModel with ChangeNotifier {
   List<Schedule> schedules = [];

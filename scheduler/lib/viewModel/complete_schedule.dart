@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../model/complete_schedule.dart';
 
 final completeScheduleListProvider =
-    Provider((_) => CompleteScheduleListViewModel());
+    ChangeNotifierProvider((_) => CompleteScheduleListViewModel());
 
 class CompleteScheduleListViewModel with ChangeNotifier {
   List<CompleteSchedule> completeSchedules = [];
