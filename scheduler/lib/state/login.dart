@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final loginPageProvider = ChangeNotifierProvider((_) => LoginPageViewModel());
+final loginPageProvider = ChangeNotifierProvider((_) => LoginState());
 
-class LoginPageViewModel extends ChangeNotifier {
+class LoginState extends ChangeNotifier {
   String _email = "";
   String get email => _email;
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../model/schedule.dart';
-import 'date_time_picker.dart';
+import '../../model/schedule.dart';
+import '../widgets/date_time_picker.dart';
 
 const String dateFormat = "yyyy-MM-dd";
 const String timeFormat = "HH:mm";

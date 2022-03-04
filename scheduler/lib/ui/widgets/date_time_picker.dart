@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../model/schedule.dart';
+import '../../model/schedule.dart';
 import 'show_custom_widgets.dart';
 
 const String dateFormat = "yyyy-MM-dd";
