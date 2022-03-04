@@ -27,13 +27,13 @@ class CompleteScheduleList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scheduleListViewModel = ref.watch(completeScheduleListProvider);
+    final completeSchedules = ref.watch(completeScheduleListProvider);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           return CompleteScheduleCard(index: index);
         },
-        childCount: scheduleListViewModel.completeSchedules.length,
+        childCount: completeSchedules.length,
       ),
     );
   }
@@ -46,8 +46,8 @@ class CompleteScheduleCard extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scheduleListViewModel = ref.watch(completeScheduleListProvider);
-    final schedule = scheduleListViewModel.completeSchedules[index];
+    final completeSchedules = ref.watch(completeScheduleListProvider);
+    final schedule = completeSchedules[index];
     return Card(
       child: ListTile(
         title: Text(schedule.name),

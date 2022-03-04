@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dotted_border/dotted_border.dart';
 
-import '../model/complete_schedule.dart';
 import '../model/schedule.dart';
 import '../viewModel/complete_schedule.dart';
 import '../viewModel/schedule_list.dart';
@@ -90,7 +89,7 @@ class ScheduleCard extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final scheduleListViewModel = ref.watch(scheduleListProvider);
     final completeScheduleListViewModel =
-        ref.watch(completeScheduleListProvider);
+        ref.read(completeScheduleListProvider.notifier);
     final schedule = scheduleListViewModel.schedules[index];
     return Card(
       child: ListTile(
@@ -161,8 +160,7 @@ class ScheduleCard extends HookConsumerWidget {
                   ? ElevatedButton(
                       child: const Text("complete"),
                       onPressed: () async {
-                        final completeSchedule =
-                            await showDialog<CompleteSchedule>(
+                        final completeSchedule = await showDialog<Schedule>(
                           context: context,
                           builder: (context) =>
                               ScheduleCompleteDialog(initialSchedule: schedule),
@@ -181,8 +179,7 @@ class ScheduleCard extends HookConsumerWidget {
                             color: Colors.black87,
                           )),
                       onPressed: () async {
-                        final completeSchedule =
-                            await showDialog<CompleteSchedule>(
+                        final completeSchedule = await showDialog<Schedule>(
                           context: context,
                           builder: (context) =>
                               ScheduleCompleteDialog(initialSchedule: schedule),

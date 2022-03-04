@@ -1,105 +1,57 @@
-import 'package:flutter/foundation.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:scheduler/model/schedule_repository_impl.dart';
 
-import '../model/complete_schedule.dart';
+import '../model/schedule.dart';
 
 final completeScheduleListProvider =
-    ChangeNotifierProvider((_) => CompleteScheduleListViewModel());
+    StateNotifierProvider<CompleteScheduleListViewModel, List<Schedule>>((ref) {
+  return CompleteScheduleListViewModel(ref.read);
+});
 
-class CompleteScheduleListViewModel with ChangeNotifier {
-  List<CompleteSchedule> completeSchedules = [];
-  QueryDocumentSnapshot<Map<String, dynamic>>? userCompleteDocument;
+class CompleteScheduleListViewModel extends StateNotifier<List<Schedule>> {
+  final Reader _reader;
+  late final scheduleRepository = _reader(scheduleRepositoryProvider);
 
-  Future<bool> fetchScheduleFromFirestore(String? userEmail) async {
-    completeSchedules = [];
+  CompleteScheduleListViewModel(this._reader) : super([]);
 
+  Future<bool> fetchSchedule(String? userEmail) async {
     if (userEmail == null) {
       return false;
     }
 
-    try {
-      await initFirestoreDocument(userEmail);
-    } catch (e) {
-      userCompleteDocument = null;
+    if (!await scheduleRepository.authUserRepository(userEmail)) {
+      state = [];
       return false;
     }
 
-    try {
-      final userSnapshot = await userCompleteDocument!.reference
-          .collection("completeSchedules")
-          .get();
+    final schedules = await scheduleRepository.getCompleteSchedules();
+    _insertSchedulesToState(schedules);
 
-      for (var userSchedule in userSnapshot.docs) {
-        final newCompleteSchedule = CompleteSchedule.of(
-            userSchedule["id"],
-            userSchedule["name"],
-            userSchedule["motivate"],
-            userSchedule["startTime"].toDate(),
-            userSchedule["endTime"].toDate(),
-            userSchedule["imagePath"]);
-        insertScheduleToSchedules(newCompleteSchedule);
-      }
-    } catch (e) {
+    return state.isNotEmpty;
+  }
+
+  Future<bool> addCompleteSchedule(Schedule schedule) async {
+    if (!await scheduleRepository.addCompleteSchedules(schedule)) {
       return false;
     }
 
+    _insertScheduleToState(schedule);
     return true;
   }
 
-  Future<void> initFirestoreDocument(String userEmail) async {
-    try {
-      final snapshot =
-          await FirebaseFirestore.instance.collection("users").get();
-      userCompleteDocument =
-          snapshot.docs.firstWhere((doc) => doc["mail"] == userEmail);
-    } catch (e) {
-      rethrow;
+  void _insertSchedulesToState(List<Schedule> schedules) {
+    for (final schedule in schedules) {
+      _insertScheduleToState(schedule);
     }
   }
 
-  bool addCompleteSchedule(CompleteSchedule schedule) {
-    if (!insertScheduleToFirestore(schedule)) {
-      return false;
-    }
-
-    insertScheduleToSchedules(schedule);
-    return true;
-  }
-
-  bool insertScheduleToFirestore(CompleteSchedule schedule) {
-    if (userCompleteDocument == null) {
-      return false;
-    }
-
-    try {
-      userCompleteDocument!.reference
-          .collection("completeSchedules")
-          .doc(schedule.id)
-          .set({
-        "id": schedule.id,
-        "name": schedule.name,
-        "motivate": schedule.motivation,
-        "startTime": schedule.startDateTime,
-        "endTime": schedule.endDateTime,
-        "imagePath": schedule.imagePath,
-      });
-    } catch (e) {
-      return false;
-    }
-
-    return true;
-  }
-
-  void insertScheduleToSchedules(CompleteSchedule schedule) {
-    for (int i = 0; i < completeSchedules.length; i++) {
-      if (completeSchedules[i].startDateTime.isAfter(schedule.startDateTime)) {
-        completeSchedules.insert(i, schedule);
-        notifyListeners();
+  void _insertScheduleToState(Schedule schedule) {
+    for (int i = 0; i < state.length; i++) {
+      if (state[i].startDateTime.isAfter(schedule.startDateTime)) {
+        state.insert(i, schedule);
         return;
       }
     }
-    completeSchedules.add(schedule);
-    notifyListeners();
+    state.add(schedule);
   }
 }

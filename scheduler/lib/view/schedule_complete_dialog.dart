@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../model/schedule.dart';
-import '../model/complete_schedule.dart';
 import 'date_time_picker.dart';
 
 const String dateFormat = "yyyy-MM-dd";
@@ -20,19 +19,18 @@ class ScheduleCompleteDialog extends StatefulWidget {
 }
 
 class ScheduleCompleteDialogState extends State<ScheduleCompleteDialog> {
-  late CompleteSchedule completeSchedule;
+  late Schedule completeSchedule;
 
   @override
   void initState() {
     super.initState();
 
-    completeSchedule = CompleteSchedule.of(
+    completeSchedule = Schedule.of(
         widget.initialSchedule.id,
         widget.initialSchedule.name,
         widget.initialSchedule.motivation,
         widget.initialSchedule.startDateTime,
-        widget.initialSchedule.endDateTime,
-        "");
+        widget.initialSchedule.endDateTime);
   }
 
   @override

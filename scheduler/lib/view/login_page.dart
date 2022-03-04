@@ -17,7 +17,7 @@ class LoginPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final scheduleListViewModel = ref.watch(scheduleListProvider);
     final completeScheduleListViewModel =
-        ref.watch(completeScheduleListProvider);
+        ref.read(completeScheduleListProvider.notifier);
     final loginPageViewModel = ref.watch(loginPageProvider);
     return Scaffold(
       body: Center(
@@ -57,7 +57,7 @@ class LoginPage extends HookConsumerWidget {
                     final isFetch = await scheduleListViewModel
                             .fetchScheduleFromFirestore(user.email) &&
                         await completeScheduleListViewModel
-                            .fetchScheduleFromFirestore(user.email);
+                            .fetchSchedule(user.email);
                     if (isFetch) {
                       loginPageViewModel.infoText = "ログイン成功:${user.email}";
                       Navigator.push(

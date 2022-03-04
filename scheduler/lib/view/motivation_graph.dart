@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:charts_flutter/flutter.dart';
 
-import '../model/complete_schedule.dart';
 import '../model/schedule.dart';
 import '../viewModel/complete_schedule.dart';
 import '../viewModel/schedule_list.dart';
@@ -15,8 +14,7 @@ class MotivationGraphView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final schedules = ref.watch(scheduleListProvider).schedules;
-    final completeSchedules =
-        ref.watch(completeScheduleListProvider).completeSchedules;
+    final completeSchedules = ref.watch(completeScheduleListProvider);
     final allSchedules = createSchedulesCopy(schedules, completeSchedules);
     return Scaffold(
       appBar: AppBar(
@@ -66,7 +64,7 @@ class MotivationGraphView extends HookConsumerWidget {
   }
 
   List<Schedule> createSchedulesCopy(
-      List<Schedule> schedules, List<CompleteSchedule> completeSchedules) {
+      List<Schedule> schedules, List<Schedule> completeSchedules) {
     List<Schedule> _schedules = <Schedule>[];
     for (int i = 0; i < schedules.length; i++) {
       _schedules.add(Schedule.of(
