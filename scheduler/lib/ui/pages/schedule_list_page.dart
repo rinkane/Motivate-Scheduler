@@ -5,7 +5,7 @@ import 'package:dotted_border/dotted_border.dart';
 import '../../model/schedule.dart';
 import '../../notifier/schedule.dart';
 import '../widgets/listTile/schedule_list_tile.dart';
-import '../widgets/schedule_add_button.dart';
+import '../widgets/button/schedule_add_button.dart';
 import '../widgets/view_select_drawer.dart';
 
 const String dateTimeformat = "yyyy-MM-dd HH:mm";

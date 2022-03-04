@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:scheduler/ui/widgets/button/dialog_action_button.dart';
 
-import '../widgets/text/one_line_text.dart';
+import '../widgets/text/dialog_title_text.dart';
 
 class ConfirmDeleteScheduleDialog extends StatelessWidget {
   final String title;
@@ -11,29 +12,18 @@ class ConfirmDeleteScheduleDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: OneLineText(
-        ellipsisText: title + "を削除しますか？",
+      title: DialogTitleText(
+        ellipsisText: title,
+        text: "を削除しますか？",
       ),
       actions: <Widget>[
-        SizedBox(
-          width: 100,
-          height: 60,
-          child: TextButton(
-            child: const Text("削除"),
-            onPressed: () {
-              Navigator.pop(context, true);
-            },
-          ),
+        DialogActionButton(
+          title: "削除",
+          onPressed: () => Navigator.pop(context, true),
         ),
-        SizedBox(
-          width: 100,
-          height: 60,
-          child: TextButton(
-            child: const Text("キャンセル"),
-            onPressed: () {
-              Navigator.pop(context, false);
-            },
-          ),
+        DialogActionButton(
+          title: "キャンセル",
+          onPressed: () => Navigator.pop(context, false),
         ),
       ],
     );

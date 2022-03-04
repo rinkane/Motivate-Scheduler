@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:scheduler/ui/widgets/button/dialog_action_button.dart';
 
 import '../../model/schedule.dart';
 import '../widgets/show_custom_widgets.dart';
@@ -169,29 +170,15 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
         ],
       ),
       actions: <Widget>[
-        SizedBox(
-          width: 100,
-          height: 60,
-          child: TextButton(
-            child: method == ScheduleSettingMethod.add
-                ? const Text("追加")
-                : const Text("修正"),
-            onPressed: canCompleteSettingSchedule
-                ? () {
-                    Navigator.pop(context, schedule);
-                  }
-                : null,
-          ),
+        DialogActionButton(
+          title: method == ScheduleSettingMethod.add ? "追加" : "修正",
+          onPressed: canCompleteSettingSchedule
+              ? () => Navigator.pop(context, schedule)
+              : null,
         ),
-        SizedBox(
-          width: 100,
-          height: 60,
-          child: TextButton(
-            child: const Text("キャンセル"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+        DialogActionButton(
+          title: "キャンセル",
+          onPressed: () => Navigator.pop(context),
         ),
       ],
     );

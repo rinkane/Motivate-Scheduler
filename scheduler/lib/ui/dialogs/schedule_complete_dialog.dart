@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:scheduler/ui/widgets/button/dialog_action_button.dart';
+import 'package:scheduler/ui/widgets/text/dialog_title_text.dart';
 
 import '../../model/schedule.dart';
 import '../widgets/date_time_picker.dart';
@@ -37,8 +39,9 @@ class ScheduleCompleteDialogState extends State<ScheduleCompleteDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: OneLineText(
-        ellipsisText: completeSchedule.name + "を完了しますか？",
+      title: DialogTitleText(
+        ellipsisText: completeSchedule.name,
+        text: "を完了しますか？",
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -52,24 +55,13 @@ class ScheduleCompleteDialogState extends State<ScheduleCompleteDialog> {
         ],
       ),
       actions: <Widget>[
-        SizedBox(
-          width: 100,
-          height: 60,
-          child: TextButton(
-              child: const Text("完了"),
-              onPressed: completeSchedule.isCorrectSchedulePeriod
-                  ? () {
-                      Navigator.pop(context, completeSchedule);
-                    }
-                  : null),
+        DialogActionButton(
+          title: "完了",
+          onPressed: () => Navigator.pop(context, completeSchedule),
         ),
-        SizedBox(
-          width: 100,
-          height: 60,
-          child: TextButton(
-            child: const Text("キャンセル"),
-            onPressed: () => Navigator.pop(context),
-          ),
+        DialogActionButton(
+          title: "キャンセル",
+          onPressed: () => Navigator.pop(context),
         ),
       ],
     );

@@ -2,9 +2,9 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../model/schedule.dart';
-import '../../notifier/schedule.dart';
-import '../dialogs/schedule_setting_dialog.dart';
+import '../../../model/schedule.dart';
+import '../../../notifier/schedule.dart';
+import '../../dialogs/schedule_setting_dialog.dart';
 
 class ScheduleAddButton extends HookConsumerWidget {
   const ScheduleAddButton({Key? key}) : super(key: key);
