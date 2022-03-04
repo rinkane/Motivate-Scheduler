@@ -1,4 +1,4 @@
-import 'package:scheduler/model/schedule.dart';
+import '../model/schedule.dart';
 
 abstract class ScheduleRepository {
   Future<bool> authUserRepository(String email);
