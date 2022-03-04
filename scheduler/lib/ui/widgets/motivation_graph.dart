@@ -4,8 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:charts_flutter/flutter.dart';
 
 import '../../model/schedule.dart';
-import '../../state/complete_schedule.dart';
-import '../../state/schedule.dart';
+import '../../notifier/complete_schedule.dart';
+import '../../notifier/schedule.dart';
 import 'view_select_drawer.dart';
 
 class MotivationGraphView extends HookConsumerWidget {

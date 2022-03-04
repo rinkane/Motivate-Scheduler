@@ -163,4 +163,22 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
 
     return true;
   }
+
+  @override
+  Future<bool> deleteCompleteSchedule(Schedule schedule) async {
+    if (!isAuth) {
+      return false;
+    }
+
+    try {
+      await _userDocument!.reference
+          .collection("completeSchedules")
+          .doc(schedule.id)
+          .delete();
+    } catch (e) {
+      return false;
+    }
+
+    return true;
+  }
 }

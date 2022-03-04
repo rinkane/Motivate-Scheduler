@@ -14,4 +14,6 @@ abstract class ScheduleRepository {
   Future<bool> updateSchedule(Schedule schedule);
 
   Future<bool> deleteSchedule(Schedule schedule);
+
+  Future<bool> deleteCompleteSchedule(Schedule schedule);
 }

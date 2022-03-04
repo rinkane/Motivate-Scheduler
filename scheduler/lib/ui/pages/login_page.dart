@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../state/login.dart';
-import '../../state/complete_schedule.dart';
-import '../../state/schedule.dart';
+import '../../notifier/login.dart';
+import '../../notifier/complete_schedule.dart';
+import '../../notifier/schedule.dart';
 import 'regist_user_page.dart';
 import 'schedule_list_page.dart';
 

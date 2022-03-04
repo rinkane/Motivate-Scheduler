@@ -54,4 +54,17 @@ class CompleteScheduleState extends StateNotifier<List<Schedule>> {
     }
     state.add(schedule);
   }
+
+  Future<bool> deleteCompleteSchedule(int index) async {
+    if (!await scheduleRepository.deleteCompleteSchedule(state[index])) {
+      return false;
+    }
+
+    _deleteScheduleFromState(index);
+    return true;
+  }
+
+  void _deleteScheduleFromState(int index) {
+    state.removeAt(index);
+  }
 }
