@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'firebase_options.dart';
-import 'view/login_page.dart';
+import 'ui/pages/login_page.dart';
 
 const String appName = "Motivate Scheduler";
 

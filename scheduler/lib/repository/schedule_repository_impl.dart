@@ -1,7 +1,7 @@
 import 'package:scheduler/model/schedule.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:scheduler/model/schedule_repository.dart';
+import 'package:scheduler/repository/schedule_repository.dart';
 
 final scheduleRepositoryProvider = Provider((_) => ScheduleRepositoryImpl());
 

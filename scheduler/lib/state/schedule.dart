@@ -1,5 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:scheduler/model/schedule_repository_impl.dart';
+import 'package:scheduler/repository/schedule_repository_impl.dart';
 
 import '../model/schedules_state.dart';
 import '../model/schedule.dart';
