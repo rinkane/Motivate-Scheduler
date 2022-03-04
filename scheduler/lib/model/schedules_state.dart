@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 import 'schedule.dart';
 
 class SchedulesState {
