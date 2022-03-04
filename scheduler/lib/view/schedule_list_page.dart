@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dotted_border/dotted_border.dart';
 
-import '../model/complete_schedule.dart';
 import '../model/schedule.dart';
 import '../viewModel/complete_schedule.dart';
 import '../viewModel/schedule_list.dart';
@@ -17,7 +16,7 @@ class ScheduleListView extends HookConsumerWidget {
   const ScheduleListView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scheduleListViewModel = ref.watch(scheduleListProvider);
+    final scheduleListViewModel = ref.read(scheduleListProvider.notifier);
     return Scaffold(
       drawer: const ViewSelectDrawer(),
       body: CustomScrollView(
@@ -69,13 +68,13 @@ class ScheduleList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scheduleListViewModel = ref.watch(scheduleListProvider);
+    final schedules = ref.watch(scheduleListProvider).schedules;
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           return ScheduleCard(index: index);
         },
-        childCount: scheduleListViewModel.schedules.length,
+        childCount: schedules.length,
       ),
     );
   }
@@ -88,14 +87,14 @@ class ScheduleCard extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scheduleListViewModel = ref.watch(scheduleListProvider);
+    final scheduleListViewModel = ref.read(scheduleListProvider.notifier);
     final completeScheduleListViewModel =
-        ref.watch(completeScheduleListProvider);
-    final schedule = scheduleListViewModel.schedules[index];
+        ref.read(completeScheduleListProvider.notifier);
+    final schedules = ref.watch(scheduleListProvider).schedules;
     return Card(
       child: ListTile(
         title: DefaultTextStyle(
-          child: Text(schedule.name),
+          child: Text(schedules[index].name),
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
           style: const TextStyle(),
@@ -108,14 +107,14 @@ class ScheduleCard extends HookConsumerWidget {
               alignment: Alignment.center,
               width: 30,
               child: Text(
-                schedule.motivation.toString(),
+                schedules[index].motivation.toString(),
                 style: const TextStyle(
                   fontSize: 16,
                 ),
               ),
             ),
             Visibility(
-              visible: schedule.doubleBookedCount != 0,
+              visible: schedules[index].doubleBookedCount != 0,
               child: Container(
                 alignment: Alignment.center,
                 width: 50,
@@ -133,15 +132,15 @@ class ScheduleCard extends HookConsumerWidget {
             Container(
               margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
               child: Text(
-                schedule.getDurationText(),
+                schedules[index].getDurationText(),
               ),
             ),
             Visibility(
-              visible: schedule.doubleBookedCount != 0,
+              visible: schedules[index].doubleBookedCount != 0,
               child: Container(
                 margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: DefaultTextStyle(
-                  child: Text(schedule.getDoubleBookedWarningText()),
+                  child: Text(schedules[index].getDoubleBookedWarningText()),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: TextStyle(
@@ -157,15 +156,14 @@ class ScheduleCard extends HookConsumerWidget {
           children: <Widget>[
             Container(
               margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-              child: schedule.isCompleteAt(DateTime.now())
+              child: schedules[index].isCompleteAt(DateTime.now())
                   ? ElevatedButton(
                       child: const Text("complete"),
                       onPressed: () async {
-                        final completeSchedule =
-                            await showDialog<CompleteSchedule>(
+                        final completeSchedule = await showDialog<Schedule>(
                           context: context,
-                          builder: (context) =>
-                              ScheduleCompleteDialog(initialSchedule: schedule),
+                          builder: (context) => ScheduleCompleteDialog(
+                              initialSchedule: schedules[index]),
                         );
                         if (completeSchedule == null) {
                           return;
@@ -181,11 +179,10 @@ class ScheduleCard extends HookConsumerWidget {
                             color: Colors.black87,
                           )),
                       onPressed: () async {
-                        final completeSchedule =
-                            await showDialog<CompleteSchedule>(
+                        final completeSchedule = await showDialog<Schedule>(
                           context: context,
-                          builder: (context) =>
-                              ScheduleCompleteDialog(initialSchedule: schedule),
+                          builder: (context) => ScheduleCompleteDialog(
+                              initialSchedule: schedules[index]),
                         );
                         if (completeSchedule == null) {
                           return;
@@ -203,7 +200,7 @@ class ScheduleCard extends HookConsumerWidget {
                   context: context,
                   builder: (context) => ScheduleSettingDialog(
                       initialMethod: ScheduleSettingMethod.fix,
-                      initialSchedule: schedule),
+                      initialSchedule: schedules[index]),
                 );
                 if (_schedule != null) {
                   scheduleListViewModel.updateSchedule(_schedule, index);
@@ -216,7 +213,7 @@ class ScheduleCard extends HookConsumerWidget {
                 final isDelete = await showDialog<bool>(
                   context: context,
                   builder: (context) =>
-                      ConfirmDeleteScheduleDialog(title: schedule.name),
+                      ConfirmDeleteScheduleDialog(title: schedules[index].name),
                 );
                 if (isDelete == true) {
                   scheduleListViewModel.deleteSchedule(index);
