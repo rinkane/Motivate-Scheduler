@@ -5,13 +5,13 @@ import '../model/schedules_state.dart';
 import '../model/schedule.dart';
 
 final scheduleListProvider =
-    StateNotifierProvider<ScheduleListViewModel, SchedulesState>(
-        (ref) => ScheduleListViewModel(ref.read));
+    StateNotifierProvider<ScheduleState, SchedulesState>(
+        (ref) => ScheduleState(ref.read));
 
-class ScheduleListViewModel extends StateNotifier<SchedulesState> {
+class ScheduleState extends StateNotifier<SchedulesState> {
   final Reader _reader;
   late final scheduleRepository = _reader(scheduleRepositoryProvider);
-  ScheduleListViewModel(this._reader) : super(SchedulesState());
+  ScheduleState(this._reader) : super(SchedulesState());
 
   Future<bool> fetchScheduleFromFirestore(String? userEmail) async {
     if (userEmail == null) {

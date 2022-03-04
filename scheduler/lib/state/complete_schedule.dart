@@ -4,15 +4,15 @@ import 'package:scheduler/model/schedule_repository_impl.dart';
 import '../model/schedule.dart';
 
 final completeScheduleListProvider =
-    StateNotifierProvider<CompleteScheduleListViewModel, List<Schedule>>((ref) {
-  return CompleteScheduleListViewModel(ref.read);
+    StateNotifierProvider<CompleteScheduleState, List<Schedule>>((ref) {
+  return CompleteScheduleState(ref.read);
 });
 
-class CompleteScheduleListViewModel extends StateNotifier<List<Schedule>> {
+class CompleteScheduleState extends StateNotifier<List<Schedule>> {
   final Reader _reader;
   late final scheduleRepository = _reader(scheduleRepositoryProvider);
 
-  CompleteScheduleListViewModel(this._reader) : super([]);
+  CompleteScheduleState(this._reader) : super([]);
 
   Future<bool> fetchSchedule(String? userEmail) async {
     if (userEmail == null) {
