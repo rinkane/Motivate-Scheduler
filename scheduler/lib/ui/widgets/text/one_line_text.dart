@@ -2,19 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OneLineText extends HookConsumerWidget {
-  final String ellipsisText;
+  final String text;
+  final double fontSize;
 
-  const OneLineText({Key? key, required this.ellipsisText}) : super(key: key);
+  const OneLineText({Key? key, required this.text, this.fontSize = 16})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Wrap(
       children: <Widget>[
         DefaultTextStyle(
-          child: Text(ellipsisText),
+          child: Text(text),
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
-          style: const TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: fontSize),
         ),
       ],
     );

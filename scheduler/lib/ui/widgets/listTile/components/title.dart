@@ -12,7 +12,7 @@ class ListTileTitle extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return OneLineText(
-      ellipsisText: schedule.name,
+      text: schedule.name,
     );
   }
 }

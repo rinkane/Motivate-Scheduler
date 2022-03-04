@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/text/dialog_title_text.dart';
 import '../widgets/text/one_line_text.dart';
 
 class ConfirmDeleteScheduleDialog extends StatelessWidget {
@@ -11,8 +12,9 @@ class ConfirmDeleteScheduleDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: OneLineText(
-        ellipsisText: title + "を削除しますか？",
+      title: DialogTitleText(
+        ellipsisText: title,
+        text: "を削除しますか？",
       ),
       actions: <Widget>[
         SizedBox(
