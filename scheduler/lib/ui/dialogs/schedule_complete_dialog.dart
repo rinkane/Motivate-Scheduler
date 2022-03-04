@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../model/schedule.dart';
 import '../widgets/date_time_picker.dart';
+import '../widgets/text/one_line_text.dart';
 
 const String dateFormat = "yyyy-MM-dd";
 const String timeFormat = "HH:mm";
@@ -36,7 +37,7 @@ class ScheduleCompleteDialogState extends State<ScheduleCompleteDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("${completeSchedule.name}を完了しますか？"),
+      title: OneLineText(text: "${completeSchedule.name}を完了しますか？"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

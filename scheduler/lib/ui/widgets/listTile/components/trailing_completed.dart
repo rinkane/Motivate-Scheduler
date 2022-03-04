@@ -28,7 +28,7 @@ class ListTileTrailingCompleted extends HookConsumerWidget {
       BuildContext context, WidgetRef ref) async {
     final scheduleListViewModel =
         ref.read(completeScheduleListProvider.notifier);
-    final schedules = ref.watch(completeScheduleListProvider);
+    final schedules = ref.watch(completeScheduleListProvider).schedules;
     final isDelete = await showDialog<bool>(
       context: context,
       builder: (context) => ConfirmDeleteScheduleDialog(title: schedule.name),

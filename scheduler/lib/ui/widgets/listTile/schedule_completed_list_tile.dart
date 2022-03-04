@@ -15,7 +15,7 @@ class ScheduleCompletedListTile extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final schedule = ref.watch(completeScheduleListProvider)[index];
+    final schedule = ref.watch(completeScheduleListProvider).schedules[index];
     return ListTile(
       title: ListTileTitle(schedule: schedule),
       leading: ListTileLeading(schedule: schedule),

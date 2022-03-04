@@ -14,7 +14,7 @@ class MotivationGraphView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final schedules = ref.watch(scheduleListProvider).schedules;
-    final completeSchedules = ref.watch(completeScheduleListProvider);
+    final completeSchedules = ref.watch(completeScheduleListProvider).schedules;
     final allSchedules = createSchedulesCopy(schedules, completeSchedules);
     return Scaffold(
       appBar: AppBar(

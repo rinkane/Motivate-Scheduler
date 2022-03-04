@@ -28,7 +28,7 @@ class CompleteScheduleList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final completeSchedules = ref.watch(completeScheduleListProvider);
+    final completeSchedules = ref.watch(completeScheduleListProvider).schedules;
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
