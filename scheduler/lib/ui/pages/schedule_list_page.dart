@@ -4,8 +4,8 @@ import 'package:dotted_border/dotted_border.dart';
 
 import '../../model/schedule.dart';
 import '../../notifier/schedule.dart';
-import '../dialogs/schedule_setting_dialog.dart';
 import '../widgets/listTile/schedule_list_tile.dart';
+import '../widgets/schedule_add_button.dart';
 import '../widgets/view_select_drawer.dart';
 
 const String dateTimeformat = "yyyy-MM-dd HH:mm";
@@ -14,47 +14,15 @@ class ScheduleListView extends HookConsumerWidget {
   const ScheduleListView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scheduleListViewModel = ref.read(scheduleListProvider.notifier);
-    return Scaffold(
-      drawer: const ViewSelectDrawer(),
+    return const Scaffold(
+      drawer: ViewSelectDrawer(),
       body: CustomScrollView(
         slivers: <Widget>[
-          const SliverAppBar(
+          SliverAppBar(
             title: Text("motivate scheduler"),
           ),
-          SliverList(
-            delegate:
-                SliverChildBuilderDelegate((BuildContext context, int index) {
-              return Container(
-                height: 60,
-                margin: const EdgeInsets.fromLTRB(8, 8, 8, 4),
-                child: DottedBorder(
-                  color: Colors.black26,
-                  strokeWidth: 1,
-                  dashPattern: const [10, 10],
-                  radius: const Radius.circular(4),
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints.expand(),
-                    child: TextButton(
-                      child: const Icon(Icons.add),
-                      onPressed: () async {
-                        final schedule = await showDialog<Schedule>(
-                          context: context,
-                          builder: (context) => const ScheduleSettingDialog(
-                            initialMethod: ScheduleSettingMethod.add,
-                          ),
-                        );
-                        if (schedule != null) {
-                          scheduleListViewModel.addSchedule(schedule);
-                        }
-                      },
-                    ),
-                  ),
-                ),
-              );
-            }, childCount: 1),
-          ),
-          const ScheduleList(),
+          ScheduleAddButton(),
+          ScheduleList(),
         ],
       ),
     );
