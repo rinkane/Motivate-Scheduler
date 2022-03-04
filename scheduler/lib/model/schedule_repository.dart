@@ -7,7 +7,11 @@ abstract class ScheduleRepository {
 
   Future<List<Schedule>> getCompleteSchedules();
 
-  Future<bool> addSchedules(Schedule schedule);
+  Future<bool> addSchedule(Schedule schedule);
 
-  Future<bool> addCompleteSchedules(Schedule schedule);
+  Future<bool> addCompleteSchedule(Schedule schedule);
+
+  Future<bool> updateSchedule(Schedule schedule);
+
+  Future<bool> deleteSchedule(Schedule schedule);
 }

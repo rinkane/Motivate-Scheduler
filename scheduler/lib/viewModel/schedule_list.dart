@@ -1,195 +1,118 @@
-import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:scheduler/model/schedule_repository_impl.dart';
 
+import '../model/schedules_state.dart';
 import '../model/schedule.dart';
 
 final scheduleListProvider =
-    ChangeNotifierProvider((_) => ScheduleListViewModel());
+    StateNotifierProvider<ScheduleListViewModel, SchedulesState>(
+        (ref) => ScheduleListViewModel(ref.read));
 
-class ScheduleListViewModel with ChangeNotifier {
-  List<Schedule> schedules = [];
-  QueryDocumentSnapshot<Map<String, dynamic>>? userDocument;
+class ScheduleListViewModel extends StateNotifier<SchedulesState> {
+  final Reader _reader;
+  late final scheduleRepository = _reader(scheduleRepositoryProvider);
+  ScheduleListViewModel(this._reader) : super(SchedulesState());
 
   Future<bool> fetchScheduleFromFirestore(String? userEmail) async {
-    schedules = [];
-
     if (userEmail == null) {
       return false;
     }
 
-    try {
-      await initFirestoreDocument(userEmail);
-    } catch (e) {
-      userDocument = null;
+    if (!await scheduleRepository.authUserRepository(userEmail)) {
       return false;
     }
 
-    try {
-      final userSnapshot =
-          await userDocument!.reference.collection("schedules").get();
-
-      for (var userSchedule in userSnapshot.docs) {
-        final newSchedule = Schedule.of(
-            userSchedule["id"],
-            userSchedule["name"],
-            userSchedule["motivate"],
-            userSchedule["startTime"].toDate(),
-            userSchedule["endTime"].toDate());
-        insertScheduleToSchedules(newSchedule);
-      }
-    } catch (e) {
-      return false;
-    }
+    final schedules = await scheduleRepository.getSchedules();
+    _insertSchedulesToState(schedules);
 
     return true;
   }
 
-  Future<void> initFirestoreDocument(String userEmail) async {
-    try {
-      final snapshot =
-          await FirebaseFirestore.instance.collection("users").get();
-      userDocument =
-          snapshot.docs.firstWhere((doc) => doc["mail"] == userEmail);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  bool addSchedule(Schedule schedule) {
-    if (!insertScheduleToFirestore(schedule)) {
+  Future<bool> addSchedule(Schedule schedule) async {
+    if (!await scheduleRepository.addSchedule(schedule)) {
       return false;
     }
 
-    insertScheduleToSchedules(schedule);
+    _insertScheduleToState(schedule);
     return true;
   }
 
-  bool insertScheduleToFirestore(Schedule schedule) {
-    if (userDocument == null) {
-      return false;
+  void _insertSchedulesToState(List<Schedule> schedules) {
+    for (final schedule in schedules) {
+      _insertScheduleToState(schedule);
     }
-
-    try {
-      final newDocId = userDocument!.reference.collection("schedules").doc().id;
-      schedule.id = newDocId;
-      userDocument!.reference.collection("schedules").doc(newDocId).set({
-        "id": newDocId,
-        "name": schedule.name,
-        "motivate": schedule.motivation,
-        "startTime": schedule.startDateTime,
-        "endTime": schedule.endDateTime,
-      });
-    } catch (e) {
-      return false;
-    }
-
-    return true;
   }
 
-  void insertScheduleToSchedules(Schedule schedule) {
-    for (int i = 0; i < schedules.length; i++) {
-      if (schedules[i].startDateTime.isAfter(schedule.startDateTime)) {
-        schedules.insert(i, schedule);
-        notifyListeners();
-        updateDoubleBooking(schedule);
+  void _insertScheduleToState(Schedule schedule) {
+    for (int i = 0; i < state.schedules.length; i++) {
+      if (state.schedules[i].startDateTime.isAfter(schedule.startDateTime)) {
+        state = state.update((schedules) => schedules..insert(i, schedule));
+        _updateDoubleBooking(schedule);
         return;
       }
     }
-    schedules.add(schedule);
-    notifyListeners();
+    state = state.update((schedules) => schedules..add(schedule));
 
-    updateDoubleBooking(schedule);
+    _updateDoubleBooking(schedule);
   }
 
-  bool updateSchedule(Schedule schedule, int index) {
-    if (!updateScheduleToFirestore(schedule)) {
+  Future<bool> updateSchedule(Schedule schedule, int index) async {
+    if (!await scheduleRepository.updateSchedule(schedule)) {
       return false;
     }
 
-    updateScheduleToSchedules(schedule, index);
+    _updateScheduleToState(schedule, index);
     return true;
   }
 
-  bool updateScheduleToFirestore(Schedule schedule) {
-    if (userDocument == null) {
-      return false;
-    }
+  void _updateScheduleToState(Schedule schedule, int index) {
+    state = state.updateAt(index, (_schedule) => _schedule = schedule);
 
-    try {
-      userDocument!.reference.collection("schedules").doc(schedule.id).set({
-        "name": schedule.name,
-        "motivate": schedule.motivation,
-        "startTime": schedule.startDateTime,
-        "endTime": schedule.endDateTime,
-      }, SetOptions(merge: true));
-    } catch (e) {
-      return false;
-    }
-
-    return true;
+    _updateDoubleBooking(schedule);
   }
 
-  void updateScheduleToSchedules(Schedule schedule, int index) {
-    schedules[index] = schedule;
-    notifyListeners();
-
-    updateDoubleBooking(schedule);
+  void _updateDoubleBooking(Schedule schedule) {
+    _addDoubleBooking(schedule);
+    _removeDoubleBooking(schedule);
   }
 
-  void updateDoubleBooking(Schedule schedule) {
-    addDoubleBooking(schedule);
-    removeDoubleBooking(schedule);
-  }
-
-  void addDoubleBooking(Schedule schedule) {
-    for (int i = 0; i < schedules.length; i++) {
-      if (schedules[i].isDoubleBooked(schedule) ||
-          schedule.isDoubleBooked(schedules[i])) {
-        schedule.addDoubleBookedSchedule(schedules[i]);
-        schedules[i].addDoubleBookedSchedule(schedule);
-        notifyListeners();
+  void _addDoubleBooking(Schedule schedule) {
+    for (int i = 0; i < state.schedules.length; i++) {
+      if (state.schedules[i].isDoubleBooked(schedule)) {
+        state = state.updateAt(
+            i, (_schedule) => _schedule..addDoubleBookedSchedule(schedule));
+        state = state.updateAt(
+            state.schedules.indexOf(schedule),
+            (_schedule) =>
+                _schedule..addDoubleBookedSchedule(state.schedules[i]));
       }
     }
   }
 
-  void removeDoubleBooking(Schedule schedule, {bool isForce = false}) {
-    for (int i = 0; i < schedules.length; i++) {
-      if (!(schedules[i].isDoubleBooked(schedule) ||
-              schedule.isDoubleBooked(schedules[i])) ||
-          isForce) {
-        schedule.removeDoubleBookedSchedule(schedules[i]);
-        schedules[i].removeDoubleBookedSchedule(schedule);
-        notifyListeners();
+  void _removeDoubleBooking(Schedule schedule, {bool isForce = false}) {
+    for (int i = 0; i < state.schedules.length; i++) {
+      if (!state.schedules[i].isDoubleBooked(schedule) || isForce) {
+        state = state.updateAt(
+            i, (_schedule) => _schedule..removeDoubleBookedSchedule(schedule));
+        state = state.updateAt(
+            state.schedules.indexOf(schedule),
+            (_schedule) =>
+                _schedule..removeDoubleBookedSchedule(state.schedules[i]));
       }
     }
   }
 
-  bool deleteSchedule(int index) {
-    if (!deleteScheduleFromFirestore(schedules[index])) {
+  Future<bool> deleteSchedule(int index) async {
+    if (!await scheduleRepository.deleteSchedule(state.schedules[index])) {
       return false;
     }
 
-    deleteScheduleFromSchedules(index);
+    _deleteScheduleFromState(index);
     return true;
   }
 
-  bool deleteScheduleFromFirestore(Schedule schedule) {
-    if (userDocument == null) {
-      return false;
-    }
-
-    try {
-      userDocument!.reference.collection("schedules").doc(schedule.id).delete();
-    } catch (e) {
-      return false;
-    }
-    return true;
-  }
-
-  void deleteScheduleFromSchedules(int index) {
-    removeDoubleBooking(schedules[index], isForce: true);
-    schedules.removeAt(index);
-    notifyListeners();
+  void _deleteScheduleFromState(int index) {
+    _removeDoubleBooking(state.schedules[index], isForce: true);
+    state = state.update((schedules) => schedules..removeAt(index));
   }
 }

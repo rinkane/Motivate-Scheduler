@@ -31,7 +31,7 @@ class CompleteScheduleListViewModel extends StateNotifier<List<Schedule>> {
   }
 
   Future<bool> addCompleteSchedule(Schedule schedule) async {
-    if (!await scheduleRepository.addCompleteSchedules(schedule)) {
+    if (!await scheduleRepository.addCompleteSchedule(schedule)) {
       return false;
     }
 

@@ -11,6 +11,10 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
 
   @override
   Future<bool> authUserRepository(String email) async {
+    if (isAuth) {
+      return true;
+    }
+
     try {
       final snapshot =
           await FirebaseFirestore.instance.collection("users").get();
@@ -71,14 +75,38 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
   }
 
   @override
-  Future<bool> addSchedules(Schedule schedule) async {
+  Future<bool> addSchedule(Schedule schedule) async {
+    if (!isAuth) {
+      return false;
+    }
+
+    try {
+      final newDocId =
+          _userDocument!.reference.collection("schedules").doc().id;
+      schedule.id = newDocId;
+      await _userDocument!.reference.collection("schedules").doc(newDocId).set({
+        "id": newDocId,
+        "name": schedule.name,
+        "motivate": schedule.motivation,
+        "startTime": schedule.startDateTime,
+        "endTime": schedule.endDateTime,
+      });
+    } catch (e) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @override
+  Future<bool> addCompleteSchedule(Schedule schedule) async {
     if (!isAuth) {
       return false;
     }
 
     try {
       await _userDocument!.reference
-          .collection("schedules")
+          .collection("completeSchedules")
           .doc(schedule.id)
           .set({
         "id": schedule.id,
@@ -95,22 +123,39 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
   }
 
   @override
-  Future<bool> addCompleteSchedules(Schedule schedule) async {
+  Future<bool> updateSchedule(Schedule schedule) async {
     if (!isAuth) {
       return false;
     }
 
     try {
       await _userDocument!.reference
-          .collection("completeSchedules")
+          .collection("schedules")
           .doc(schedule.id)
           .set({
-        "id": schedule.id,
         "name": schedule.name,
         "motivate": schedule.motivation,
         "startTime": schedule.startDateTime,
         "endTime": schedule.endDateTime,
-      });
+      }, SetOptions(merge: true));
+    } catch (e) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @override
+  Future<bool> deleteSchedule(Schedule schedule) async {
+    if (!isAuth) {
+      return false;
+    }
+
+    try {
+      await _userDocument!.reference
+          .collection("schedules")
+          .doc(schedule.id)
+          .delete();
     } catch (e) {
       return false;
     }
