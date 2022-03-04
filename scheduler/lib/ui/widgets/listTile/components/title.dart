@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../model/schedule.dart';
-import '../../text/title_name.dart';
+import '../../text/one_line_text.dart';
 
 class ListTileTitle extends HookConsumerWidget {
   final Schedule schedule;
@@ -12,7 +12,7 @@ class ListTileTitle extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return OneLineText(
-      text: schedule.name,
+      ellipsisText: schedule.name,
     );
   }
 }

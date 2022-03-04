@@ -11,7 +11,9 @@ class ConfirmDeleteScheduleDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: OneLineText(text: title + "を削除しますか？"),
+      title: OneLineText(
+        ellipsisText: title + "を削除しますか？",
+      ),
       actions: <Widget>[
         SizedBox(
           width: 100,

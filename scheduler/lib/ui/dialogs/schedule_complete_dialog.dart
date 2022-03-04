@@ -37,7 +37,9 @@ class ScheduleCompleteDialogState extends State<ScheduleCompleteDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: OneLineText(text: "${completeSchedule.name}を完了しますか？"),
+      title: OneLineText(
+        ellipsisText: completeSchedule.name + "を完了しますか？",
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
