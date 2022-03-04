@@ -3,8 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dotted_border/dotted_border.dart';
 
 import '../model/schedule.dart';
-import '../viewModel/complete_schedule.dart';
-import '../viewModel/schedule_list.dart';
+import '../state/complete_schedule.dart';
+import '../state/schedule.dart';
 import 'schedule_complete_dialog.dart';
 import 'schedule_setting_dialog.dart';
 import 'view_select_drawer.dart';
