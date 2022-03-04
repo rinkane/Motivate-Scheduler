@@ -15,26 +15,27 @@ class ListTileTrailing extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scheduleListViewModel = ref.read(scheduleListProvider.notifier);
-    final schedules = ref.watch(scheduleListProvider).schedules;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         ListTileTrailingCompleteButton(schedule: schedule),
         ListTileTrailingFixButton(schedule: schedule),
         ListTileTrailingDeleteButton(
-          deleteSchedule: () async {
-            final isDelete = await showDialog<bool>(
-              context: context,
-              builder: (context) =>
-                  ConfirmDeleteScheduleDialog(title: schedule.name),
-            );
-            if (isDelete == true) {
-              scheduleListViewModel.deleteSchedule(schedules.indexOf(schedule));
-            }
-          },
+          deleteSchedule: () => deleteSchedule(context, ref),
         ),
       ],
     );
+  }
+
+  Future<void> deleteSchedule(BuildContext context, WidgetRef ref) async {
+    final scheduleListViewModel = ref.read(scheduleListProvider.notifier);
+    final schedules = ref.watch(scheduleListProvider).schedules;
+    final isDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => ConfirmDeleteScheduleDialog(title: schedule.name),
+    );
+    if (isDelete == true) {
+      scheduleListViewModel.deleteSchedule(schedules.indexOf(schedule));
+    }
   }
 }
