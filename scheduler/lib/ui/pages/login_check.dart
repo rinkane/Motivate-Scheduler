@@ -19,22 +19,11 @@ class LoginCheckState extends ConsumerState<LoginCheckPage> {
   @override
   void initState() {
     super.initState();
-
-    /*
-    final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      final userState = ref.read(userProvider);
-      userState.setUser(currentUser);
-      Navigator.of(context).pushReplacementNamed("/home");
-    } else {
-      Navigator.of(context).pushReplacementNamed("/login");
-    }
-    */
   }
 
   void navigate() async {
-    final unsubscribe = FirebaseAuth.instance.authStateChanges();
-    unsubscribe.forEach((user) {
+    final subscribe = FirebaseAuth.instance.authStateChanges();
+    subscribe.forEach((user) {
       if (user != null) {
         Navigator.of(context).pushReplacementNamed("/home");
       } else {
@@ -46,7 +35,7 @@ class LoginCheckState extends ConsumerState<LoginCheckPage> {
   @override
   Widget build(BuildContext context) {
     navigate();
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Text("Loading..."),
       ),
