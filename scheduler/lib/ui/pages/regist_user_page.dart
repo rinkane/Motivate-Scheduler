@@ -63,7 +63,7 @@ class _RegistUserPageState extends State<RegistUserPage> {
                         .collection('users')
                         .doc()
                         .set({'mail': mailAddress, 'password': password});
-                    Navigator.pop(context);
+                    Navigator.of(context).pushNamed("/login");
                   } catch (e) {
                     setState(() {
                       infoText = "登録失敗:${e.toString()}";

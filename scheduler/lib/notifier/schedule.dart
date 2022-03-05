@@ -13,7 +13,7 @@ class ScheduleStateNotifier extends StateNotifier<SchedulesState> {
   late final scheduleRepository = _reader(scheduleRepositoryProvider);
   ScheduleStateNotifier(this._reader) : super(SchedulesState());
 
-  Future<bool> fetchScheduleFromFirestore(String? userEmail) async {
+  Future<bool> fetchSchedule(String? userEmail) async {
     if (userEmail == null) {
       return false;
     }

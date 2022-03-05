@@ -28,27 +28,14 @@ class ViewSelectDrawer extends StatelessWidget {
             ),
           ),
           TextButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ScheduleListView(),
-                  ));
-            },
+            onPressed: () => Navigator.of(context).pushNamed("/home"),
             child: const ListTile(
               leading: Icon(Icons.schedule),
               title: Text("Schedules"),
             ),
           ),
           TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const MotivationGraphView(),
-                ),
-              );
-            },
+            onPressed: () => Navigator.of(context).pushNamed("/motivation"),
             child: const ListTile(
               leading: Icon(Icons.auto_graph),
               title: Text("Motivation"),
@@ -57,14 +44,7 @@ class ViewSelectDrawer extends StatelessWidget {
           const Divider(
               thickness: 1, indent: 10, endIndent: 10, color: Colors.black38),
           TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CompleteScheduleView(),
-                ),
-              );
-            },
+            onPressed: () => Navigator.of(context).pushNamed("/complete"),
             child: const ListTile(
               leading: Icon(Icons.check_circle_outline),
               title: Text("Complete Schedules"),
