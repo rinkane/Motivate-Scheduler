@@ -14,15 +14,20 @@ class ScheduleListView extends HookConsumerWidget {
   const ScheduleListView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Scaffold(
-      drawer: ViewSelectDrawer(),
+    return Scaffold(
+      drawer: const ViewSelectDrawer(),
       body: CustomScrollView(
         slivers: <Widget>[
-          SliverAppBar(
+          const SliverAppBar(
             title: Text("motivate scheduler"),
           ),
-          ScheduleAddButton(),
-          ScheduleList(),
+          SliverList(
+            delegate:
+                SliverChildBuilderDelegate((BuildContext context, int index) {
+              return const ScheduleAddButton();
+            }, childCount: 1),
+          ),
+          const ScheduleList(),
         ],
       ),
     );
