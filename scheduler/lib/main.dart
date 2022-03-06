@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'firebase/firebase_options.dart';
 import 'app.dart';
 
-void main() async {
+Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.web);
   runApp(
     const ProviderScope(

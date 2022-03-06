@@ -21,9 +21,9 @@ class LoginCheckState extends ConsumerState<LoginCheckPage> {
     super.initState();
   }
 
-  void navigate() async {
+  Future<void> navigate() async {
     final subscribe = FirebaseAuth.instance.authStateChanges();
-    subscribe.forEach((user) {
+    await subscribe.forEach((user) {
       if (user != null) {
         Navigator.of(context).pushReplacementNamed("/home");
       } else {
