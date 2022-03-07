@@ -4,7 +4,7 @@ import 'package:scheduler/ui/widgets/text/dialog_title_text.dart';
 
 import '../../model/schedule.dart';
 import '../widgets/date_time_picker.dart';
-import '../widgets/text/one_line_text.dart';
+import '../widgets/slider/labeled_slider.dart';
 
 const String dateFormat = "yyyy-MM-dd";
 const String timeFormat = "HH:mm";
@@ -52,6 +52,8 @@ class ScheduleCompleteDialogState extends State<ScheduleCompleteDialog> {
               DateTimePicker(schedule: completeSchedule),
             ],
           ),
+          ScheduleMotivationSlider(
+              label: "モチベーション", schedule: completeSchedule),
         ],
       ),
       actions: <Widget>[

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:dotted_border/dotted_border.dart';
 
 import '../../model/schedule.dart';
 import '../../notifier/schedule.dart';

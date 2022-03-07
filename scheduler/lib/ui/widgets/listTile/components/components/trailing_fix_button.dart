@@ -13,7 +13,7 @@ class ListTileTrailingFixButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scheduleListViewModel = ref.read(scheduleListProvider.notifier);
+    final scheduleListViewModel = ref.watch(scheduleListProvider.notifier);
     final schedules = ref.watch(scheduleListProvider).schedules;
     return IconButton(
       icon: const Icon(Icons.mode_edit),
