@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 
-class TextInputField extends StatefulWidget {
-  final String text;
+import '../../../model/schedule.dart';
+
+class ScheduleNameInputField extends StatefulWidget {
+  final Schedule schedule;
   final String hintText;
   final double width;
   final double fontSize;
 
-  const TextInputField(
+  const ScheduleNameInputField(
       {Key? key,
-      required this.text,
+      required this.schedule,
       this.hintText = "",
       this.width = 400,
       this.fontSize = 16})
       : super(key: key);
 
   @override
-  TextInputFieldState createState() => TextInputFieldState();
+  ScheduleNameInputFieldState createState() => ScheduleNameInputFieldState();
 }
 
-class TextInputFieldState extends State<TextInputField> {
-  late String text;
+class ScheduleNameInputFieldState extends State<ScheduleNameInputField> {
+  late Schedule schedule;
   late String hintText;
   late double width;
   late double fontSize;
@@ -28,7 +30,7 @@ class TextInputFieldState extends State<TextInputField> {
   void initState() {
     super.initState();
 
-    text = widget.text;
+    schedule = widget.schedule;
     hintText = widget.hintText;
     width = widget.width;
     fontSize = widget.fontSize;
@@ -39,7 +41,7 @@ class TextInputFieldState extends State<TextInputField> {
     return SizedBox(
       width: width,
       child: TextFormField(
-        initialValue: text,
+        initialValue: schedule.name,
         style: TextStyle(fontSize: fontSize),
         decoration: InputDecoration(hintText: hintText),
         onChanged: (String s) {
@@ -51,7 +53,7 @@ class TextInputFieldState extends State<TextInputField> {
 
   void changeTextField(String value) {
     setState(() {
-      text = value;
+      schedule.name = value;
     });
   }
 }

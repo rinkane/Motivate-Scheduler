@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/schedule.dart';
 import '../widgets/button/dialog_action_button.dart';
 import '../widgets/date_time_picker.dart';
 import '../widgets/slider/labeled_slider.dart';
-import '../widgets/textarea/input_text_area.dart';
+import '../widgets/textarea/schedule_name_input_field.dart';
 
 const String dateFormat = "yyyy-MM-dd";
 const String timeFormat = "HH:mm";
 
-class ScheduleSettingDialog extends StatefulWidget {
+class ScheduleSettingDialog extends StatefulHookConsumerWidget {
   final ScheduleSettingMethod initialMethod;
   final Schedule? initialSchedule;
 
@@ -28,7 +29,7 @@ enum ScheduleSettingMethod {
   fix,
 }
 
-class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
+class ScheduleSettingDialogState extends ConsumerState<ScheduleSettingDialog> {
   late Schedule schedule;
   late ScheduleSettingMethod method;
 
@@ -59,8 +60,8 @@ class ScheduleSettingDialogState extends State<ScheduleSettingDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              TextInputField(
-                text: schedule.name,
+              ScheduleNameInputField(
+                schedule: schedule,
                 hintText: "何をする予定ですか？",
                 fontSize: 16,
                 width: 400,

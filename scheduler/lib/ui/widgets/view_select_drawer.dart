@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../pages/complete_schedule_page.dart';
-import '../pages/schedule_list_page.dart';
-import 'motivation_graph.dart';
-
 class ViewSelectDrawer extends StatelessWidget {
   const ViewSelectDrawer({Key? key}) : super(key: key);
 

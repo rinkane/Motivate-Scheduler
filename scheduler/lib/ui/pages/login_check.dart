@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scheduler/notifier/user.dart';
 
 import '../../notifier/complete_schedule.dart';
+import '../../notifier/login.dart';
 import '../../notifier/schedule.dart';
 import 'login_page.dart';
 import 'schedule_list_page.dart';
@@ -25,6 +26,17 @@ class LoginCheckState extends ConsumerState<LoginCheckPage> {
     final subscribe = FirebaseAuth.instance.authStateChanges();
     await subscribe.forEach((user) {
       if (user != null) {
+        final scheduleListViewModel = ref.read(scheduleListProvider.notifier);
+        final completeScheduleListViewModel =
+            ref.read(completeScheduleListProvider.notifier);
+        final scheduleState = ref.read(scheduleListProvider);
+        final completeScheduleState = ref.read(completeScheduleListProvider);
+        if (scheduleState.schedules.isEmpty) {
+          scheduleListViewModel.fetchSchedule(user.email);
+        }
+        if (completeScheduleState.schedules.isEmpty) {
+          completeScheduleListViewModel.fetchSchedule(user.email);
+        }
         Navigator.of(context).pushReplacementNamed("/home");
       } else {
         Navigator.of(context).pushReplacementNamed("/login");

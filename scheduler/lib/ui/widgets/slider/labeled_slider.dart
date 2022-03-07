@@ -50,35 +50,6 @@ class LabeledSliderState extends State<LabeledSlider> {
           child: Text(value.toString()),
         ),
       ],
-      /*
-        Stack(
-          children: <Widget>[
-            Container(
-              height: 60,
-              margin: const EdgeInsets.fromLTRB(0, 28, 0, 0),
-              alignment: Alignment.centerLeft,
-              child: Text(label),
-            ),
-            Container(
-              height: 60,
-              margin: const EdgeInsets.fromLTRB(0, 30, 50, 0),
-              alignment: Alignment.center,
-              child: Slider(
-                value: value.toDouble(),
-                max: 100,
-                min: -100,
-                onChanged: changeSlider,
-              ),
-            ),
-            Container(
-              height: 60,
-              margin: const EdgeInsets.fromLTRB(0, 30, 20, 0),
-              alignment: Alignment.centerRight,
-              child: Text(value.toString()),
-            ),
-          ],
-        ),
-        */
     );
   }
 
