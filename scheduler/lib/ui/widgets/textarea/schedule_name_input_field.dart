@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../model/schedule.dart';
 
+@Deprecated("この方法ではテキストの変更をWidgetの外部に通知できないっぽいので一旦非推奨にする")
 class ScheduleNameInputField extends StatefulWidget {
   final Schedule schedule;
   final String hintText;

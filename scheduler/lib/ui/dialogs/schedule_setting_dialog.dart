@@ -5,7 +5,6 @@ import '../../model/schedule.dart';
 import '../widgets/button/dialog_action_button.dart';
 import '../widgets/date_time_picker.dart';
 import '../widgets/slider/labeled_slider.dart';
-import '../widgets/textarea/schedule_name_input_field.dart';
 
 const String dateFormat = "yyyy-MM-dd";
 const String timeFormat = "HH:mm";
@@ -45,7 +44,12 @@ class ScheduleSettingDialogState extends ConsumerState<ScheduleSettingDialog> {
   void initState() {
     super.initState();
     schedule = widget.initialSchedule != null
-        ? widget.initialSchedule!
+        ? Schedule.of(
+            widget.initialSchedule!.id,
+            widget.initialSchedule!.name,
+            widget.initialSchedule!.motivation,
+            widget.initialSchedule!.startDateTime,
+            widget.initialSchedule!.endDateTime)
         : Schedule(DateTime.now());
     method = widget.initialMethod;
   }
@@ -60,17 +64,30 @@ class ScheduleSettingDialogState extends ConsumerState<ScheduleSettingDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              /*
               ScheduleNameInputField(
                 schedule: schedule,
                 hintText: "何をする予定ですか？",
                 fontSize: 16,
                 width: 400,
               ),
+              */
+              SizedBox(
+                width: 400,
+                child: TextFormField(
+                  initialValue: schedule.name,
+                  style: TextStyle(fontSize: 16),
+                  decoration: InputDecoration(hintText: "何をする予定ですか？"),
+                  onChanged: (String s) {
+                    changeTextField(s);
+                  },
+                ),
+              ),
               DateTimePicker(schedule: schedule),
             ],
           ),
-          LabeledSlider(
-            value: schedule.motivation,
+          ScheduleMotivationSlider(
+            schedule: schedule,
             label: "モチベーション",
           ),
         ],
@@ -78,7 +95,7 @@ class ScheduleSettingDialogState extends ConsumerState<ScheduleSettingDialog> {
       actions: <Widget>[
         DialogActionButton(
           title: method == ScheduleSettingMethod.add ? "追加" : "修正",
-          onPressed: canCompleteSettingSchedule
+          onPressed: schedule.name != ""
               ? () => Navigator.pop(context, schedule)
               : null,
         ),
@@ -88,5 +105,11 @@ class ScheduleSettingDialogState extends ConsumerState<ScheduleSettingDialog> {
         ),
       ],
     );
+  }
+
+  void changeTextField(String value) {
+    setState(() {
+      schedule.name = value;
+    });
   }
 }
