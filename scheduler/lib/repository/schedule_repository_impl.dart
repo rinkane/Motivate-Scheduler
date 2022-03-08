@@ -181,4 +181,9 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
 
     return true;
   }
+
+  @override
+  void signOutRepository() {
+    _userDocument = null;
+  }
 }

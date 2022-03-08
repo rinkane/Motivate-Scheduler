@@ -20,17 +20,18 @@ class LoginCheckState extends ConsumerState<LoginCheckPage> {
   @override
   void initState() {
     super.initState();
+    navigate();
   }
 
   Future<void> navigate() async {
     final subscribe = FirebaseAuth.instance.authStateChanges();
     await subscribe.forEach((user) {
       if (user != null) {
-        final scheduleListViewModel = ref.read(scheduleListProvider.notifier);
+        final scheduleListViewModel = ref.watch(scheduleListProvider.notifier);
         final completeScheduleListViewModel =
-            ref.read(completeScheduleListProvider.notifier);
-        final scheduleState = ref.read(scheduleListProvider);
-        final completeScheduleState = ref.read(completeScheduleListProvider);
+            ref.watch(completeScheduleListProvider.notifier);
+        final scheduleState = ref.watch(scheduleListProvider);
+        final completeScheduleState = ref.watch(completeScheduleListProvider);
         if (scheduleState.schedules.isEmpty) {
           scheduleListViewModel.fetchSchedule(user.email);
         }
@@ -46,7 +47,6 @@ class LoginCheckState extends ConsumerState<LoginCheckPage> {
 
   @override
   Widget build(BuildContext context) {
-    navigate();
     return const Scaffold(
       body: Center(
         child: Text("Loading..."),

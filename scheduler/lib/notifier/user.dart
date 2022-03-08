@@ -42,4 +42,9 @@ class UserNotifier extends ChangeNotifier {
     }
     return result;
   }
+
+  Future<void> signOut() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    return await auth.signOut();
+  }
 }

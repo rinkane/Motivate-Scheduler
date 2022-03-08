@@ -13,6 +13,10 @@ class ScheduleStateNotifier extends StateNotifier<SchedulesState> {
   late final scheduleRepository = _reader(scheduleRepositoryProvider);
   ScheduleStateNotifier(this._reader) : super(SchedulesState());
 
+  void clearSchedule() {
+    state = state.update((_) => []);
+  }
+
   Future<bool> fetchSchedule(String? userEmail) async {
     if (userEmail == null) {
       return false;
@@ -23,6 +27,7 @@ class ScheduleStateNotifier extends StateNotifier<SchedulesState> {
     }
 
     final schedules = await scheduleRepository.getSchedules();
+    state = state.update((_) => []);
     _insertSchedulesToState(schedules);
 
     return true;

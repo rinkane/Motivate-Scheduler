@@ -52,7 +52,6 @@ class LoginPage extends HookConsumerWidget {
                         await userNotifier.signInWithEmailAndPassword(
                             loginPageViewModel.email,
                             loginPageViewModel.password);
-
                     final isFetch = await scheduleListViewModel
                             .fetchSchedule(loginPageViewModel.email) &&
                         await completeScheduleListViewModel

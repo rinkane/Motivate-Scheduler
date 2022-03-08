@@ -15,6 +15,10 @@ class CompleteScheduleState extends StateNotifier<SchedulesState> {
 
   CompleteScheduleState(this._reader) : super(SchedulesState());
 
+  void clearSchedule() {
+    state = state.update((_) => []);
+  }
+
   Future<bool> fetchSchedule(String? userEmail) async {
     if (userEmail == null) {
       return false;
