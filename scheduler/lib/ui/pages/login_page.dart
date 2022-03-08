@@ -18,7 +18,7 @@ class LoginPage extends HookConsumerWidget {
     final completeScheduleListViewModel =
         ref.read(completeScheduleListProvider.notifier);
     final loginPageViewModel = ref.watch(loginPageProvider);
-    final userState = ref.watch(userProvider);
+    final userNotifier = ref.watch(userProvider);
     return Scaffold(
       body: Center(
         child: Container(
@@ -48,18 +48,17 @@ class LoginPage extends HookConsumerWidget {
                 child: const Text("ログイン"),
                 onPressed: () async {
                   try {
-                    final FirebaseAuth auth = FirebaseAuth.instance;
                     final UserCredential result =
-                        await auth.signInWithEmailAndPassword(
-                            email: loginPageViewModel.email,
-                            password: loginPageViewModel.password);
+                        await userNotifier.signInWithEmailAndPassword(
+                            loginPageViewModel.email,
+                            loginPageViewModel.password);
 
                     final isFetch = await scheduleListViewModel
                             .fetchSchedule(loginPageViewModel.email) &&
                         await completeScheduleListViewModel
                             .fetchSchedule(loginPageViewModel.email);
 
-                    if (result.user != null) {
+                    if (result.user != null && isFetch) {
                       loginPageViewModel.infoText =
                           "ログイン成功:${loginPageViewModel.email}";
                       Navigator.of(context).pushNamed("/home");

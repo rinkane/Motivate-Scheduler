@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:scheduler/notifier/user.dart';
 
-class RegistUserPage extends StatefulWidget {
+class RegistUserPage extends StatefulHookConsumerWidget {
   const RegistUserPage({Key? key}) : super(key: key);
 
   @override
-  State<RegistUserPage> createState() => _RegistUserPageState();
+  _RegistUserPageState createState() => _RegistUserPageState();
 }
 
-class _RegistUserPageState extends State<RegistUserPage> {
-  String mailAddress = "";
+class _RegistUserPageState extends ConsumerState<RegistUserPage> {
+  String email = "";
   String password = "";
   String infoText = "";
 
   @override
   Widget build(BuildContext context) {
+    final userNotifier = ref.watch(userProvider);
     return Scaffold(
       body: Center(
         child: Container(
@@ -28,7 +30,7 @@ class _RegistUserPageState extends State<RegistUserPage> {
                 ),
                 onChanged: (String input) {
                   setState(() {
-                    mailAddress = input;
+                    email = input;
                   });
                 },
               ),
@@ -49,22 +51,12 @@ class _RegistUserPageState extends State<RegistUserPage> {
                 child: const Text("登録"),
                 onPressed: () async {
                   try {
-                    final id =
-                        FirebaseFirestore.instance.collection('users').doc().id;
-                    final FirebaseAuth auth = FirebaseAuth.instance;
-                    final UserCredential result =
-                        await auth.createUserWithEmailAndPassword(
-                      email: mailAddress,
-                      password: password,
-                    );
+                    final result = await userNotifier
+                        .registerUserWithEmailAndPassword(email, password);
                     final User user = result.user!;
                     setState(() {
                       infoText = "登録成功:${user.email}";
                     });
-                    await FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(id)
-                        .set({'mail': mailAddress});
                     Navigator.of(context).pushNamed("/login");
                   } catch (e) {
                     setState(() {
