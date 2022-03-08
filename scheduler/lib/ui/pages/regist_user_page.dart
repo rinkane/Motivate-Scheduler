@@ -49,6 +49,8 @@ class _RegistUserPageState extends State<RegistUserPage> {
                 child: const Text("登録"),
                 onPressed: () async {
                   try {
+                    final id =
+                        FirebaseFirestore.instance.collection('users').doc().id;
                     final FirebaseAuth auth = FirebaseAuth.instance;
                     final UserCredential result =
                         await auth.createUserWithEmailAndPassword(
@@ -61,8 +63,8 @@ class _RegistUserPageState extends State<RegistUserPage> {
                     });
                     await FirebaseFirestore.instance
                         .collection('users')
-                        .doc()
-                        .set({'mail': mailAddress, 'password': password});
+                        .doc(id)
+                        .set({'mail': mailAddress});
                     Navigator.of(context).pushNamed("/login");
                   } catch (e) {
                     setState(() {

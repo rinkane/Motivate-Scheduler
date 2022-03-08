@@ -6,8 +6,6 @@ import 'package:scheduler/notifier/user.dart';
 import '../../notifier/login.dart';
 import '../../notifier/complete_schedule.dart';
 import '../../notifier/schedule.dart';
-import 'regist_user_page.dart';
-import 'schedule_list_page.dart';
 
 const String appName = "Motivate Scheduler";
 
@@ -55,11 +53,13 @@ class LoginPage extends HookConsumerWidget {
                         await auth.signInWithEmailAndPassword(
                             email: loginPageViewModel.email,
                             password: loginPageViewModel.password);
+
                     final isFetch = await scheduleListViewModel
                             .fetchSchedule(loginPageViewModel.email) &&
                         await completeScheduleListViewModel
                             .fetchSchedule(loginPageViewModel.email);
-                    if (isFetch) {
+
+                    if (result.user != null) {
                       loginPageViewModel.infoText =
                           "ログイン成功:${loginPageViewModel.email}";
                       Navigator.of(context).pushNamed("/home");
