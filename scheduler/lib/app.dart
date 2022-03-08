@@ -1,9 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:scheduler/notifier/complete_schedule.dart';
-import 'package:scheduler/notifier/schedule.dart';
-import 'package:scheduler/notifier/user.dart';
 import 'package:scheduler/ui/pages/complete_schedule_page.dart';
 import 'package:scheduler/ui/pages/login_check.dart';
 import 'package:scheduler/ui/pages/regist_user_page.dart';

@@ -64,20 +64,12 @@ class ScheduleSettingDialogState extends ConsumerState<ScheduleSettingDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              /*
-              ScheduleNameInputField(
-                schedule: schedule,
-                hintText: "何をする予定ですか？",
-                fontSize: 16,
-                width: 400,
-              ),
-              */
               SizedBox(
                 width: 400,
                 child: TextFormField(
                   initialValue: schedule.name,
-                  style: TextStyle(fontSize: 16),
-                  decoration: InputDecoration(hintText: "何をする予定ですか？"),
+                  style: const TextStyle(fontSize: 16),
+                  decoration: const InputDecoration(hintText: "何をする予定ですか？"),
                   onChanged: (String s) {
                     changeTextField(s);
                   },

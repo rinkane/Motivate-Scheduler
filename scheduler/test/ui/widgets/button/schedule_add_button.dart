@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:scheduler/ui/dialogs/schedule_setting_dialog.dart';
 import 'package:scheduler/ui/widgets/button/schedule_add_button.dart';
 
 void main() {
