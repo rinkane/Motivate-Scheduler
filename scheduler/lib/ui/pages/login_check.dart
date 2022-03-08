@@ -17,6 +17,8 @@ class LoginCheckPage extends StatefulHookConsumerWidget {
 }
 
 class LoginCheckState extends ConsumerState<LoginCheckPage> {
+  final subscribe = FirebaseAuth.instance.authStateChanges();
+
   @override
   void initState() {
     super.initState();
@@ -24,7 +26,6 @@ class LoginCheckState extends ConsumerState<LoginCheckPage> {
   }
 
   Future<void> navigate() async {
-    final subscribe = FirebaseAuth.instance.authStateChanges();
     await subscribe.forEach((user) {
       if (user != null) {
         final scheduleListViewModel = ref.watch(scheduleListProvider.notifier);
@@ -42,7 +43,13 @@ class LoginCheckState extends ConsumerState<LoginCheckPage> {
       } else {
         Navigator.of(context).pushReplacementNamed("/login");
       }
-    });
+      // HACK: ログインチェック画面を抜けた後もログイン状態が変わると購読されてしまうので無理矢理防いでいる
+    }).whenComplete(() => subscribe.forEach((_) {}));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
