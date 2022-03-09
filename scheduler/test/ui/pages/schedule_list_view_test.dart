@@ -8,7 +8,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:scheduler/notifier/schedule.dart';
 
 import 'package:scheduler/ui/pages/schedule_list_page.dart';
 
