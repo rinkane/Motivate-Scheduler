@@ -55,7 +55,7 @@ class MotivationGraphView extends HookConsumerWidget {
               startLabel: DateFormat("yyyy-MM-dd HH:mm").format(DateTime.now()),
               labelPosition: AnnotationLabelPosition.inside,
               strokeWidthPx: 1,
-              color: Color(r: 0, g: 0, b: 0),
+              color: const Color(r: 0, g: 0, b: 0),
             ),
           ],
         ),

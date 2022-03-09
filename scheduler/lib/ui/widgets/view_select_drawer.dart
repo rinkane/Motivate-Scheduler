@@ -18,18 +18,18 @@ class ViewSelectDrawer extends HookConsumerWidget {
     return Drawer(
       child: ListView(
         children: <Widget>[
-          const SizedBox(
-            height: 100,
-            child: DrawerHeader(
+          UserAccountsDrawerHeader(
+            accountEmail: Text(
+              userNotifier.user?.email ?? "",
+            ),
+            decoration: const BoxDecoration(
+              color: Colors.purple,
+            ),
+            accountName: null,
+            currentAccountPicture: const CircleAvatar(
               child: Text(
-                "Menu",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.purple,
+                "12323",
+                style: TextStyle(fontSize: 24),
               ),
             ),
           ),
