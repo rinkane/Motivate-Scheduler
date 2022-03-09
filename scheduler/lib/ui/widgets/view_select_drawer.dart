@@ -5,6 +5,8 @@ import 'package:scheduler/notifier/schedule.dart';
 import 'package:scheduler/notifier/user.dart';
 import 'package:scheduler/repository/schedule_repository_impl.dart';
 
+import '../../model/schedule.dart';
+
 class ViewSelectDrawer extends HookConsumerWidget {
   const ViewSelectDrawer({Key? key}) : super(key: key);
 
@@ -15,21 +17,26 @@ class ViewSelectDrawer extends HookConsumerWidget {
     var completeScheduleState =
         ref.watch(completeScheduleListProvider.notifier);
     var scheduleRepository = ref.watch(scheduleRepositoryProvider);
+    final List<Schedule> allSchedules = [];
+    allSchedules.addAll(scheduleState.state.schedules);
+    allSchedules.addAll(completeScheduleState.state.schedules);
+    allSchedules.sort(((a, b) => a.endDateTime.compareTo(b.endDateTime)));
+    final motivation = calcNowMotivation(allSchedules);
     return Drawer(
       child: ListView(
         children: <Widget>[
-          const SizedBox(
-            height: 100,
-            child: DrawerHeader(
+          UserAccountsDrawerHeader(
+            accountEmail: Text(
+              userNotifier.user?.email ?? "",
+            ),
+            decoration: const BoxDecoration(
+              color: Colors.purple,
+            ),
+            accountName: null,
+            currentAccountPicture: CircleAvatar(
               child: Text(
-                "Menu",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.purple,
+                motivation.toString(),
+                style: const TextStyle(fontSize: 24),
               ),
             ),
           ),
@@ -78,5 +85,14 @@ class ViewSelectDrawer extends HookConsumerWidget {
         ],
       ),
     );
+  }
+
+  int calcNowMotivation(List<Schedule> schedules) {
+    int motivation = 0;
+    for (final schedule in schedules) {
+      motivation += schedule.motivation;
+    }
+
+    return motivation;
   }
 }
