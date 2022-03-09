@@ -49,14 +49,14 @@ class MotivationGraphView extends HookConsumerWidget {
       behaviors: [
         RangeAnnotation(
           [
-            for (int i = 0; i < motivations.length; i++)
-              LineAnnotationSegment(
-                motivations[i].dateTime,
-                RangeAnnotationAxisType.domain,
-                startLabel: DateFormat("yyyy-MM-dd HH:mm")
-                    .format(motivations[i].dateTime),
-                labelPosition: AnnotationLabelPosition.inside,
-              ),
+            LineAnnotationSegment(
+              DateTime.now(),
+              RangeAnnotationAxisType.domain,
+              startLabel: DateFormat("yyyy-MM-dd HH:mm").format(DateTime.now()),
+              labelPosition: AnnotationLabelPosition.inside,
+              strokeWidthPx: 1,
+              color: Color(r: 0, g: 0, b: 0),
+            ),
           ],
         ),
       ],
