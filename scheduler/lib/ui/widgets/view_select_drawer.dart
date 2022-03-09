@@ -5,6 +5,8 @@ import 'package:scheduler/notifier/schedule.dart';
 import 'package:scheduler/notifier/user.dart';
 import 'package:scheduler/repository/schedule_repository_impl.dart';
 
+import '../../model/schedule.dart';
+
 class ViewSelectDrawer extends HookConsumerWidget {
   const ViewSelectDrawer({Key? key}) : super(key: key);
 
@@ -15,6 +17,11 @@ class ViewSelectDrawer extends HookConsumerWidget {
     var completeScheduleState =
         ref.watch(completeScheduleListProvider.notifier);
     var scheduleRepository = ref.watch(scheduleRepositoryProvider);
+    final List<Schedule> allSchedules = [];
+    allSchedules.addAll(scheduleState.state.schedules);
+    allSchedules.addAll(completeScheduleState.state.schedules);
+    allSchedules.sort(((a, b) => a.endDateTime.compareTo(b.endDateTime)));
+    final motivation = calcNowMotivation(allSchedules);
     return Drawer(
       child: ListView(
         children: <Widget>[
@@ -26,10 +33,10 @@ class ViewSelectDrawer extends HookConsumerWidget {
               color: Colors.purple,
             ),
             accountName: null,
-            currentAccountPicture: const CircleAvatar(
+            currentAccountPicture: CircleAvatar(
               child: Text(
-                "12323",
-                style: TextStyle(fontSize: 24),
+                motivation.toString(),
+                style: const TextStyle(fontSize: 24),
               ),
             ),
           ),
@@ -78,5 +85,14 @@ class ViewSelectDrawer extends HookConsumerWidget {
         ],
       ),
     );
+  }
+
+  int calcNowMotivation(List<Schedule> schedules) {
+    int motivation = 0;
+    for (final schedule in schedules) {
+      motivation += schedule.motivation;
+    }
+
+    return motivation;
   }
 }
