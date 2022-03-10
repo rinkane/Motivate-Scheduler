@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scheduler/notifier/user.dart';
+
+import '../widgets/toast/toast.dart';
 
 class RegistUserPage extends StatefulHookConsumerWidget {
   const RegistUserPage({Key? key}) : super(key: key);
@@ -11,9 +14,17 @@ class RegistUserPage extends StatefulHookConsumerWidget {
 }
 
 class _RegistUserPageState extends ConsumerState<RegistUserPage> {
+  late FToast toast;
+
   String email = "";
   String password = "";
-  String infoText = "";
+
+  @override
+  void initState() {
+    super.initState();
+    toast = FToast();
+    toast.init(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +57,7 @@ class _RegistUserPageState extends ConsumerState<RegistUserPage> {
                   });
                 },
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 24),
               ElevatedButton(
                 child: const Text("登録"),
                 onPressed: () async {
@@ -54,19 +65,27 @@ class _RegistUserPageState extends ConsumerState<RegistUserPage> {
                     final result = await userNotifier
                         .registerUserWithEmailAndPassword(email, password);
                     final User user = result.user!;
-                    setState(() {
-                      infoText = "登録成功:${user.email}";
-                    });
+                    toast.showToast(
+                      child: AppToast(
+                        text: "登録成功:${user.email}",
+                        icon: Icons.check_circle,
+                      ),
+                      gravity: ToastGravity.BOTTOM_RIGHT,
+                      toastDuration: const Duration(seconds: 2),
+                    );
                     Navigator.of(context).pushNamed("/login");
                   } catch (e) {
-                    setState(() {
-                      infoText = "登録失敗:${e.toString()}";
-                    });
+                    toast.showToast(
+                      child: AppToast(
+                        text: "登録失敗:${e.toString()}",
+                        icon: Icons.cancel,
+                      ),
+                      gravity: ToastGravity.BOTTOM_RIGHT,
+                      toastDuration: const Duration(seconds: 2),
+                    );
                   }
                 },
               ),
-              const SizedBox(height: 8),
-              Text(infoText),
             ],
           ),
         ),
