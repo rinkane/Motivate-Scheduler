@@ -44,12 +44,7 @@ class ScheduleSettingDialogState extends ConsumerState<ScheduleSettingDialog> {
   void initState() {
     super.initState();
     schedule = widget.initialSchedule != null
-        ? Schedule.of(
-            widget.initialSchedule!.id,
-            widget.initialSchedule!.name,
-            widget.initialSchedule!.motivation,
-            widget.initialSchedule!.startDateTime,
-            widget.initialSchedule!.endDateTime)
+        ? widget.initialSchedule!
         : Schedule(DateTime.now());
     method = widget.initialMethod;
   }
