@@ -71,9 +71,8 @@ class ScheduleStateNotifier extends StateNotifier<SchedulesState> {
   }
 
   void _updateScheduleToState(Schedule schedule, int index) {
-    state = state.updateAt(index, (_schedule) => _schedule = schedule);
-
-    _updateDoubleBooking(schedule);
+    deleteSchedule(index);
+    addSchedule(schedule);
   }
 
   void _updateDoubleBooking(Schedule schedule) {
