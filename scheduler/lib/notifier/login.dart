@@ -10,8 +10,6 @@ class LoginState extends ChangeNotifier {
   String _password = "";
   String get password => _password;
 
-  String infoText = "";
-
   void setEmail(String email) {
     _email = email;
     notifyListeners();

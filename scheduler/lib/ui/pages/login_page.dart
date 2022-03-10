@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:scheduler/notifier/user.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:scheduler/ui/pages/schedule_list_page.dart';
 
 import '../../notifier/login.dart';
 import '../../notifier/complete_schedule.dart';
@@ -9,11 +11,25 @@ import '../../notifier/schedule.dart';
 
 const String appName = "Motivate Scheduler";
 
-class LoginPage extends HookConsumerWidget {
+class LoginPage extends StatefulHookConsumerWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  LoginPageState createState() => LoginPageState();
+}
+
+class LoginPageState extends ConsumerState<LoginPage> {
+  late FToast toast;
+
+  @override
+  void initState() {
+    super.initState();
+    toast = FToast();
+    toast.init(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final scheduleListViewModel = ref.read(scheduleListProvider.notifier);
     final completeScheduleListViewModel =
         ref.read(completeScheduleListProvider.notifier);
@@ -58,14 +74,42 @@ class LoginPage extends HookConsumerWidget {
                             .fetchSchedule(loginPageViewModel.email);
 
                     if (result.user != null && isFetch) {
-                      loginPageViewModel.infoText =
-                          "ログイン成功:${loginPageViewModel.email}";
+                      toast.showToast(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Row(
+                            children: const <Widget>[
+                              Icon(Icons.check_circle),
+                              Text("ログイン成功"),
+                            ],
+                          ),
+                        ),
+                        gravity: ToastGravity.BOTTOM_RIGHT,
+                        toastDuration: const Duration(seconds: 2),
+                      );
                       Navigator.of(context).pushNamed("/home");
                     } else {
                       throw Exception("スケジュールデータを取得できませんでした。");
                     }
                   } catch (e) {
-                    loginPageViewModel.infoText = "ログイン失敗:${e.toString()}";
+                    String msg = "ログイン失敗:${e.toString()}";
+                    toast.showToast(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            const Icon(Icons.check_circle),
+                            Text(msg),
+                          ],
+                        ),
+                      ),
+                      gravity: ToastGravity.BOTTOM_RIGHT,
+                      toastDuration: const Duration(seconds: 2),
+                    );
                   }
                 },
               ),
@@ -75,7 +119,6 @@ class LoginPage extends HookConsumerWidget {
                 onPressed: () => Navigator.of(context).pushNamed("/register"),
               ),
               const SizedBox(height: 16),
-              Text(loginPageViewModel.infoText),
             ],
           ),
         ),
