@@ -3,8 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:scheduler/notifier/user.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:scheduler/ui/pages/schedule_list_page.dart';
 
+import '../../ui/widgets/toast/toast.dart';
 import '../../notifier/login.dart';
 import '../../notifier/complete_schedule.dart';
 import '../../notifier/schedule.dart';
@@ -48,6 +48,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
                 onChanged: (String input) {
                   loginPageViewModel.setEmail(input);
                 },
+                initialValue: loginPageViewModel.email,
               ),
               const SizedBox(height: 8),
               TextFormField(
@@ -58,6 +59,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
                 onChanged: (String input) {
                   loginPageViewModel.setPassword(input);
                 },
+                initialValue: loginPageViewModel.password,
               ),
               const SizedBox(height: 24),
               ElevatedButton(
@@ -75,16 +77,9 @@ class LoginPageState extends ConsumerState<LoginPage> {
 
                     if (result.user != null && isFetch) {
                       toast.showToast(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Row(
-                            children: const <Widget>[
-                              Icon(Icons.check_circle),
-                              Text("ログイン成功"),
-                            ],
-                          ),
+                        child: const AppToast(
+                          text: "ログイン成功",
+                          icon: Icons.check_circle,
                         ),
                         gravity: ToastGravity.BOTTOM_RIGHT,
                         toastDuration: const Duration(seconds: 2),
@@ -96,16 +91,9 @@ class LoginPageState extends ConsumerState<LoginPage> {
                   } catch (e) {
                     String msg = "ログイン失敗:${e.toString()}";
                     toast.showToast(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            const Icon(Icons.check_circle),
-                            Text(msg),
-                          ],
-                        ),
+                      child: AppToast(
+                        text: msg,
+                        icon: Icons.cancel,
                       ),
                       gravity: ToastGravity.BOTTOM_RIGHT,
                       toastDuration: const Duration(seconds: 2),
