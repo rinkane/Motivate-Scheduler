@@ -12,9 +12,9 @@ class AppToast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(6),
+      padding: const EdgeInsets.fromLTRB(12, 18, 12, 18),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4), color: Colors.purple),
+          borderRadius: BorderRadius.circular(4), color: Colors.black87),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
