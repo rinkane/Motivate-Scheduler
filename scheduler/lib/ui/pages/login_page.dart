@@ -8,6 +8,7 @@ import '../../ui/widgets/toast/toast.dart';
 import '../../notifier/login.dart';
 import '../../notifier/complete_schedule.dart';
 import '../../notifier/schedule.dart';
+import '../widgets/button/elevated_text_button.dart';
 
 const String appName = "Motivate Scheduler";
 
@@ -62,8 +63,8 @@ class LoginPageState extends ConsumerState<LoginPage> {
                 initialValue: loginPageViewModel.password,
               ),
               const SizedBox(height: 24),
-              ElevatedButton(
-                child: const Text("ログイン"),
+              ElevatedTextButton(
+                text: "ログイン",
                 onPressed: () async {
                   try {
                     final UserCredential result =
@@ -102,8 +103,8 @@ class LoginPageState extends ConsumerState<LoginPage> {
                 },
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
-                child: const Text("ユーザ登録"),
+              ElevatedTextButton(
+                text: "ユーザ登録",
                 onPressed: () => Navigator.of(context).pushNamed("/register"),
               ),
               const SizedBox(height: 16),

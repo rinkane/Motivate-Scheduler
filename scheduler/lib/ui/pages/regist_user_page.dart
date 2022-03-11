@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scheduler/notifier/user.dart';
 
+import '../widgets/button/elevated_text_button.dart';
 import '../widgets/toast/toast.dart';
 
 class RegistUserPage extends StatefulHookConsumerWidget {
@@ -58,8 +59,8 @@ class _RegistUserPageState extends ConsumerState<RegistUserPage> {
                 },
               ),
               const SizedBox(height: 24),
-              ElevatedButton(
-                child: const Text("登録"),
+              ElevatedTextButton(
+                text: "登録",
                 onPressed: () async {
                   try {
                     final result = await userNotifier
