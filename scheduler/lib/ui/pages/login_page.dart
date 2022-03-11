@@ -8,6 +8,8 @@ import '../../ui/widgets/toast/toast.dart';
 import '../../notifier/login.dart';
 import '../../notifier/complete_schedule.dart';
 import '../../notifier/schedule.dart';
+import '../widgets/button/elevated_text_button.dart';
+import '../widgets/button/outlined_text_button.dart';
 
 const String appName = "Motivate Scheduler";
 
@@ -62,51 +64,56 @@ class LoginPageState extends ConsumerState<LoginPage> {
                 initialValue: loginPageViewModel.password,
               ),
               const SizedBox(height: 24),
-              ElevatedButton(
-                child: const Text("ログイン"),
-                onPressed: () async {
-                  try {
-                    final UserCredential result =
-                        await userNotifier.signInWithEmailAndPassword(
-                            loginPageViewModel.email,
-                            loginPageViewModel.password);
-                    final isFetch = await scheduleListViewModel
-                            .fetchSchedule(loginPageViewModel.email) &&
-                        await completeScheduleListViewModel
-                            .fetchSchedule(loginPageViewModel.email);
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedTextButton(
+                    text: "ログイン",
+                    onPressed: () async {
+                      try {
+                        final UserCredential result =
+                            await userNotifier.signInWithEmailAndPassword(
+                                loginPageViewModel.email,
+                                loginPageViewModel.password);
+                        final isFetch = await scheduleListViewModel
+                                .fetchSchedule(loginPageViewModel.email) &&
+                            await completeScheduleListViewModel
+                                .fetchSchedule(loginPageViewModel.email);
 
-                    if (result.user != null && isFetch) {
-                      toast.showToast(
-                        child: const AppToast(
-                          text: "ログイン成功",
-                          icon: Icons.check_circle,
-                        ),
-                        gravity: ToastGravity.BOTTOM_RIGHT,
-                        toastDuration: const Duration(seconds: 2),
-                      );
-                      Navigator.of(context).pushNamed("/home");
-                    } else {
-                      throw Exception("スケジュールデータを取得できませんでした。");
-                    }
-                  } catch (e) {
-                    String msg = "ログイン失敗:${e.toString()}";
-                    toast.showToast(
-                      child: AppToast(
-                        text: msg,
-                        icon: Icons.cancel,
-                      ),
-                      gravity: ToastGravity.BOTTOM_RIGHT,
-                      toastDuration: const Duration(seconds: 2),
-                    );
-                  }
-                },
+                        if (result.user != null && isFetch) {
+                          toast.showToast(
+                            child: const AppToast(
+                              text: "ログイン成功",
+                              icon: Icons.check_circle,
+                            ),
+                            gravity: ToastGravity.BOTTOM_RIGHT,
+                            toastDuration: const Duration(seconds: 2),
+                          );
+                          Navigator.of(context).pushNamed("/home");
+                        } else {
+                          throw Exception("スケジュールデータを取得できませんでした。");
+                        }
+                      } catch (e) {
+                        String msg = "ログイン失敗:${e.toString()}";
+                        toast.showToast(
+                          child: AppToast(
+                            text: msg,
+                            icon: Icons.cancel,
+                          ),
+                          gravity: ToastGravity.BOTTOM_RIGHT,
+                          toastDuration: const Duration(seconds: 2),
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(width: 16),
+                  OutlinedTextButton(
+                    text: "ユーザ登録",
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed("/register"),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                child: const Text("ユーザ登録"),
-                onPressed: () => Navigator.of(context).pushNamed("/register"),
-              ),
-              const SizedBox(height: 16),
             ],
           ),
         ),

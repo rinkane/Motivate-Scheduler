@@ -4,6 +4,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scheduler/notifier/user.dart';
 
+import '../widgets/button/elevated_text_button.dart';
+import '../widgets/button/outlined_text_button.dart';
 import '../widgets/toast/toast.dart';
 
 class RegistUserPage extends StatefulHookConsumerWidget {
@@ -58,33 +60,43 @@ class _RegistUserPageState extends ConsumerState<RegistUserPage> {
                 },
               ),
               const SizedBox(height: 24),
-              ElevatedButton(
-                child: const Text("登録"),
-                onPressed: () async {
-                  try {
-                    final result = await userNotifier
-                        .registerUserWithEmailAndPassword(email, password);
-                    final User user = result.user!;
-                    toast.showToast(
-                      child: AppToast(
-                        text: "登録成功:${user.email}",
-                        icon: Icons.check_circle,
-                      ),
-                      gravity: ToastGravity.BOTTOM_RIGHT,
-                      toastDuration: const Duration(seconds: 2),
-                    );
-                    Navigator.of(context).pushNamed("/login");
-                  } catch (e) {
-                    toast.showToast(
-                      child: AppToast(
-                        text: "登録失敗:${e.toString()}",
-                        icon: Icons.cancel,
-                      ),
-                      gravity: ToastGravity.BOTTOM_RIGHT,
-                      toastDuration: const Duration(seconds: 2),
-                    );
-                  }
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedTextButton(
+                    text: "登録",
+                    onPressed: () async {
+                      try {
+                        final result = await userNotifier
+                            .registerUserWithEmailAndPassword(email, password);
+                        final User user = result.user!;
+                        toast.showToast(
+                          child: AppToast(
+                            text: "登録成功:${user.email}",
+                            icon: Icons.check_circle,
+                          ),
+                          gravity: ToastGravity.BOTTOM_RIGHT,
+                          toastDuration: const Duration(seconds: 2),
+                        );
+                        Navigator.of(context).pushNamed("/login");
+                      } catch (e) {
+                        toast.showToast(
+                          child: AppToast(
+                            text: "登録失敗:${e.toString()}",
+                            icon: Icons.cancel,
+                          ),
+                          gravity: ToastGravity.BOTTOM_RIGHT,
+                          toastDuration: const Duration(seconds: 2),
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(width: 16),
+                  OutlinedTextButton(
+                    text: "戻る",
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
               ),
             ],
           ),
