@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ElevatedTextButton extends StatelessWidget {
+class OutlinedTextButton extends StatelessWidget {
   final String text;
   final Function() onPressed;
-  const ElevatedTextButton(
+  const OutlinedTextButton(
       {Key? key, required this.text, required this.onPressed})
       : super(key: key);
 
@@ -12,7 +12,7 @@ class ElevatedTextButton extends StatelessWidget {
     return SizedBox(
       height: 50,
       width: 150,
-      child: ElevatedButton(
+      child: OutlinedButton(
         child: Text(text),
         onPressed: onPressed,
       ),
