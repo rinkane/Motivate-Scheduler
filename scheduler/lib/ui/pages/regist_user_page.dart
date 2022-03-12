@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:scheduler/notifier/login.dart';
 import 'package:scheduler/notifier/user.dart';
 import 'package:scheduler/ui/widgets/toast/toast.dart';
 
@@ -27,6 +28,7 @@ class _RegistUserPageState extends ConsumerState<RegistUserPage>
   @override
   Widget build(BuildContext context) {
     final userNotifier = ref.watch(userProvider);
+    final loginPageViewModel = ref.watch(loginPageProvider);
     return Scaffold(
       body: Center(
         child: Container(
@@ -66,6 +68,8 @@ class _RegistUserPageState extends ConsumerState<RegistUserPage>
                         final result = await userNotifier
                             .registerUserWithEmailAndPassword(email, password);
                         final User user = result.user!;
+                        loginPageViewModel.setEmail(email);
+                        loginPageViewModel.setPassword(password);
                         DisplayToast.show("登録成功:${user.email}");
                         Navigator.of(context).pushNamed("/home");
                       } catch (e) {
