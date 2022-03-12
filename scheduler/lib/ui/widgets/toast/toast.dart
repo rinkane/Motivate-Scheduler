@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class AppToast extends StatelessWidget {
   final String text;
@@ -30,6 +31,17 @@ class AppToast extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+mixin DisplayToast {
+  static Future<bool?> show(String msg) {
+    return Fluttertoast.showToast(
+      msg: msg,
+      gravity: ToastGravity.BOTTOM_RIGHT,
+      webBgColor: "#222222",
+      textColor: Colors.white,
     );
   }
 }

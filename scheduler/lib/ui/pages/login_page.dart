@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:scheduler/notifier/user.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:scheduler/ui/widgets/toast/toast.dart';
 
-import '../../ui/widgets/toast/toast.dart';
 import '../../notifier/login.dart';
 import '../../notifier/complete_schedule.dart';
 import '../../notifier/schedule.dart';
@@ -20,14 +19,10 @@ class LoginPage extends StatefulHookConsumerWidget {
   LoginPageState createState() => LoginPageState();
 }
 
-class LoginPageState extends ConsumerState<LoginPage> {
-  late FToast toast;
-
+class LoginPageState extends ConsumerState<LoginPage> with DisplayToast {
   @override
   void initState() {
     super.initState();
-    toast = FToast();
-    toast.init(context);
   }
 
   @override
@@ -75,34 +70,26 @@ class LoginPageState extends ConsumerState<LoginPage> {
                             await userNotifier.signInWithEmailAndPassword(
                                 loginPageViewModel.email,
                                 loginPageViewModel.password);
-                        final isFetch = await scheduleListViewModel
-                                .fetchSchedule(loginPageViewModel.email) &&
-                            await completeScheduleListViewModel
-                                .fetchSchedule(loginPageViewModel.email);
-
-                        if (result.user != null && isFetch) {
-                          toast.showToast(
-                            child: const AppToast(
-                              text: "ログイン成功",
-                              icon: Icons.check_circle,
-                            ),
-                            gravity: ToastGravity.BOTTOM_RIGHT,
-                            toastDuration: const Duration(seconds: 2),
-                          );
-                          Navigator.of(context).pushNamed("/home");
-                        } else {
-                          throw Exception("スケジュールデータを取得できませんでした。");
+                        if (result.user == null) {
+                          DisplayToast.show("ユーザを取得できませんでした");
+                          return;
                         }
-                      } catch (e) {
+                      } on Exception catch (e) {
                         String msg = "ログイン失敗:${e.toString()}";
-                        toast.showToast(
-                          child: AppToast(
-                            text: msg,
-                            icon: Icons.cancel,
-                          ),
-                          gravity: ToastGravity.BOTTOM_RIGHT,
-                          toastDuration: const Duration(seconds: 2),
-                        );
+                        DisplayToast.show(msg);
+                        return;
+                      }
+
+                      final isFetch = await scheduleListViewModel
+                              .fetchSchedule(loginPageViewModel.email) &&
+                          await completeScheduleListViewModel
+                              .fetchSchedule(loginPageViewModel.email);
+                      if (isFetch) {
+                        DisplayToast.show("ログイン成功");
+                        Navigator.of(context).pushNamed("/home");
+                      } else {
+                        DisplayToast.show("スケジュールデータを取得できませんでした。");
+                        Navigator.of(context).pushNamed("/home");
                       }
                     },
                   ),
