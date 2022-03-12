@@ -13,13 +13,15 @@ class ViewSelectDrawer extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userNotifier = ref.watch(userProvider);
-    var scheduleState = ref.watch(scheduleListProvider.notifier);
-    var completeScheduleState =
+    var scheduleNotifier = ref.watch(scheduleListProvider.notifier);
+    var completeScheduleNotifier =
         ref.watch(completeScheduleListProvider.notifier);
+    var scheduleState = ref.watch(scheduleListProvider);
+    var completeScheduleState = ref.watch(completeScheduleListProvider);
     var scheduleRepository = ref.watch(scheduleRepositoryProvider);
     final List<Schedule> allSchedules = [];
-    allSchedules.addAll(scheduleState.state.schedules);
-    allSchedules.addAll(completeScheduleState.state.schedules);
+    allSchedules.addAll(scheduleState.schedules);
+    allSchedules.addAll(completeScheduleState.schedules);
     allSchedules.sort(((a, b) => a.endDateTime.compareTo(b.endDateTime)));
     final motivation = calcNowMotivation(allSchedules);
     return Drawer(
@@ -71,8 +73,8 @@ class ViewSelectDrawer extends HookConsumerWidget {
                   .signOut()
                   .onError((error, stackTrace) => null)
                   .whenComplete(() {
-                scheduleState.clearSchedule();
-                completeScheduleState.clearSchedule();
+                scheduleNotifier.clearSchedule();
+                completeScheduleNotifier.clearSchedule();
                 scheduleRepository.signOutRepository();
                 Navigator.of(context).pushNamed("/login");
               });

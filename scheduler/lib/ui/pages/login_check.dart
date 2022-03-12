@@ -44,11 +44,6 @@ class LoginCheckState extends ConsumerState<LoginCheckPage> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(

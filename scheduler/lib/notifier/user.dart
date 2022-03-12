@@ -13,7 +13,6 @@ class UserNotifier extends ChangeNotifier {
     final subscribe = FirebaseAuth.instance.authStateChanges();
     subscribe.forEach((user) {
       this.user = user;
-      print(user?.email);
       isLoadState = true;
       notifyListeners();
     });
