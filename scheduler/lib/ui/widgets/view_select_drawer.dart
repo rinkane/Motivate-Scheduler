@@ -88,10 +88,9 @@ class ViewSelectDrawer extends HookConsumerWidget {
   }
 
   int calcNowMotivation(List<Schedule> schedules) {
-    int motivation = 0;
-    for (final schedule in schedules) {
-      motivation += schedule.motivation;
-    }
+    int motivation = schedules
+        .where((schedule) => schedule.endDateTime.isBefore(DateTime.now()))
+        .fold(0, (sum, schedule) => sum += schedule.motivation);
 
     return motivation;
   }

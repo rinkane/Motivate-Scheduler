@@ -7,6 +7,6 @@ app.all('/*', basicAuth(function(user, password) {
  return user === 'rinkane' && password === 'rekishi';
 }));
 
-app.use(express.static(__dirname + '/../build/web/'))
+app.use(express.static(__dirname + '/../build/web'))
 
 exports.app = functions.https.onRequest(app)
