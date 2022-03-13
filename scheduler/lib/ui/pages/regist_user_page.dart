@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scheduler/notifier/login.dart';
 import 'package:scheduler/notifier/user.dart';
@@ -23,6 +24,12 @@ class _RegistUserPageState extends ConsumerState<RegistUserPage>
   @override
   void initState() {
     super.initState();
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
+      final userState = ref.watch(userProvider);
+      if (userState.user != null) {
+        Navigator.pop(context);
+      }
+    });
   }
 
   @override
