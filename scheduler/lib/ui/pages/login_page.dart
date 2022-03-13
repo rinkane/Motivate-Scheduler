@@ -86,10 +86,8 @@ class LoginPageState extends ConsumerState<LoginPage> with DisplayToast {
                               .fetchSchedule(loginPageViewModel.email);
                       if (isFetch) {
                         DisplayToast.show("ログイン成功");
-                        Navigator.of(context).pushNamed("/home");
                       } else {
                         DisplayToast.show("スケジュールデータを取得できませんでした。");
-                        Navigator.of(context).pushNamed("/home");
                       }
                     },
                   ),

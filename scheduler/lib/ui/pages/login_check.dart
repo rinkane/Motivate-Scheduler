@@ -35,9 +35,11 @@ class LoginCheckState extends ConsumerState<LoginCheckPage> {
         if (completeScheduleState.schedules.isEmpty) {
           completeScheduleListViewModel.fetchSchedule(user.email);
         }
-        Navigator.of(context).pushReplacementNamed("/home");
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil("/home", (route) => false);
       } else {
-        Navigator.of(context).pushReplacementNamed("/login");
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil("/home", (route) => false);
       }
       // HACK: ログインチェック画面を抜けた後もログイン状態が変わると購読されてしまうので無理矢理防いでいる
     }).whenComplete(() => subscribe.forEach((_) {}));

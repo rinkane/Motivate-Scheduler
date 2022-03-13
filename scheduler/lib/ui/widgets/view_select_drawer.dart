@@ -76,7 +76,7 @@ class ViewSelectDrawer extends HookConsumerWidget {
                 scheduleNotifier.clearSchedule();
                 completeScheduleNotifier.clearSchedule();
                 scheduleRepository.signOutRepository();
-                Navigator.of(context).pushNamed("/login");
+                Navigator.of(context).pushNamed("/home");
               });
             },
             child: const ListTile(
