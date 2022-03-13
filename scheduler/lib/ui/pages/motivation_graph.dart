@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:charts_flutter/flutter.dart';
+import 'package:scheduler/ui/widgets/login_state_selector.dart';
 
 import '../../model/schedule.dart';
 import '../../notifier/complete_schedule.dart';
 import '../../notifier/schedule.dart';
-import 'view_select_drawer.dart';
+import '../widgets/view_select_drawer.dart';
+import 'login_page.dart';
 
 class MotivationGraphView extends HookConsumerWidget {
   const MotivationGraphView({Key? key}) : super(key: key);
@@ -16,18 +18,20 @@ class MotivationGraphView extends HookConsumerWidget {
     final schedules = ref.watch(scheduleListProvider).schedules;
     final completeSchedules = ref.watch(completeScheduleListProvider).schedules;
     final allSchedules = createSchedulesCopy(schedules, completeSchedules);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Motivation Scheduler"),
-      ),
-      drawer: const ViewSelectDrawer(),
-      body: Center(
-        child: Container(
-            margin: const EdgeInsets.all(30),
-            height: 500,
-            child: createChart(allSchedules)),
-      ),
-    );
+    return LoginStateSelector(
+        loggedInWidget: Scaffold(
+          appBar: AppBar(
+            title: const Text("Motivation Scheduler"),
+          ),
+          drawer: const ViewSelectDrawer(),
+          body: Center(
+            child: Container(
+                margin: const EdgeInsets.all(30),
+                height: 500,
+                child: createChart(allSchedules)),
+          ),
+        ),
+        loggedOutWidget: const LoginPage());
   }
 
   TimeSeriesChart createChart(List<Schedule> schedules) {

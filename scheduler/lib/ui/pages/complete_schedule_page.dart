@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:scheduler/ui/widgets/login_state_selector.dart';
 
 import '../../notifier/complete_schedule.dart';
 import '../widgets/listTile/schedule_completed_list_tile.dart';
 import '../widgets/view_select_drawer.dart';
+import 'login_page.dart';
 
 class CompleteScheduleView extends StatelessWidget {
   const CompleteScheduleView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      drawer: ViewSelectDrawer(),
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            title: Text("Motivate Scheduler"),
+    return const LoginStateSelector(
+        loggedInWidget: Scaffold(
+          drawer: ViewSelectDrawer(),
+          body: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                title: Text("Motivate Scheduler"),
+              ),
+              CompleteScheduleList(),
+            ],
           ),
-          CompleteScheduleList(),
-        ],
-      ),
-    );
+        ),
+        loggedOutWidget: LoginPage());
   }
 }
 

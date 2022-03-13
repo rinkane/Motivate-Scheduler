@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scheduler/ui/pages/complete_schedule_page.dart';
 import 'package:scheduler/ui/pages/login_check.dart';
 import 'package:scheduler/ui/pages/regist_user_page.dart';
-import 'package:scheduler/ui/widgets/motivation_graph.dart';
+import 'package:scheduler/ui/pages/motivation_graph.dart';
 import 'ui/pages/schedule_list_page.dart';
 
 const String appName = "Motivate Scheduler";
