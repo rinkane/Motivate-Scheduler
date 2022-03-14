@@ -6,6 +6,7 @@ import 'package:scheduler/notifier/login.dart';
 import 'package:scheduler/notifier/user.dart';
 import 'package:scheduler/ui/widgets/toast/toast.dart';
 
+import '../../utility/exception_message_creator.dart';
 import '../widgets/button/elevated_text_button.dart';
 import '../widgets/button/outlined_text_button.dart';
 
@@ -79,8 +80,9 @@ class _RegistUserPageState extends ConsumerState<RegistUserPage>
                         loginPageViewModel.setPassword(password);
                         DisplayToast.show("登録成功:${user.email}");
                         Navigator.of(context).pushNamed("/home");
-                      } catch (e) {
-                        DisplayToast.show("登録失敗:${e.toString()}");
+                      } on FirebaseAuthException catch (e) {
+                        DisplayToast.show(
+                            "登録失敗:${ExceptionMessageCreator.createFromFirebaseAuthException(e)}");
                       }
                     },
                   ),

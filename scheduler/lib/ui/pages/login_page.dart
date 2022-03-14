@@ -7,6 +7,7 @@ import 'package:scheduler/ui/widgets/toast/toast.dart';
 import '../../notifier/login.dart';
 import '../../notifier/complete_schedule.dart';
 import '../../notifier/schedule.dart';
+import '../../utility/exception_message_creator.dart';
 import '../widgets/button/elevated_text_button.dart';
 import '../widgets/button/outlined_text_button.dart';
 
@@ -74,8 +75,9 @@ class LoginPageState extends ConsumerState<LoginPage> with DisplayToast {
                           DisplayToast.show("ユーザを取得できませんでした");
                           return;
                         }
-                      } on Exception catch (e) {
-                        String msg = "ログイン失敗:${e.toString()}";
+                      } on FirebaseAuthException catch (e) {
+                        String msg =
+                            "ログイン失敗:${ExceptionMessageCreator.createFromFirebaseAuthException(e)}";
                         DisplayToast.show(msg);
                         return;
                       }
