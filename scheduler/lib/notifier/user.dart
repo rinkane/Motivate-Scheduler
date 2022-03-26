@@ -27,7 +27,6 @@ class UserNotifier extends ChangeNotifier {
 
   Future<UserCredential> registerUserWithEmailAndPassword(
       String email, String password) async {
-    final id = FirebaseFirestore.instance.collection('users').doc().id;
     final FirebaseAuth auth = FirebaseAuth.instance;
     final result = await auth.createUserWithEmailAndPassword(
       email: email,
@@ -36,7 +35,7 @@ class UserNotifier extends ChangeNotifier {
     if (result.user != null) {
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(id)
+          .doc(result.user!.uid)
           .set({'mail': email});
     }
     return result;

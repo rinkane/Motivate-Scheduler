@@ -75,21 +75,20 @@ class LoginPageState extends ConsumerState<LoginPage> with DisplayToast {
                           DisplayToast.show("ユーザを取得できませんでした");
                           return;
                         }
+                        final isFetch = await scheduleListViewModel
+                                .fetchSchedule(result.user) &&
+                            await completeScheduleListViewModel
+                                .fetchSchedule(result.user);
+                        if (isFetch) {
+                          DisplayToast.show("ログイン成功");
+                        } else {
+                          DisplayToast.show("スケジュールデータを取得できませんでした。");
+                        }
                       } on FirebaseAuthException catch (e) {
                         String msg =
                             "ログイン失敗:${ExceptionMessageCreator.createFromFirebaseAuthException(e)}";
                         DisplayToast.show(msg);
                         return;
-                      }
-
-                      final isFetch = await scheduleListViewModel
-                              .fetchSchedule(loginPageViewModel.email) &&
-                          await completeScheduleListViewModel
-                              .fetchSchedule(loginPageViewModel.email);
-                      if (isFetch) {
-                        DisplayToast.show("ログイン成功");
-                      } else {
-                        DisplayToast.show("スケジュールデータを取得できませんでした。");
                       }
                     },
                   ),

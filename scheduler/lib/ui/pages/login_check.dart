@@ -30,10 +30,10 @@ class LoginCheckState extends ConsumerState<LoginCheckPage> {
         final scheduleState = ref.watch(scheduleListProvider);
         final completeScheduleState = ref.watch(completeScheduleListProvider);
         if (scheduleState.schedules.isEmpty) {
-          scheduleListViewModel.fetchSchedule(user.email);
+          scheduleListViewModel.fetchSchedule(user);
         }
         if (completeScheduleState.schedules.isEmpty) {
-          completeScheduleListViewModel.fetchSchedule(user.email);
+          completeScheduleListViewModel.fetchSchedule(user);
         }
         Navigator.of(context)
             .pushNamedAndRemoveUntil("/home", (route) => false);
