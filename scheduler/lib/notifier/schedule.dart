@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../repository/schedule_repository_impl.dart';
@@ -17,12 +18,12 @@ class ScheduleStateNotifier extends StateNotifier<SchedulesState> {
     state = state.update((_) => []);
   }
 
-  Future<bool> fetchSchedule(String? userEmail) async {
-    if (userEmail == null) {
+  Future<bool> fetchSchedule(User? user) async {
+    if (user == null) {
       return false;
     }
 
-    if (!await scheduleRepository.authUserRepository(userEmail)) {
+    if (!await scheduleRepository.authUserRepository(user)) {
       return false;
     }
 

@@ -1,5 +1,6 @@
 import 'package:scheduler/model/schedule.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'schedule_repository.dart';
@@ -7,19 +8,20 @@ import 'schedule_repository.dart';
 final scheduleRepositoryProvider = Provider((_) => ScheduleRepositoryImpl());
 
 class ScheduleRepositoryImpl implements ScheduleRepository {
-  QueryDocumentSnapshot<Map<String, dynamic>>? _userDocument;
-  bool get isAuth => _userDocument != null;
+  DocumentReference<Map<String, dynamic>>? _userDocument;
+  User? user;
+  bool get isAuth => _userDocument != null && user != null;
 
   @override
-  Future<bool> authUserRepository(String email) async {
+  Future<bool> authUserRepository(User user) async {
     if (isAuth) {
       return true;
     }
 
     try {
-      final snapshot =
-          await FirebaseFirestore.instance.collection("users").get();
-      _userDocument = snapshot.docs.firstWhere((doc) => doc["mail"] == email);
+      this.user = user;
+      _userDocument =
+          FirebaseFirestore.instance.collection("users").doc(user.uid);
     } catch (e) {
       return false;
     }
@@ -36,7 +38,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     List<Schedule> schedules = [];
     try {
       final schedulesSnapshot =
-          await _userDocument!.reference.collection("schedules").get();
+          await _userDocument!.collection("schedules").get();
       for (var scheduleDoc in schedulesSnapshot.docs) {
         schedules.add(Schedule.of(
             scheduleDoc["id"],
@@ -60,7 +62,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     List<Schedule> completeSchedules = [];
     try {
       final completeSchedulesSnapshot =
-          await _userDocument!.reference.collection("completeSchedules").get();
+          await _userDocument!.collection("completeSchedules").get();
       for (var completeScheduleDoc in completeSchedulesSnapshot.docs) {
         completeSchedules.add(Schedule.of(
             completeScheduleDoc["id"],
@@ -82,10 +84,9 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     try {
-      final newDocId =
-          _userDocument!.reference.collection("schedules").doc().id;
+      final newDocId = user!.uid;
       schedule.id = newDocId;
-      await _userDocument!.reference.collection("schedules").doc(newDocId).set({
+      await _userDocument!.collection("schedules").doc(newDocId).set({
         "id": newDocId,
         "name": schedule.name,
         "motivate": schedule.motivation,
@@ -106,7 +107,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     try {
-      await _userDocument!.reference
+      await _userDocument!
           .collection("completeSchedules")
           .doc(schedule.id)
           .set({
@@ -130,10 +131,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     try {
-      await _userDocument!.reference
-          .collection("schedules")
-          .doc(schedule.id)
-          .set({
+      await _userDocument!.collection("schedules").doc(schedule.id).set({
         "name": schedule.name,
         "motivate": schedule.motivation,
         "startTime": schedule.startDateTime,
@@ -153,10 +151,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     try {
-      await _userDocument!.reference
-          .collection("schedules")
-          .doc(schedule.id)
-          .delete();
+      await _userDocument!.collection("schedules").doc(schedule.id).delete();
     } catch (e) {
       return false;
     }
@@ -171,7 +166,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     try {
-      await _userDocument!.reference
+      await _userDocument!
           .collection("completeSchedules")
           .doc(schedule.id)
           .delete();

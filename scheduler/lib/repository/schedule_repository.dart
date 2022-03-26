@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../model/schedule.dart';
 
 abstract class ScheduleRepository {
-  Future<bool> authUserRepository(String email);
+  Future<bool> authUserRepository(User user);
 
   Future<List<Schedule>> getSchedules();
 
