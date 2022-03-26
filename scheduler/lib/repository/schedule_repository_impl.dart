@@ -84,7 +84,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     try {
-      final newDocId = user!.uid;
+      final newDocId = _userDocument!.collection("schedules").doc().id;
       schedule.id = newDocId;
       await _userDocument!.collection("schedules").doc(newDocId).set({
         "id": newDocId,
